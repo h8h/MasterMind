@@ -1,4 +1,4 @@
 MasterMind
 ==========
 
-Study Project HTW Aalen - yeah!
+Study Project HTW Aalen
