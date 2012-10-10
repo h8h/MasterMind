@@ -5,7 +5,7 @@ public class main {
 		final gui g = new gui();
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-                g.createAndShowGUI();
+                g.showGUI();
             }
         });
 	}
