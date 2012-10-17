@@ -3,7 +3,7 @@ package mastermind_core;
 import java.util.*;
 
 public class core {
-	String[] availableColors =	{"#2305e1","#e02f24","#e8ec0e","#28e515","#ec8b0e","#5d5c56","#cac9c4","#000000","#FFFFFF","#6a1606","#9ad4f9","#186d32","#137167","#7c29a8","#cf0cb9","#5c7c46"};
+	String[] availableColors =	{"#2305e1","#e02f24","#e8ec0e","#28e515","#ec8b0e","#7c29a8","#cac9c4","#000000","#FFFFFF","#6a1606","#9ad4f9","#186d32","#137167","#5d5c56","#cf0cb9","#5c7c46"};
 	String[] usedColors;
 	String[] code;
 
@@ -41,7 +41,7 @@ public class core {
             String[] check = new String[codeColors.length];
             int checkpos = 0;
         
-            // Auf Farbe+Position pr�fen
+            // Auf Farbe+Position pruefen
             for(int i=0 ; i<userColors.length ; i++){
                 if(userColors[i].equals(codeColors[i])){
                     check[checkpos++] = "X";
@@ -50,7 +50,7 @@ public class core {
                 }
             }
 
-            // Nur auf Farbe pr�fen
+            // Nur auf Farbe pruefen
             loop1: for(int i=0 ; i<userColors.length ; i++){
                 loop2: for(int j=0 ; j<codeColors.length ; j++){
                     if(userColors[i].equals("UX"))
