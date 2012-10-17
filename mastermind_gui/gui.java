@@ -19,77 +19,11 @@ public class gui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridBagLayout());
 
-		//Spielbare Farben und Namen ;)
+		//Make new Game
+		initGame(8, frame);
+		//Make Menu
+		genMenu(frame);
 
-		int codeSize = 8;
-		mastermindCore = new core(codeSize);
-		usingColors = new JButton[codeSize];
-		code = new JButton[codeSize / 2];
-
-		for(int i=0; i < code.length; i++) {
-			code[i] = new JButton();
-			addComponent(frame, code[i], i+i,0,2,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
-		}	
-		setBackgroundColor();
-
-		String[] usedColors =	mastermindCore.getUsedColors();
-		for(int i=0; i < usingColors.length; i++) {
-			JButton chooseColors = new JButton ();
-			chooseColors.setBackground(Color.decode(usedColors[i]));
-			usingColors[i] = chooseColors;
-			addComponent(frame, usingColors[i], i,10,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
-		}
-
-		JMenuBar bar = new JMenuBar();
-		{
-			JMenu menu = new JMenu("File");
-			{
-			JMenuItem item = new JMenuItem("Neues Spiel");
-			item.addActionListener(new ActionListener () {
-					public void actionPerformed (ActionEvent e) {
-						setBackgroundColor();
-					}
-			});
-			menu.add(item);
-			}
-			bar.add(menu);
-		}
-
-
-		frame.setJMenuBar(bar);
-		//addComponent(frame, new JButton("BLA"), 15, 4, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL);
-		/*/pane.setLayout(new GridBagLayout());
-		Box hbox = Box.createHorizontalBox();
-		Box hbox1 = Box.createHorizontalBox();
-		
-
-		
-
-
-
-		//Action fuer den ReMixIt - Button
-		JButton mixer = new JButton ("ReMixIt");
-
-		//ReMixIt mit Click-Action verbinden
-		mixer.addActionListener(new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				setBackgroundColor();
-			}
-		});
-		//ReMixIt-Button zum Panel hinzufuegen
-		hbox1.add(mixer);
-		Box vbox = Box.createVerticalBox();
-		{
-			//vbox.add(hbox);
-			//vbox.add(pane);
-			//vbox.add(hbox1);	    
-		}
-
-		//
-		//frame.add(vbox);
-		//Display the window.
-		*/
-		//frame.add(pane);
 		frame.pack();
 		frame.setVisible(true);
 	}
@@ -105,4 +39,45 @@ public class gui {
 			code[i].setBackground(Color.decode(colorCode[i]));
 		}
 	}
+	
+	private void initGame(int codeSize, Container container) {
+		mastermindCore = new core(codeSize);
+		usingColors = new JButton[codeSize];
+		code = new JButton[codeSize / 2];
+
+		//Generate secret code buttons
+		for(int i=0; i < code.length; i++) {
+			code[i] = new JButton();
+			addComponent(container, code[i], i+i,0,2,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
+		}	
+		setBackgroundColor();
+
+		//Generate usedColor buttons
+		String[] usedColors =	mastermindCore.getUsedColors();
+		for(int i=0; i < usingColors.length; i++) {
+			JButton chooseColors = new JButton ();
+			chooseColors.setBackground(Color.decode(usedColors[i]));
+			usingColors[i] = chooseColors;
+			addComponent(container, usingColors[i], i,10,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
+		}	
+	}
+	
+	private void genMenu(Container container) {
+		JMenuBar bar = new JMenuBar();
+		{
+			JMenu menu = new JMenu("File");
+			{
+			JMenuItem item = new JMenuItem("Neues Spiel");
+			item.addActionListener(new ActionListener () {
+					public void actionPerformed (ActionEvent e) {
+						setBackgroundColor();
+					}
+			});
+			menu.add(item);
+			}
+			bar.add(menu);
+		}	
+		((JFrame) container).setJMenuBar(bar);
+	}
+	
 }
