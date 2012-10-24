@@ -8,6 +8,7 @@ import mastermind_core.core;
 public class gui {
 	JButton[] code;
 	JButton[] usingColors;
+	JButton[] setIt;
 	core mastermindCore;	
 
 // private void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill)
@@ -18,7 +19,7 @@ public class gui {
 		//frame.setPreferredSize(new Dimension(640, 480));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(new GridBagLayout());
-
+	
 		//Make new Game
 		initGame(8, frame);
 		//Make Menu
@@ -33,22 +34,31 @@ public class gui {
     container.add(component, gbc);
   }
 
-	private void setBackgroundColor() {
-		String [] colorCode = mastermindCore.generateCode();
-		for(int i=0; i < code.length; i++) {
-			code[i].setBackground(Color.decode(colorCode[i]));
-		}
-	}
-	
 	private void initGame(int codeSize, Container container) {
 		mastermindCore = new core(codeSize);
 		usingColors = new JButton[codeSize];
 		code = new JButton[codeSize / 2];
-
+		
 		//Generate secret code buttons
 		for(int i=0; i < code.length; i++) {
 			code[i] = new JButton();
 			addComponent(container, code[i], i+i,0,2,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
+		}	
+		
+		//Generate useless Buttons - just for testing and fun and so on... :)
+		int tries = 8;
+		int codeLength = codeSize / 2;
+		setIt = new JButton[codeLength * tries]; //4 counts of trying
+		int column = 1;
+		int row = 3;
+		for(int i=(codeLength * tries)-1; i >= 0; i--) {
+			setIt[i] = new JButton("" + i);
+			addComponent(container, setIt[i], row,column,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
+			row--;
+			if(row==-1) {
+				column++;
+				row = 3;
+			}
 		}	
 		setBackgroundColor();
 
@@ -61,6 +71,14 @@ public class gui {
 			addComponent(container, usingColors[i], i,10,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
 		}	
 	}
+	
+	private void setBackgroundColor() {
+		String [] colorCode = mastermindCore.generateCode();
+		for(int i=0; i < code.length; i++) {
+			code[i].setBackground(Color.decode(colorCode[i]));
+		}
+	}
+	
 	
 	private void genMenu(Container container) {
 		JMenuBar bar = new JMenuBar();
