@@ -9,6 +9,8 @@ public class gui {
 	JButton[] code;
 	JButton[] usingColors;
 	JButton[] setIt;
+	String[] setColors;
+	int setColorPos;
 	core mastermindCore;	
 
 // private void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill)
@@ -38,7 +40,8 @@ public class gui {
 		mastermindCore = new core(codeSize);
 		usingColors = new JButton[codeSize];
 		code = new JButton[codeSize / 2];
-		
+		setColors = new String[codeSize / 2];
+		setColorPos = 0;
 		//Generate secret code buttons
 		for(int i=0; i < code.length; i++) {
 			code[i] = new JButton();
@@ -46,11 +49,11 @@ public class gui {
 		}	
 		
 		//Generate useless Buttons - just for testing and fun and so on... :)
-		int tries = 8;
+		int tries = 4;
 		int codeLength = codeSize / 2;
 		setIt = new JButton[codeLength * tries]; //4 counts of trying
 		int column = 1;
-		int row = 3;
+		int row = codeLength - 1;
 		for(int i=(codeLength * tries)-1; i >= 0; i--) {
 			setIt[i] = new JButton("" + i);
 			addComponent(container, setIt[i], row,column,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
@@ -67,8 +70,17 @@ public class gui {
 		for(int i=0; i < usingColors.length; i++) {
 			JButton chooseColors = new JButton ();
 			chooseColors.setBackground(Color.decode(usedColors[i]));
+			chooseColors.addActionListener(new ActionListener () {
+					public void actionPerformed (ActionEvent e) {
+						JButton getColor = (JButton) e.getSource();
+						setColors[setColorPos%code.length] = "#" + (Integer.toHexString(getColor.getBackground().getRGB())).substring(2); 
+						setIt[setColorPos].setBackground(getColor.getBackground());
+						setColorPos++;		
+					}
+			});
 			usingColors[i] = chooseColors;
 			addComponent(container, usingColors[i], i,10,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
+			
 		}	
 	}
 	
