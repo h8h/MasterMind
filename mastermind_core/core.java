@@ -33,43 +33,41 @@ public class core {
 		return usedColors;
 	}
         
-        public static String[] color_check (String[] codeColor, String[] userColor){
-        
-            String[] codeColors = codeColor;
-            String[] userColors = userColor;
-        
-            String[] check = new String[codeColors.length];
-            int checkpos = 0;
-        
-            // Auf Farbe+Position pruefen
-            for(int i=0 ; i<userColors.length ; i++){
-                if(userColors[i].equals(codeColors[i])){
-                    check[checkpos++] = "X";
-                    userColors[i] = "UX";
-                    codeColors[i] = "CX";
-                }
-            }
+  public String[] color_check (String[] userColor){
+		String[] codeColors = code.clone(); //Not nice, but it works
+		System.arraycopy(code, 0, codeColors, 0, codeColors.length); //Not nice, but it works
+		String[] userColors = userColor;
 
-            // Nur auf Farbe pruefen
-            loop1: for(int i=0 ; i<userColors.length ; i++){
-                loop2: for(int j=0 ; j<codeColors.length ; j++){
-                    if(userColors[i].equals("UX"))
-                        break loop2;
-                    else if(userColors[i].equals(codeColors[j])){
-                        check[checkpos++] = "O";
-                        userColors[i] = "UX";
-                        codeColors[j] = "CX";
-                        break loop2;
-                    }
-                    else if(j==codeColors.length-1){
-                        userColors[i] = "UX";
-                        check[checkpos++]="-";
-                        break loop2;
-                    }
-                }
-            }
-            return check;
-        }
-    }
+		String[] check = new String[codeColors.length];
+		int checkpos = 0;
 
+		// Auf Farbe+Position pruefen
+		for(int i=0 ; i<userColors.length ; i++){
+		    if(userColors[i].equals(codeColors[i])){
+		        check[checkpos++] = "X";
+		        userColors[i] = "UX";
+		        codeColors[i] = "CX";
+		    }
+		}
 
+		// Nur auf Farbe pruefen
+		loop1: for(int i=0 ; i<userColors.length ; i++){
+		    loop2: for(int j=0 ; j<codeColors.length ; j++){
+		        if(userColors[i].equals("UX"))
+		            break loop2;
+		        else if(userColors[i].equals(codeColors[j])){
+		            check[checkpos++] = "O";
+		            userColors[i] = "UX";
+		            codeColors[j] = "CX";
+		            break loop2;
+		        }
+		        else if(j==codeColors.length-1){
+		            userColors[i] = "UX";
+		            check[checkpos++]="-";
+		            break loop2;
+		        }
+		    }
+		}
+		return check;
+  }
+}

@@ -13,8 +13,6 @@ public class gui {
 	int setColorPos;
 	core mastermindCore;	
 
-// private void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill)
-
   public void showGUI() {
 		//Erstellt ein neues Fenster		
 		JFrame frame = new JFrame("MasterMind PP-1");
@@ -42,13 +40,14 @@ public class gui {
 		code = new JButton[codeSize / 2];
 		setColors = new String[codeSize / 2];
 		setColorPos = 0;
+		
 		//Generate secret code buttons
 		for(int i=0; i < code.length; i++) {
 			code[i] = new JButton();
 			addComponent(container, code[i], i+i,0,2,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
 		}	
 		
-		//Generate useless Buttons - just for testing and fun and so on... :)
+		//Buttons which get the choosed Colors 
 		int tries = 4;
 		int codeLength = codeSize / 2;
 		setIt = new JButton[codeLength * tries]; //4 counts of trying
@@ -63,7 +62,6 @@ public class gui {
 				row = 3;
 			}
 		}	
-		setBackgroundColor();
 
 		//Generate usedColor buttons
 		String[] usedColors =	mastermindCore.getUsedColors();
@@ -75,9 +73,22 @@ public class gui {
 						JButton getColor = (JButton) e.getSource();
 						setColors[setColorPos%code.length] = "#" + (Integer.toHexString(getColor.getBackground().getRGB())).substring(2); 
 						setIt[setColorPos].setBackground(getColor.getBackground());
+						if((setColorPos+1)%code.length == 0) {
+							System.out.println("Versuch "+setColorPos/code.length+":");
+							for(int i=0; i < setColors.length; i++) {
+								System.out.print(setColors[i] + " - ");
+							}
+							System.out.println();
+							String[] getHint = mastermindCore.color_check(setColors);
+							for(int i=0; i < getHint.length; i++) {
+								System.out.print(getHint[i] + " ");
+							}	
+							System.out.println();
+						}
 						setColorPos++;		
 					}
 			});
+			setBackgroundColor();
 			usingColors[i] = chooseColors;
 			addComponent(container, usingColors[i], i,10,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
 			
@@ -90,7 +101,6 @@ public class gui {
 			code[i].setBackground(Color.decode(colorCode[i]));
 		}
 	}
-	
 	
 	private void genMenu(Container container) {
 		JMenuBar bar = new JMenuBar();
@@ -108,6 +118,5 @@ public class gui {
 			bar.add(menu);
 		}	
 		((JFrame) container).setJMenuBar(bar);
-	}
-	
+	}	
 }
