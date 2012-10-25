@@ -59,7 +59,7 @@ public class gui {
 			row--;
 			if(row==-1) {
 				column++;
-				row = 3;
+				row = codeLength - 1;
 			}
 		}	
 
