@@ -12,7 +12,7 @@ public class gui {
 	String[] setColors;
 	int setColorPos;
 	core mastermindCore;	
-
+	
   public void showGUI() {
 		//Erstellt ein neues Fenster		
 		JFrame frame = new JFrame("MasterMind PP-1");
@@ -70,20 +70,24 @@ public class gui {
 			chooseColors.setBackground(Color.decode(usedColors[i]));
 			chooseColors.addActionListener(new ActionListener () {
 					public void actionPerformed (ActionEvent e) {
-						JButton getColor = (JButton) e.getSource();
-						setColors[setColorPos%code.length] = "#" + (Integer.toHexString(getColor.getBackground().getRGB())).substring(2); 
-						setIt[setColorPos].setBackground(getColor.getBackground());
-						if((setColorPos+1)%code.length == 0) {
-							System.out.println("Versuch "+setColorPos/code.length+":");
-							for(int i=0; i < setColors.length; i++) {
-								System.out.print(setColors[i] + " - ");
+						if(setColorPos<setIt.length) {
+							JButton getColor = (JButton) e.getSource();
+							setColors[setColorPos%code.length] = "#" + (Integer.toHexString(getColor.getBackground().getRGB())).substring(2); 
+							setIt[setColorPos].setBackground(getColor.getBackground());
+							if((setColorPos+1)%code.length == 0) {
+								System.out.println("Versuch "+setColorPos/code.length+":");
+								for(int i=0; i < setColors.length; i++) {
+									System.out.print(setColors[i] + " - ");
+								}
+								System.out.println();
+								String[] getHint = mastermindCore.color_check(setColors);
+								for(int i=0; i < getHint.length; i++) {
+									System.out.print(getHint[i] + " ");
+								}	
+								System.out.println();
 							}
-							System.out.println();
-							String[] getHint = mastermindCore.color_check(setColors);
-							for(int i=0; i < getHint.length; i++) {
-								System.out.print(getHint[i] + " ");
-							}	
-							System.out.println();
+						} else {
+							System.out.println("!!!!!!!!!!!!!GAME OVER :)!!!!!!!!!!!!!!!!!!!!");
 						}
 						setColorPos++;		
 					}
@@ -110,7 +114,7 @@ public class gui {
 			JMenuItem item = new JMenuItem("Neues Spiel");
 			item.addActionListener(new ActionListener () {
 					public void actionPerformed (ActionEvent e) {
-						setBackgroundColor();
+						resetGame();
 					}
 			});
 			menu.add(item);
@@ -118,5 +122,13 @@ public class gui {
 			bar.add(menu);
 		}	
 		((JFrame) container).setJMenuBar(bar);
+	}
+	
+	private void resetGame() {
+		for(int i=0; i<setIt.length; i++) {
+			setIt[i].setBackground(null);
+		}
+		setColorPos=0;
+		setBackgroundColor();
 	}	
 }
