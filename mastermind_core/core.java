@@ -4,18 +4,18 @@ import java.util.*;
 
 public class core {
 	static final String[] availableColors =	{"#2305e1","#e02f24","#e8ec0e","#28e515","#ec8b0e","#7c29a8","#cac9c4","#000000","#FFFFFF","#6a1606","#9ad4f9","#186d32","#137167","#5d5c56","#cf0cb9","#5c7c46"};
-	String[] usedColors;
+	String[] enabledColors;
 	String[] code;
 
-	public core (int codeSize) {
-		initColors(codeSize);
+	public core (int codeLength,int enabledColorRange) {
+		initColors(codeLength,enabledColorRange);
 	}
 
-	private void initColors(int codeSize) {
-		usedColors = new String[codeSize];
-		code = new String[codeSize / 2];
-		for (int i = 0; i < codeSize; i++) {
-			usedColors[i] = availableColors[i];	
+	private void initColors(int codeLength,int enabledColorRange) {
+		enabledColors = new String[enabledColorRange];
+		code = new String[codeLength];
+		for (int i = 0; i < enabledColorRange; i++) {
+			enabledColors[i] = availableColors[i];	
 		}
 	}
 
@@ -23,14 +23,14 @@ public class core {
 		int randomizeColor = 0;
 		Random r = new Random();
 		for (int i = 0; i < code.length; i++) {
-			randomizeColor = r.nextInt(usedColors.length);		
-			code[i] = usedColors[randomizeColor];
+			randomizeColor = r.nextInt(enabledColors.length);		
+			code[i] = enabledColors[randomizeColor];
 		}
 		return code;
 	}
 	
-	public String[] getUsedColors() {
-		return usedColors;
+	public String[] getEnabledColors() {
+		return enabledColors;
 	}
         
   public String[] color_check (String[] userColor){

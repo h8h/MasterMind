@@ -3,138 +3,26 @@ package mastermind_gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*; 
-import mastermind_core.core;
+
 
 public class gui {
-	JButton[] code;
-	JButton[] usingColors;
-	JButton[] setIt;
-	JButton[] hints;
-	String[] setColors;
-	int setColorPos;
-	core mastermindCore;
 
   public void showGUI() {
 		//Erstellt ein neues Fenster		
 		JFrame frame = new JFrame("MasterMind PP-1");
 		//frame.setPreferredSize(new Dimension(640, 480));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLayout(new GridBagLayout());
 
-		//Make new Game
-		initGame(8, frame);
 		//Make Menu
-		genMenu(frame);
-
+		//genMenu(frame);
+																	//params CodeLength, EnabledColors, Tries
+		gameInitialization game = new gameInitialization(2,15,4);
+		frame.add(game.getContainer());
 		frame.pack();
 		frame.setVisible(true);
 	}
-
-  private void addComponent(Container container, Component component, int gridx, int gridy, int gridwidth, int gridheight, int anchor, int fill) {
-    GridBagConstraints gbc = new GridBagConstraints(gridx, gridy, gridwidth, gridheight, 1.0, 1.0, anchor, fill, new Insets(0, 0, 0, 0), 0, 0);
-    container.add(component, gbc);
-    container.revalidate();
-  }
-
-	private void initGame(int codeSize, Container container) {
-		mastermindCore = new core(codeSize);
-		usingColors = new JButton[codeSize];
-
-		code = new JButton[codeSize / 2];
-		setColors = new String[codeSize / 2];
-		setColorPos = 0;
-		
-		//Generate secret code buttons
-		for(int i=0; i < code.length; i++) {
-			code[i] = new JButton();
-		}	
-		//Buttons which get the choosed Colors 
-		final int tries = 4;
-		hints = new JButton[codeSize*tries];
-		int codeLength = codeSize / 2;
-		setIt = new JButton[codeLength * tries]; //4 counts of trying
-		int column = 1;
-		int row = -1;
-		JPanel hintPane = new JPanel();
-		for(int i=(codeLength * tries)-1; i >= 0; i--) {
-			if(row==-1) {
-				column++;
-				row = codeLength - 1;
-				hintPane = new JPanel();
-				hintPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-				GridLayout hintLayout = new GridLayout(codeLength/2,codeLength/2);
-				hintPane.setLayout(hintLayout);
-				addComponent(container, hintPane, code.length+1,column,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);	
-			}
-			setIt[i] = new JButton("" + i);
-			addComponent(container, setIt[i], row,column,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
-			hints[i] = new JButton(i +"");
-			hintPane.add(hints[i]);
-			row--;
-		}	
-		
-		//Generate usedColor buttons
-		String[] usedColors =	mastermindCore.getUsedColors();
-			final Container con = container;
-		for(int i=0; i < usingColors.length; i++) {
-			JButton chooseColors = new JButton ();
-			chooseColors.setBackground(Color.decode(usedColors[i]));
-			chooseColors.addActionListener(new ActionListener () {
-					public void actionPerformed (ActionEvent e) {
-						if(setColorPos<setIt.length) {
-							JButton getColor = (JButton) e.getSource();
-							setColors[setColorPos%code.length] = "#" + (Integer.toHexString(getColor.getBackground().getRGB())).substring(2); 
-							setIt[setColorPos].setBackground(getColor.getBackground());
-							if((setColorPos+1)%code.length == 0) {
-								String[] getHint = mastermindCore.color_check(setColors);
-							int hintPos = setColorPos;
-							for(int i=0; i < getHint.length; i++) {
-									if(getHint[i]=="X") {
-										hints[hintPos].setBackground(Color.BLACK);
-										hintPos--;
-									} else if(getHint[i]=="O") {
-										hints[hintPos].setBackground(Color.WHITE);
-										hintPos--;
-									}
-							}
-
-
-
-								
-								
-							}
-							if(setColorPos == setIt.length-1) {
-								System.out.println("!!!!!!!!!!!!!GAME OVER :)!!!!!!!!!!!!!!!!!!!!");
-								showResult(con);
-							}
-						} else {	
-							System.out.println("!!!!!!!!!!!!!GAME ALREADY OVER :)!!!!!!!!!!!!!!!!!!!!");
-						}
-						setColorPos++;		
-					}
-			});
-			setBackgroundColor();
-			usingColors[i] = chooseColors;
-			addComponent(container, usingColors[i], i,10,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
-			
-		}	
-	}
 	
-	private void showResult(Container con) {
-		//Generate secret code buttons
-		for(int i=0; i < code.length; i++) {
-			addComponent(con, code[i], i+i,0,2,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
-		}	
-	}
-		
-	private void setBackgroundColor() {
-		String [] colorCode = mastermindCore.generateCode();
-		for(int i=0; i < code.length; i++) {
-			code[i].setBackground(Color.decode(colorCode[i]));
-		}
-	}
-	
-	private void genMenu(Container container) {
+/*	private void genMenu(Container container) {
 		JMenuBar bar = new JMenuBar();
 		{
 			JMenu menu = new JMenu("File");
@@ -152,13 +40,5 @@ public class gui {
 		}	
 		((JFrame) container).setJMenuBar(bar);
 	}
-	
-	private void resetGame() {
-		for(int i=0; i<setIt.length; i++) {
-			setIt[i].setBackground(null);
-			hints[i].setBackground(null);		
-		}
-		setColorPos=0;
-		setBackgroundColor();
-	}	
+	*/
 }
