@@ -3,7 +3,7 @@ package mastermind_gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*; 
-
+import mastermind_gui.mastermind_templates.*;
 
 public class gui {
 
@@ -16,8 +16,9 @@ public class gui {
 		//Make Menu
 		//genMenu(frame);
 																	//params CodeLength, EnabledColors, Tries
-		gameInitialization game = new gameInitialization(2,15,4);
-		frame.add(game.getContainer());
+		//gameInitialization game = new gameInitialization(2,15,4);
+		//frame.add(game.getContainer());
+		frame.add(new VectorButton());		
 		frame.pack();
 		frame.setVisible(true);
 	}

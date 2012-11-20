@@ -4,13 +4,15 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*; 
 import mastermind_core.core;
+import mastermind_gui.mastermind_templates.*;
+
 
 class gameInitialization {
 	Container con;
-	JButton[] code;
-	JButton[] enabledColors;
-	JButton[] usedColors;
-	JButton[] hints;
+	pin[] code;
+	pin[] enabledColors;
+	pin[] usedColors;
+	pin[] hints;
 	String[] setColorsHEX;
 	int setColorPos;
 	final int tries;
@@ -28,19 +30,19 @@ class gameInitialization {
 
 	private void initGame(int codeLength,int enabledColorRange, int tries) {
 		mastermindCore = new core(codeLength, enabledColorRange);
-		enabledColors = new JButton[enabledColorRange];
+		enabledColors = new pin[enabledColorRange];
 
-		code = new JButton[codeLength];
+		code = new pin[codeLength];
 		setColorsHEX = new String[codeLength];
 		setColorPos = 0;
 		
 		//Generate secret code buttons
 		for(int i=0; i < code.length; i++) {
-			code[i] = new JButton();
+			code[i] = new pin();
 		}	
 
-		hints = new JButton[codeLength*tries];
-		usedColors = new JButton[codeLength * tries];
+		hints = new pin[codeLength*tries];
+		usedColors = new pin[codeLength * tries];
 		int column = 1;
 		int row = -1;
 		JPanel hintPane = new JPanel();
@@ -54,9 +56,11 @@ class gameInitialization {
 				hintPane.setLayout(hintLayout);
 				addComponent(hintPane, code.length+1,column,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);	
 			}
-			usedColors[i] = new JButton("" + i);
+			usedColors[i] = new pin();
 			addComponent(usedColors[i], row,column,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
-			hints[i] = new JButton(i +"");
+			pin button = new pin();
+			button.setVisible(false);			
+			hints[i] = button;
 			hintPane.add(hints[i]);
 			row--;
 		}	
@@ -64,23 +68,25 @@ class gameInitialization {
 		//Generate usedColor buttons
 		String[] enabledColorsHEX =	mastermindCore.getEnabledColors();
 		for(int i=0; i < enabledColors.length; i++) {
-			JButton chooseColors = new JButton ();
-			chooseColors.setBackground(Color.decode(enabledColorsHEX[i]));
+			pin chooseColors = new pin ();
+			chooseColors.setForeground(Color.decode(enabledColorsHEX[i]));
 			chooseColors.addActionListener(new ActionListener () {
 					public void actionPerformed (ActionEvent e) {
 						if(setColorPos<usedColors.length) {
-							JButton getColor = (JButton) e.getSource();
-							setColorsHEX[setColorPos%code.length] = "#" + (Integer.toHexString(getColor.getBackground().getRGB())).substring(2); 
-							usedColors[setColorPos].setBackground(getColor.getBackground());
+							pin getColor = (pin) e.getSource();
+							setColorsHEX[setColorPos%code.length] = "#" + (Integer.toHexString(getColor.getForeground().getRGB())).substring(2); 
+							usedColors[setColorPos].setForeground(getColor.getForeground());
 							if((setColorPos+1)%code.length == 0) {
 							String[] getHint = mastermindCore.color_check(setColorsHEX);
 							int hintPos = setColorPos;
 							for(int i=0; i < getHint.length; i++) {
 									if(getHint[i]=="X") {
-										hints[hintPos].setBackground(Color.BLACK);
+										hints[hintPos].setVisible(true);
+										hints[hintPos].setForeground(Color.BLACK);
 										hintPos--;
 									} else if(getHint[i]=="O") {
-										hints[hintPos].setBackground(Color.WHITE);
+										hints[hintPos].setVisible(true);
+										hints[hintPos].setForeground(Color.WHITE);
 										hintPos--;
 									}
 							}
@@ -100,7 +106,7 @@ class gameInitialization {
 						setColorPos++;		
 					}
 			});
-			setBackgroundColor();
+			setForegroundColor();
 			enabledColors[i] = chooseColors;
 			addComponent(enabledColors[i], i,10,1,1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
 			
@@ -114,20 +120,20 @@ class gameInitialization {
 		}	
 	}
 		
-	private void setBackgroundColor() {
+	private void setForegroundColor() {
 		String [] colorCode = mastermindCore.generateCode();
 		for(int i=0; i < code.length; i++) {
-			code[i].setBackground(Color.decode(colorCode[i]));
+			code[i].setForeground(Color.decode(colorCode[i]));
 		}
 	}
 	
 	private void resetGame() {
 		for(int i=0; i<usedColors.length; i++) {
-			usedColors[i].setBackground(null);
-			hints[i].setBackground(null);		
+			usedColors[i].setForeground(null);
+			hints[i].setForeground(null);		
 		}
 		setColorPos=0;
-		setBackgroundColor();
+		setForegroundColor();
 	}	
 	 
 	protected Container getContainer() {
