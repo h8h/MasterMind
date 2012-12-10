@@ -2,27 +2,27 @@ package mastermind_gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*; 
+import javax.swing.*;
 import mastermind_gui.mastermind_templates.*;
 
 public class gui {
 
   public void showGUI() {
-		//Erstellt ein neues Fenster		
+		//Erstellt ein neues Fenster
 		JFrame frame = new JFrame("MasterMind PP-1");
 		//frame.setPreferredSize(new Dimension(640, 480));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//Make Menu
 		//genMenu(frame);
-																	//params CodeLength, EnabledColors, Tries
-		//gameInitialization game = new gameInitialization(2,15,4);
-		//frame.add(game.getContainer());
-		frame.add(new VectorButton());		
+		//params CodeLength, EnabledColors, Tries
+		gameInitialization game = new gameInitialization(2,15,4);
+		frame.add(game.getContainer());
+		// frame.add(new VectorButton());
 		frame.pack();
 		frame.setVisible(true);
 	}
-	
+
 /*	private void genMenu(Container container) {
 		JMenuBar bar = new JMenuBar();
 		{
@@ -38,7 +38,7 @@ public class gui {
 			menu.add(item);
 			}
 			bar.add(menu);
-		}	
+		}
 		((JFrame) container).setJMenuBar(bar);
 	}
 	*/
