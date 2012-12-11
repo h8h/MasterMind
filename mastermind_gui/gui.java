@@ -4,9 +4,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import mastermind_gui.mastermind_templates.*;
+import javax.swing.filechooser.*;
+import java.io.*;
+import javax.swing.SwingUtilities;
 
 public class gui {
-
   public void showGUI() {
 		//Erstellt ein neues Fenster
 		JFrame frame = new JFrame("MasterMind PP-1");
@@ -14,25 +16,28 @@ public class gui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//Make Menu
-		//genMenu(frame);
+		genMenu(frame);
 		//params CodeLength, EnabledColors, Tries
-		gameInitialization game = new gameInitialization(2,15,4);
-		frame.add(game.getContainer());
-		// frame.add(new VectorButton());
-		frame.pack();
+		// gameInitialization game = new gameInitialization(2,15,4);
+		// frame.add(game.getContainer());
+		gameGround gg = new gameGround();
+    frame.add(gg);
+
+    frame.pack();
 		frame.setVisible(true);
 	}
 
-/*	private void genMenu(Container container) {
+	private void genMenu(Container container) {
 		JMenuBar bar = new JMenuBar();
 		{
 			JMenu menu = new JMenu("File");
 			{
-			JMenuItem item = new JMenuItem("Neues Spiel - mit Code");
-
-			item.addActionListener(new ActionListener () {
+			JMenuItem item = new JMenuItem("Speichern unter...");
+      final Container frame = container;
+      final JFileChooser fc = new JFileChooser();
+      item.addActionListener(new ActionListener () {
 					public void actionPerformed (ActionEvent e) {
-						resetGame();
+						fc.showSaveDialog(frame);
 					}
 			});
 			menu.add(item);
@@ -40,6 +45,5 @@ public class gui {
 			bar.add(menu);
 		}
 		((JFrame) container).setJMenuBar(bar);
-	}
-	*/
+	 }
 }
