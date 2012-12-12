@@ -54,7 +54,13 @@ class gameData extends AbstractTableModel{
     data.get(row).setElementAt((String)value, col);
     fireTableCellUpdated(row,col);
   }
-
+  public void setArrayAt(Object value, int row) {
+    String[] s = (String[]) value;
+    for(int i=0;i < s.length;i++) {
+       data.get(row).setElementAt(s[i],i);
+    }
+    fireTableDataChanged();
+  }
   public void setHint(String[] hints){
     data.get(0).setElementAt(hints, getColumnCount()-1);
     fireTableCellUpdated(0,getColumnCount()-1);

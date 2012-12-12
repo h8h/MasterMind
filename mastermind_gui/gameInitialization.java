@@ -19,8 +19,9 @@ class gameInitialization {
     this.codeLength = codeLength;
     this.enabledColorRange = enabledColorRange;
     mastermindCore = new core(codeLength,enabledColorRange);
-    mastermindCore.generateCode();
+    String code[] = mastermindCore.generateCode();
     gD = new gameData(codeLength);
+    gD.setArrayAt(code,0);
   }
 
   public gameGround initgameGround ()  {

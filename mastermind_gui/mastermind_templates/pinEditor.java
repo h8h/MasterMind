@@ -34,12 +34,17 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
                                                boolean isSelected,
                                                int row,
                                                int column) {
+    if(row!=0) {return null;}
     button.setBackground(getButtonBackground((String)value));
     if (position == -1 ) { //First run
       int i = 0;
       while (!enabledColors[i].equals((String)value)){ //Search current colorwalk position
         i++;
         position++;
+        if (i > enabledColors.length-1) {
+          position = -1;
+          break;
+        }
       }
       position++; //Next position from current Color
     }
@@ -53,7 +58,7 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
   }
 
   public Color getButtonBackground(String value) {
-     if (value == null) {
+     if (value == null || value.equals("")) {
       return null;
     } else {
       return Color.decode((String) value);
