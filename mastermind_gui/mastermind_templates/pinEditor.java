@@ -35,19 +35,19 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
                                                int row,
                                                int column) {
     if(row!=0) {return null;}
-    button.setBackground(getButtonBackground((String)value));
     if (position == -1 ) { //First run
       int i = 0;
       while (!enabledColors[i].equals((String)value)){ //Search current colorwalk position
         i++;
         position++;
         if (i > enabledColors.length-1) {
-          position = -1;
+          position = enabledColors.length;
           break;
         }
       }
-      position++; //Next position from current Color
     }
+
+    button.setBackground(getButtonBackground((String)value));
     return button;
   }
 

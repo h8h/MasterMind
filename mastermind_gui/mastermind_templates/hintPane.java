@@ -7,34 +7,27 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 public class hintPane implements TableCellRenderer {
-  JButton[] jb;
-
   public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column ) {
     String[] hints = (String[])value;
-    //First time - create buttons
-    if (hints[0] == null ) {
-      jb = new JButton[hints.length];
-      for (int i = 0; i < jb.length;i++ ){
-        jb[i]=new JButton();
-      }
-      return new JPanel();
-    }
+    if (hints[0] == null) { return new JPanel();}
     JPanel jp = new JPanel();
     jp.setLayout(new FlowLayout());
     int jbpos = 0;
     for(int i=0; i < hints.length; i++) {
+      JButton jb = new JButton();
       if(hints[i].equals("X")){
-        jb[jbpos].setBackground(Color.black);
-        jp.add(jb[jbpos]);
+        jb.setBackground(Color.black);
+        jp.add(jb);
         jbpos++;
       } else if(hints[i].equals("O")) {
-        jb[jbpos].setBackground(Color.red);
-        jp.add(jb[jbpos]);
+        jb.setBackground(Color.red);
+        jp.add(jb);
         jbpos++;
       }
     }
-    for(int j=jbpos; j < jb.length; j++) {
-        jp.add(jb[j]);
+    //Create Buttons which are not set
+    for(int j=jbpos; j < hints.length; j++) {
+      jp.add(new JButton());
     }
     return jp;
   }
