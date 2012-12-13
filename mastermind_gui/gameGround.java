@@ -11,7 +11,7 @@ public class gameGround extends JTable {
   public gameGround(gameData gD,String[] enabledColors) {
     super(gD); //Init JTable with Column and Data
 
-    //Table DesignsetRowHeight(int row_height)
+    //Table Design
     setPreferredScrollableViewportSize(new Dimension(500,500));
     for(int i=0; i < getColumnCount() - 1;i++) {
       getColumnModel().getColumn(i).setCellRenderer(new pin());

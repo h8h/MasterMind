@@ -28,9 +28,14 @@ class gameInitialization {
     return new gameGround(gD,mastermindCore.getEnabledColors()); //Table with set and hint buttons
   }
 
-  public void addTry() {
-    gD.setHint(mastermindCore.color_check(gD.getpinSetting())); //Get pinSetting from Table, check it and put it back in table
-    gD.addTry();
+  public boolean addTry() {
+    if (gD.setHint(mastermindCore.color_check(gD.getpinSetting()))) {
+      gD.setCellEditable(false);
+      return true;
+    } else {
+      gD.addTry();
+    } //Get pinSetting from Table, check it and put it back in table
+    return false;
   }
 
   public JPanel initenabledColors () {

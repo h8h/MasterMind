@@ -9,6 +9,7 @@ class gameData extends AbstractTableModel{
   private Vector<Vector> data = new Vector<Vector>(); // Should be in core
   private int codeLength; // Should be in core
   private int position; // Should be in core
+  private boolean celledit=true;
 
   public gameData(int codeLength) {
    super();
@@ -61,9 +62,13 @@ class gameData extends AbstractTableModel{
     }
     fireTableDataChanged();
   }
-  public void setHint(String[] hints){
+  public boolean setHint(String[] hints){
     data.get(0).setElementAt(hints, getColumnCount()-1);
     fireTableCellUpdated(0,getColumnCount()-1);
+    if(hints[hints.length-1] == "X") {
+      return true;
+    }
+    return false;
   }
 
   public String[] getpinSetting() {
@@ -95,6 +100,11 @@ class gameData extends AbstractTableModel{
   }
 
   public boolean isCellEditable(int row, int col) {
-    return true;
+    return celledit;
   }
+
+  public void setCellEditable(boolean boo){
+    celledit = boo;
+  }
+
 }

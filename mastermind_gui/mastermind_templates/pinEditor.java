@@ -8,7 +8,7 @@ import javax.swing.table.*;
 public class pinEditor extends AbstractCellEditor implements TableCellEditor,ActionListener {
   JButton button;
   String[] enabledColors;
-  int position=-1;
+  int position=0;
 
   public pinEditor(String[] enabledColors) {
     button = new JButton();
@@ -35,8 +35,8 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
                                                int row,
                                                int column) {
     if(row!=0) {return null;}
-    if (position == -1 ) { //First run
       int i = 0;
+      position=0;
       while (!enabledColors[i].equals((String)value)){ //Search current colorwalk position
         i++;
         position++;
@@ -45,7 +45,6 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
           break;
         }
       }
-    }
 
     button.setBackground(getButtonBackground((String)value));
     return button;
