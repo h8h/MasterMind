@@ -8,11 +8,12 @@ import mastermind_gui.mastermind_templates.*;
 
 
 class gameInitialization {
-  final int tries;
-  final int codeLength;
-  final int enabledColorRange;
-  core mastermindCore;
-  gameData gD;
+  private int tries;
+  private int codeLength;
+  private int enabledColorRange;
+  private int triescount=0;
+  private core mastermindCore;
+  private gameData gD;
 
   public gameInitialization(int codeLength,int enabledColorRange, int tries) {
     this.tries = tries;
@@ -24,18 +25,29 @@ class gameInitialization {
     gD.setArrayAt(code,0);
   }
 
+  public enum gameStatus {
+    WIN,PLAYING,LOST
+  }
+
   public gameGround initgameGround ()  {
     return new gameGround(gD,mastermindCore.getEnabledColors()); //Table with set and hint buttons
   }
 
-  public boolean addTry() {
+  public gameStatus addTry() {
+    triescount++;
     if (gD.setHint(mastermindCore.color_check(gD.getpinSetting()))) {
       gD.setCellEditable(false);
-      return true;
-    } else {
-      gD.addTry();
+      return gameStatus.WIN;
     } //Get pinSetting from Table, check it and put it back in table
-    return false;
+
+    //Check tries
+    //Check if last pin are black, else go on playing
+    if (triescount == tries)
+      return gameStatus.LOST;
+
+    gD.addTry();
+    System.out.println("OH NEIN OH NEIN EIN VERSUCH WENIGER!!"+triescount+"/"+tries);
+    return gameStatus.PLAYING;
   }
 
   public JPanel initenabledColors () {

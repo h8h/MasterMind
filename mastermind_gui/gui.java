@@ -10,9 +10,11 @@ import javax.swing.SwingUtilities;
 
 public class gui {
   gameInitialization game;
-  JFrame frame;
   JButton jb;
   options_gui options;
+  JFrame frame;
+  JPanel jp;
+  JPanel enabledColors;
 
   public void showGUI() {
 		//Erstellt ein neues Fenster
@@ -20,45 +22,63 @@ public class gui {
 		//frame.setPreferredSize(new Dimension(640, 480));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLayout(new FlowLayout());
-		//Make Menu
+    //Make Menu
 		genMenu(frame);
-		//params CodeLength, EnabledColors, Tries
-		game = new gameInitialization(4,8,4);
-    frame.add(game.initgameGround());
-    jb = new JButton ("OK");
-    jb.addActionListener(new ActionListener () {
-      public void actionPerformed (ActionEvent e) {
-        addTry();
-      }
-    });
-    frame.add(jb);
-    frame.add(game.initenabledColors());
     options = new options_gui();
     frame.add(options);
-
-    ak = new JButton ("Akzeptieren");
+    JButton ak = new JButton ("Akzeptieren");
     ak.addActionListener(new ActionListener () {
       public void actionPerformed (ActionEvent e) {
         newGame();
       }
     });
     frame.add(ak);
-
+    newGame();
     frame.pack();
 		frame.setVisible(true);
-	}
-
-	private void addTry() {
-    if(game.addTry()) {
-      frame.add(new JLabel("SIE HABEN GEWONNEN"));
-      jb.setEnabled(false);
-      frame.repaint();
-      frame.revalidate();
-    }
   }
 
   private void newGame() {
-    game.newgame();
+    //Create JPanel
+    if (jp !=null)
+      frame.remove(jp);
+    jp = new JPanel();
+    jp.setLayout(new FlowLayout());
+    //params CodeLength, EnabledColors, Tries
+    game = new gameInitialization(options.getcodeLength(),options.getColorRange(),4);
+    jp.add(game.initgameGround());
+    jb = new JButton ("OK");
+    jb.addActionListener(new ActionListener () {
+      public void actionPerformed (ActionEvent e) {
+        addTry();
+      }
+    });
+    jp.add(jb);
+    enabledColors = game.initenabledColors();
+    jp.add(enabledColors);
+    frame.add(jp);
+    frame.repaint();
+    frame.revalidate();
+  }
+
+  private void addTry() {
+    switch(game.addTry()) {
+      case WIN:
+        disableGame();
+        jp.add(new JLabel("SIE HABEN GEWONNEN"));
+        break;
+      case LOST:
+        disableGame();
+        jp.add(new JLabel("SIE HABEN DEN CODE NICHT GEKNACKT DIE WELT GEHT NUN UNTER IN 3 ... 2 ... 1 ... *SCHERZ*"));
+        break;
+    }
+    frame.repaint();
+    frame.revalidate();
+  }
+
+  private void disableGame() {
+    jp.remove(enabledColors);
+    jb.setEnabled(false);
   }
 
   private void genMenu(Container container) {
