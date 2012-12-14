@@ -1,4 +1,5 @@
 *.class
 mastermind_gui/*.class
 mastermind_gui/mastermind_templates/*.class
+mastermind_save_load/*.class
 mastermind_core/*.class

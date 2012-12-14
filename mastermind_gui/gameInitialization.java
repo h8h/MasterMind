@@ -4,25 +4,21 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import mastermind_core.core;
+import mastermind_save_load.*;
 import mastermind_gui.mastermind_templates.*;
 
 
 class gameInitialization {
-  private int tries;
-  private int codeLength;
-  private int enabledColorRange;
   private int triescount=0;
-  private core mastermindCore;
+  private core mm_core;
   private gameData gD;
+  private gameGround gG;
 
-  public gameInitialization(int codeLength,int enabledColorRange, int tries) {
-    this.tries = tries;
-    this.codeLength = codeLength;
-    this.enabledColorRange = enabledColorRange;
-    mastermindCore = new core(codeLength,enabledColorRange);
-    String code[] = mastermindCore.generateCode();
-    gD = new gameData(codeLength);
-    gD.setArrayAt(code,0);
+  public gameInitialization(core mm_core) {
+    this.mm_core = mm_core;
+    String code[] = mm_core.generateCode();
+    gD = new gameData(mm_core);
+    gG = new gameGround(gD,mm_core.getEnabledColors()); //Table with set and hint buttons
   }
 
   public enum gameStatus {
@@ -30,31 +26,33 @@ class gameInitialization {
   }
 
   public gameGround initgameGround ()  {
-    return new gameGround(gD,mastermindCore.getEnabledColors()); //Table with set and hint buttons
+    return gG;
   }
 
   public gameStatus addTry() {
     triescount++;
-    if (gD.setHint(mastermindCore.color_check(gD.getpinSetting()))) {
+    if (gD.setHint(mm_core.color_check(gD.getpinSetting()))) {
       gD.setCellEditable(false);
       return gameStatus.WIN;
     } //Get pinSetting from Table, check it and put it back in table
 
     //Check tries
     //Check if last pin are black, else go on playing
-    if (triescount == tries)
+    if (triescount == mm_core.getTries()) {
+      gD.showCode();
+      gG.setRowHeight(0,80);
       return gameStatus.LOST;
+    }
 
     gD.addTry();
-    System.out.println("OH NEIN OH NEIN EIN VERSUCH WENIGER!!"+triescount+"/"+tries);
     return gameStatus.PLAYING;
   }
 
   public JPanel initenabledColors () {
     JPanel jp = new JPanel();
     String abc = "QWERTZUIOP";
-    String[] enabledColorsHEX = mastermindCore.getEnabledColors();
-    for (int i=0; i < enabledColorRange; i++) {
+    String[] enabledColorsHEX = mm_core.getEnabledColors();
+    for (int i=0; i < enabledColorsHEX.length; i++) {
       JButton jb;
       if ((i+1)  < 10) {
         jb = new JButton((i+1)+"");

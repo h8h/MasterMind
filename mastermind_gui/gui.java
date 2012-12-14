@@ -7,6 +7,8 @@ import mastermind_gui.mastermind_templates.*;
 import javax.swing.filechooser.*;
 import java.io.*;
 import javax.swing.SwingUtilities;
+import mastermind_save_load.*;
+import mastermind_core.core;
 
 public class gui {
   gameInitialization game;
@@ -45,8 +47,10 @@ public class gui {
     jp = new JPanel();
     jp.setLayout(new FlowLayout());
     //params CodeLength, EnabledColors, Tries
-    game = new gameInitialization(options.getcodeLength(),options.getColorRange(),4);
-    jp.add(game.initgameGround());
+    core mm_core = new core (options.getcodeLength(),options.getColorRange(),4);
+    game = new gameInitialization(mm_core);
+    JScrollPane scrollpane = new JScrollPane(game.initgameGround());
+    jp.add(scrollpane);
     jb = new JButton ("OK");
     jb.addActionListener(new ActionListener () {
       public void actionPerformed (ActionEvent e) {
