@@ -63,9 +63,6 @@ public class core {
     }
     return false;
   }
-  public int incTriesCount() {
-    return triescount++;
-  }
 
   public void showCode() {
     data.add(0, new Vector<Object>());

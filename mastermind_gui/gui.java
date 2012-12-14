@@ -17,6 +17,7 @@ public class gui {
   JFrame frame;
   JPanel jp;
   JPanel enabledColors;
+  File filename;
 
   public void showGUI() {
 		//Erstellt ein neues Fenster
@@ -45,10 +46,16 @@ public class gui {
 		{
 			JMenu menu = new JMenu("File");
 			{
-			JMenuItem item01 = new JMenuItem("Speichern unter...");
-      item01.addActionListener(new ActionListener () {
+			JMenuItem item00 = new JMenuItem("Speichern unter...");
+      item00.addActionListener(new ActionListener () {
 					public void actionPerformed (ActionEvent e) {
             saveDialog();
+          }
+			});
+      JMenuItem item01 = new JMenuItem("Speichern");
+      item01.addActionListener(new ActionListener () {
+					public void actionPerformed (ActionEvent e) {
+            saveFile();
           }
 			});
 			JMenuItem item02 = new JMenuItem("Laden");
@@ -57,6 +64,7 @@ public class gui {
             loadDialog();
           }
 			});
+      menu.add(item00);
 			menu.add(item01);
       menu.add(item02);
       }
@@ -68,9 +76,22 @@ public class gui {
   private void saveDialog() {
     JFileChooser fc = new JFileChooser();
     if(fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
-      save gamesave = new save(fc.getSelectedFile());
-      gamesave.savefile(game.getCore());
+      filename = fc.getSelectedFile();
+      saveFile(filename);
     }
+  }
+
+  private void saveFile() {
+    if(filename == null) {
+      saveDialog();
+    } else {
+      saveFile(filename);
+    }
+  }
+
+  private void saveFile(File filn) {
+    save gamesave = new save(filn);
+    gamesave.savefile(game.getCore());
   }
 
   private void loadDialog() {
