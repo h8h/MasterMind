@@ -1,23 +1,20 @@
 package mastermind_save_load;
 import java.io.*;
-import mastermind_core.core;
 
-class load {
-  String filename;
+public class load {
+  File filename;
 
-  public load (String file) {
+  public load (File file) {
     filename = file;
   }
 
-  private core loadFile() {
+  public Object[] loadfile() {
     try {
       FileInputStream loadFile = new FileInputStream(filename);
       ObjectInputStream load = new ObjectInputStream(loadFile);
-      String name = (String) load.readObject();
-      String name01 = (String) load.readObject();
+      Object[] o = (Object[]) load.readObject();
       load.close();
-      System.out.println(name);
-      System.out.println(name01);
+      return o;
     } catch(Exception exc){
       exc.printStackTrace(); // If there was an error, print the info.
     }

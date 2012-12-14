@@ -6,14 +6,17 @@ import mastermind_core.core;
 
 class gameData extends AbstractTableModel{
   private String[] columnNames;
-  private int position; // Should be in core
+  private int position;
   private boolean celledit=true;
   private core mm_core;
 
   public gameData(core mm_core) {
-   super();
-   this.mm_core = mm_core;
-   createColumns();
+    super();
+    this.mm_core = mm_core;
+    createColumns();
+    if(getRowCount() == 0) { //New Game or game loaded?
+      addTry(); //Add first Try
+    }
   }
 
   public void createColumns() {
@@ -22,7 +25,6 @@ class gameData extends AbstractTableModel{
       columnNames[i] = i +"";
     }
     columnNames[mm_core.codeLength()] = "Hint";
-    addTry(); //Add first Try
   }
 
   public void showCode() {
@@ -59,6 +61,7 @@ class gameData extends AbstractTableModel{
     mm_core.data.get(row).setElementAt((String)value, col);
     fireTableCellUpdated(row,col);
   }
+
   public void setArrayAt(Object value, int row) {
     String[] s = (String[]) value;
     for(int i=0;i < s.length;i++) {
@@ -66,6 +69,7 @@ class gameData extends AbstractTableModel{
     }
     fireTableDataChanged();
   }
+
   public boolean setHint(String[] hints){
     mm_core.data.get(0).setElementAt(hints, getColumnCount()-1);
     fireTableCellUpdated(0,getColumnCount()-1);
@@ -82,6 +86,7 @@ class gameData extends AbstractTableModel{
     }
     return s;
   }
+
   //Implement Functions
   public int getColumnCount() {
     return columnNames.length;

@@ -9,14 +9,12 @@ import mastermind_gui.mastermind_templates.*;
 
 
 class gameInitialization {
-  private int triescount=0;
   private core mm_core;
   private gameData gD;
   private gameGround gG;
 
   public gameInitialization(core mm_core) {
     this.mm_core = mm_core;
-    String code[] = mm_core.generateCode();
     gD = new gameData(mm_core);
     gG = new gameGround(gD,mm_core.getEnabledColors()); //Table with set and hint buttons
   }
@@ -30,15 +28,15 @@ class gameInitialization {
   }
 
   public gameStatus addTry() {
-    triescount++;
     if (gD.setHint(mm_core.color_check(gD.getpinSetting()))) {
       gD.setCellEditable(false);
       return gameStatus.WIN;
     } //Get pinSetting from Table, check it and put it back in table
 
     //Check tries
-    //Check if last pin are black, else go on playing
-    if (triescount == mm_core.getTries()) {
+    //Check if last pin is black, else go on playing
+    if (mm_core.checkTries()) {
+      gD.setCellEditable(false);
       gD.showCode();
       gG.setRowHeight(0,80);
       return gameStatus.LOST;
@@ -50,7 +48,7 @@ class gameInitialization {
 
   public JPanel initenabledColors () {
     JPanel jp = new JPanel();
-    String abc = "QWERTZUIOP";
+    String abc = "0QWER";
     String[] enabledColorsHEX = mm_core.getEnabledColors();
     for (int i=0; i < enabledColorsHEX.length; i++) {
       JButton jb;
@@ -72,5 +70,9 @@ class gameInitialization {
 
   public void setColor(String color) {
     gD.setColor(color);
+  }
+
+  public Object[] getCore() {
+    return mm_core.makePKG();
   }
 }

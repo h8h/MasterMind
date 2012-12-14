@@ -8,10 +8,12 @@ import javax.swing.event.*;
 public class options_gui extends JPanel {
     private int ColorRange = 8;
     private int codeLength = 4;
+    private JSlider slide_colors;
+    private JSlider slide_code;
 
     public options_gui() {
-        JSlider slide_colors = new JSlider(JSlider.VERTICAL,2,16,8);
-        JSlider slide_code  = new JSlider(JSlider.VERTICAL,2,10,4);
+        slide_colors = new JSlider(JSlider.VERTICAL,2,14,8);
+        slide_code  = new JSlider(JSlider.VERTICAL,2,10,4);
 
         slide_colors.setMajorTickSpacing(1);
         slide_colors.setPaintLabels(true);
@@ -41,16 +43,18 @@ public class options_gui extends JPanel {
       return ColorRange;
     }
 
-    private void setColorRange(int cr) {
+    protected void setColorRange(int cr) {
       ColorRange = cr;
+      slide_colors.setValue(ColorRange);
     }
 
     public int getcodeLength(){
       return codeLength;
     }
 
-    private void setcodeLength(int cl) {
+    protected void setcodeLength(int cl) {
       codeLength = cl;
+      slide_code.setValue(codeLength);
     }
 }
 

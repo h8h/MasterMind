@@ -1,20 +1,18 @@
 package mastermind_save_load;
 import java.io.*;
-import mastermind_core.core;
 
-class save {
-  String filename;
-  core mastermindCore;
+public class save {
+  File filename;
 
-  public save (String file, core mastermind_game) {
-    filename = file;
+  public save (File filen) {
+    filename = filen;
   }
 
-  private void savefile() {
+  public void savefile(Object mastermind_game) {
     try {
       FileOutputStream saveFile = new FileOutputStream(filename);
       ObjectOutputStream save = new ObjectOutputStream(saveFile);
-      save.writeObject("GUDE ABEND!");
+      save.writeObject(mastermind_game);
       save.close();
     } catch(Exception exc){
       exc.printStackTrace(); // If there was an error, print the info.

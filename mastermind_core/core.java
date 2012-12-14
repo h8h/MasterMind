@@ -3,16 +3,26 @@ package mastermind_core;
 import java.util.*;
 
 public class core {
-	static final String[] availableColors =	{"#2305e1","#e02f24","#e8ec0e","#28e515","#ec8b0e","#7c29a8","#cac9c4","#000000","#FFFFFF","#6a1606","#9ad4f9","#186d32","#137167","#5d5c56","#cf0cb9","#5c7c46"};
+	static final String[] availableColors =	{"#2305e1","#e02f24","#e8ec0e","#28e515","#ec8b0e","#7c29a8","#000000","#6a1606","#9ad4f9","#186d32","#137167","#5d5c56","#cf0cb9","#5c7c46"};
 	private String[] enabledColors;
 	private String[] code;
   private int tries;
+  private int triescount;
   public Vector<Vector> data = new Vector<Vector>();
 
 	public core (int codeLength,int enabledColorRange, int tries) {
 		initColors(codeLength,enabledColorRange);
+    generateCode();
     this.tries = tries;
-	}
+  }
+
+  public core (Object[] o) {
+    initColors((int)o[0],(int)o[1]);
+    code = (String[]) o[2];
+    tries = (int) o[3];
+    triescount = (int) o[4];
+    data = (Vector<Vector>) o[5];
+  }
 
 	private void initColors(int codeLength,int enabledColorRange) {
 		enabledColors = new String[enabledColorRange];
@@ -22,14 +32,13 @@ public class core {
 		}
 	}
 
-	public String[] generateCode() {
+	public void generateCode() {
 		int randomizeColor = 0;
 		Random r = new Random();
 		for (int i = 0; i < code.length; i++) {
 			randomizeColor = r.nextInt(enabledColors.length);
 			code[i] = enabledColors[randomizeColor];
 		}
-		return code;
 	}
 
 	public String[] getEnabledColors() {
@@ -46,6 +55,16 @@ public class core {
 
   public int getTries() {
     return tries;
+  }
+
+  public boolean checkTries() {
+    if(++triescount == tries) {
+      return true;
+    }
+    return false;
+  }
+  public int incTriesCount() {
+    return triescount++;
   }
 
   public void showCode() {
@@ -92,5 +111,10 @@ public class core {
 		    }
 		}
 		return check;
+  }
+
+  public Object[] makePKG() {
+    Object[] o = {code.length, enabledColors.length, code, tries, triescount, data};
+    return o;
   }
 }

@@ -25,7 +25,7 @@ public class gui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setLayout(new FlowLayout());
     //Make Menu
-		genMenu(frame);
+		genMenu();
     options = new options_gui();
     frame.add(options);
     JButton ak = new JButton ("Akzeptieren");
@@ -40,14 +40,68 @@ public class gui {
 		frame.setVisible(true);
   }
 
+  private void genMenu() {
+		JMenuBar bar = new JMenuBar();
+		{
+			JMenu menu = new JMenu("File");
+			{
+			JMenuItem item01 = new JMenuItem("Speichern unter...");
+      item01.addActionListener(new ActionListener () {
+					public void actionPerformed (ActionEvent e) {
+            saveDialog();
+          }
+			});
+			JMenuItem item02 = new JMenuItem("Laden");
+      item02.addActionListener(new ActionListener () {
+        public void actionPerformed (ActionEvent e) {
+            loadDialog();
+          }
+			});
+			menu.add(item01);
+      menu.add(item02);
+      }
+		bar.add(menu);
+		}
+		frame.setJMenuBar(bar);
+	}
+
+  private void saveDialog() {
+    JFileChooser fc = new JFileChooser();
+    if(fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+      save gamesave = new save(fc.getSelectedFile());
+      gamesave.savefile(game.getCore());
+    }
+  }
+
+  private void loadDialog() {
+    JFileChooser fc = new JFileChooser();
+    if(fc.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+      load savegame = new load(fc.getSelectedFile());
+      newGame(savegame.loadfile());
+    }
+  }
+
   private void newGame() {
+    createGame(null);
+  }
+
+  private void newGame(Object[] o) {
+    core co= new core(o);
+    options.setColorRange(co.EnabledColorsSize());
+    options.setcodeLength(co.codeLength());
+    createGame(co);
+  }
+
+  private void createGame(core mm_core) {
     //Create JPanel
     if (jp !=null)
       frame.remove(jp);
     jp = new JPanel();
     jp.setLayout(new FlowLayout());
     //params CodeLength, EnabledColors, Tries
-    core mm_core = new core (options.getcodeLength(),options.getColorRange(),4);
+    if (mm_core == null) {
+      mm_core = new core (options.getcodeLength(),options.getColorRange(),4);
+    }
     game = new gameInitialization(mm_core);
     JScrollPane scrollpane = new JScrollPane(game.initgameGround());
     jp.add(scrollpane);
@@ -73,7 +127,7 @@ public class gui {
         break;
       case LOST:
         disableGame();
-        jp.add(new JLabel("SIE HABEN DEN CODE NICHT GEKNACKT DIE WELT GEHT NUN UNTER IN 3 ... 2 ... 1 ... *SCHERZ*"));
+        jp.add(new JLabel("SIE HABEN VERLOREN"));
         break;
     }
     frame.repaint();
@@ -85,23 +139,4 @@ public class gui {
     jb.setEnabled(false);
   }
 
-  private void genMenu(Container container) {
-		JMenuBar bar = new JMenuBar();
-		{
-			JMenu menu = new JMenu("File");
-			{
-			JMenuItem item01 = new JMenuItem("Speichern unter...");
-      final Container frame = container;
-      final JFileChooser fc = new JFileChooser();
-      item01.addActionListener(new ActionListener () {
-					public void actionPerformed (ActionEvent e) {
-						fc.showSaveDialog(frame);
-					}
-			});
-			menu.add(item01);
-      }
-		bar.add(menu);
-		}
-		((JFrame) container).setJMenuBar(bar);
-	 }
 }
