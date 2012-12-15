@@ -8,14 +8,14 @@ public class save {
     filename = filen;
   }
 
-  public void savefile(Object mastermind_game) {
+  public void savefile(Object mastermind_game) throws IOException {
     try {
       FileOutputStream saveFile = new FileOutputStream(filename);
       ObjectOutputStream save = new ObjectOutputStream(saveFile);
       save.writeObject(mastermind_game);
       save.close();
     } catch(Exception exc){
-      exc.printStackTrace(); // If there was an error, print the info.
+     throw exc;//Redirect Error to GUI
     }
   }
 }

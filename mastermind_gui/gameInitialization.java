@@ -28,7 +28,7 @@ class gameInitialization {
   }
 
   public gameStatus addTry() {
-    if (gD.setHint(mm_core.color_check(gD.getpinSetting()))) {
+    if (gD.setHint(mm_core.color_check())) {
       gD.setCellEditable(false);
       return gameStatus.WIN;
     } //Get pinSetting from Table, check it and put it back in table

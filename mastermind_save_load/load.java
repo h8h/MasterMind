@@ -8,7 +8,7 @@ public class load {
     filename = file;
   }
 
-  public Object[] loadfile() {
+  public Object[] loadfile() throws IOException,ClassNotFoundException {
     try {
       FileInputStream loadFile = new FileInputStream(filename);
       ObjectInputStream load = new ObjectInputStream(loadFile);
@@ -16,8 +16,7 @@ public class load {
       load.close();
       return o;
     } catch(Exception exc){
-      exc.printStackTrace(); // If there was an error, print the info.
+      throw exc; //Redirect Error to GUI
     }
-    return null;
   }
 }
