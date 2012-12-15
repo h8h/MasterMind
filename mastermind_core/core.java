@@ -125,7 +125,15 @@ public class core {
     return (String) ((Vector) data.get(0)).get(col);
   }
 
- protected void setValueAt(String value, int col){
+  protected String getValueAt(int row, int col) {
+    return (String) ((Vector) data.get(row)).get(col);
+  }
+
+  protected String[] getHintPane(int row) {
+    return (String []) ((Vector) data.get(row)).get(codeLength());
+  }
+
+  protected void setValueAt(String value, int col){
     data.get(0).setElementAt((String)value, col);
   }
 
