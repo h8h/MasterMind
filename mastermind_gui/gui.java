@@ -3,10 +3,7 @@ package mastermind_gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import mastermind_gui.mastermind_templates.*;
-import javax.swing.filechooser.*;
 import java.io.*;
-import javax.swing.SwingUtilities;
 import mastermind_save_load.*;
 import mastermind_core.core;
 import  javax.swing.filechooser.FileFilter;
@@ -22,7 +19,7 @@ public class gui {
   static final String GAMENAME="MasterMind PP-1";
 
   public void showGUI() {
-		//Erstellt ein neues Fenster
+		//Displays a new Window
 		frame = new JFrame(GAMENAME+" Spiel: unbenannt");
 		//frame.setPreferredSize(new Dimension(640, 480));
 		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -40,6 +37,9 @@ public class gui {
             public void windowOpened(WindowEvent arg0) { }
         });
     frame.setLayout(new FlowLayout());
+    //KeyListener
+    KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+    manager.addKeyEventDispatcher(new keyboard(this));
     //Make Menu
 		genMenu();
     options = new options_gui();
@@ -184,6 +184,7 @@ public class gui {
     core co= new core(o);
     options.setColorRange(co.EnabledColorsSize());
     options.setcodeLength(co.codeLength());
+    options.setTriesLength(co.getTries());
     createGame(co);
   }
 
@@ -213,7 +214,7 @@ public class gui {
     frame.getJMenuBar().getMenu(0).getItem(1).setEnabled(true); // item01
     if (mm_core == null) {
       //params CodeLength, EnabledColors, Tries
-      mm_core = new core (options.getcodeLength(),options.getColorRange(),4);
+      mm_core = new core (options.getcodeLength(),options.getColorRange(),options.gettriesLength());
     }
     game = new gameInitialization(mm_core);
     JScrollPane scrollpane = new JScrollPane(game.initgameGround());

@@ -1,7 +1,5 @@
 package mastermind_gui;
 
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -10,11 +8,13 @@ public class options_gui extends JPanel {
     private int codeLength = 4;
     private JSlider slide_colors;
     private JSlider slide_code;
-
+    private JSpinner js_tries;
     public options_gui() {
+    	
         slide_colors = new JSlider(JSlider.VERTICAL,2,14,8);
         slide_code  = new JSlider(JSlider.VERTICAL,2,10,4);
-
+        js_tries = new JSpinner();
+        
         slide_colors.setMajorTickSpacing(1);
         slide_colors.setPaintLabels(true);
         slide_colors.setPaintTicks(true);
@@ -32,9 +32,11 @@ public class options_gui extends JPanel {
           public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             setcodeLength(source.getValue());
+            setTriesLength((int)((3*source.getValue())/2));
           }
         });
-
+        setTriesLength((int)((3*codeLength)/2));
+        add(js_tries);
         add(slide_colors);
         add(slide_code);
     }
@@ -56,5 +58,14 @@ public class options_gui extends JPanel {
       codeLength = cl;
       slide_code.setValue(codeLength);
     }
+    
+    public int gettriesLength() {
+    	return (int) js_tries.getValue();
+    }
+    
+    protected void setTriesLength(int tries) {
+    	js_tries.setValue(tries);
+    }
+    
 }
 

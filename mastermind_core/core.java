@@ -76,15 +76,15 @@ public class core {
   }
 
   public String[] color_check (){
-    String[] codeColors = code.clone(); //Not nice, but it works
-    System.arraycopy(code, 0, codeColors, 0, codeColors.length); //Not nice, but it works
+    String[] codeColors = code.clone(); 
+    System.arraycopy(code, 0, codeColors, 0, codeColors.length); 
     core_bot.setBestColors();
     String[] userColors = getDataArray();
 
     String[] check = new String[codeColors.length];
     int checkpos = 0;
 
-    // Auf Farbe+Position pruefen
+    // Color check funktion
     for(int i=0 ; i<userColors.length ; i++){
       if(userColors[i].equals(codeColors[i])){
         check[checkpos++] = "X";
@@ -93,7 +93,6 @@ public class core {
       }
     }
 
-    // Nur auf Farbe pruefen
     loop1: for(int i=0 ; i<userColors.length ; i++){
       loop2: for(int j=0 ; j<codeColors.length ; j++){
         if(userColors[i].equals("UX"))
