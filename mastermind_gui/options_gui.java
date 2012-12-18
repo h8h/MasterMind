@@ -2,19 +2,25 @@ package mastermind_gui;
 
 import javax.swing.*;
 import javax.swing.event.*;
-
+import java.awt.event.*;
+import java.awt.Component;
 public class options_gui extends JPanel {
     private int ColorRange = 8;
     private int codeLength = 4;
     private JSlider slide_colors;
     private JSlider slide_code;
     private JSpinner js_tries;
-    public options_gui() {
-    	
+    private gui g;
+
+    public options_gui(gui g) {
+    	  this.g = g;
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        Box vbox = Box.createVerticalBox();
+
         slide_colors = new JSlider(JSlider.VERTICAL,2,14,8);
         slide_code  = new JSlider(JSlider.VERTICAL,2,10,4);
         js_tries = new JSpinner();
-        
+
         slide_colors.setMajorTickSpacing(1);
         slide_colors.setPaintLabels(true);
         slide_colors.setPaintTicks(true);
@@ -35,10 +41,39 @@ public class options_gui extends JPanel {
             setTriesLength((int)((3*source.getValue())/2));
           }
         });
+        JButton ak = new JButton ("Neues Spiel");
+        ak.setAlignmentY(ak.LEFT_ALIGNMENT);
+        ak.addActionListener(new ActionListener () {
+          public void actionPerformed (ActionEvent e) {
+            newGame();
+          }
+        });
+
         setTriesLength((int)((3*codeLength)/2));
-        add(js_tries);
-        add(slide_colors);
-        add(slide_code);
+        vbox.add(Box.createVerticalStrut(40));
+        vbox.add(new JLabel("Einstellungen:"));
+        vbox.add(Box.createVerticalStrut(20));
+        Box hlabl = Box.createHorizontalBox();
+        hlabl.add(new JLabel("Anzahl Farben:"));
+        hlabl.add(new JLabel("Geheimer Code:"));
+        vbox.add(hlabl);
+        vbox.add(Box.createVerticalStrut(20));
+        Box hbox = Box.createHorizontalBox();
+        hbox.add(slide_colors);
+        hbox.add(Box.createHorizontalGlue());
+        hbox.add(slide_code);
+        vbox.add(Box.createVerticalStrut(20));
+        vbox.add(hbox);
+        vbox.add(Box.createVerticalStrut(20));
+        vbox.add(js_tries);
+        vbox.add(Box.createVerticalStrut(20));
+        vbox.add(ak);
+        vbox.add(Box.createGlue());
+        add(vbox);
+    }
+
+    private void newGame() {
+      g.newGame();
     }
 
     public int getColorRange() {
@@ -58,14 +93,14 @@ public class options_gui extends JPanel {
       codeLength = cl;
       slide_code.setValue(codeLength);
     }
-    
+
     public int gettriesLength() {
     	return (int) js_tries.getValue();
     }
-    
+
     protected void setTriesLength(int tries) {
     	js_tries.setValue(tries);
     }
-    
+
 }
 

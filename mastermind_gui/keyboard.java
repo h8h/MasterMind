@@ -55,6 +55,8 @@ class keyboard implements KeyEventDispatcher{
   public boolean setValues(KeyEvent e) {
     int key = (int) e.getKeyChar();
     switch (key) {
+        case  48: key = 10;
+                  break;
         case 113: key = 11;
                   break;
         case 119: key = 12;
@@ -64,11 +66,11 @@ class keyboard implements KeyEventDispatcher{
         case 114: key = 14;
                   break;
     }
-    if( (key > 47 && key < 58) || (key > 10 && key < 15)) {
+    if( (key > 48 && key < 58) || (key > 10 && key < 15)) {
       if (first_value == -1) {
-        first_value = (key>10&&key<15) ? key : key  - 48;
+        first_value = (key>9&&key<15) ? key : key  - 48;
       } else if (second_value == -1 ) {
-        second_value = (key>10&&key<15) ? key: key - 48;
+        second_value = (key>9&&key<15) ? key: key - 48;
         return true;
       }
     } else { //Reject

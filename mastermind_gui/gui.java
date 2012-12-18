@@ -36,21 +36,21 @@ public class gui {
             public void windowIconified(WindowEvent arg0) { }
             public void windowOpened(WindowEvent arg0) { }
         });
-    frame.setLayout(new FlowLayout());
-    //KeyListener
+    // frame.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS);
+    // KeyListener
     KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
     manager.addKeyEventDispatcher(new keyboard(this));
-    //Make Menu
+    // Make Menu
 		genMenu();
-    options = new options_gui();
-    frame.add(options);
-    JButton ak = new JButton ("Akzeptieren");
-    ak.addActionListener(new ActionListener () {
+    options = new options_gui(this);
+    frame.add(options,BorderLayout.LINE_START);
+    jb = new JButton ("OK");
+    jb.addActionListener(new ActionListener () {
       public void actionPerformed (ActionEvent e) {
-        newGame();
+        addTry();
       }
     });
-    frame.add(ak);
+    frame.add(jb,BorderLayout.LINE_END);
     newGame();
     frame.pack();
 		frame.setVisible(true);
@@ -171,7 +171,7 @@ public class gui {
     }
   }
 
-  private void newGame() {
+  protected void newGame() {
     if (gameRunning()) {return;}
     filename = null;
     frame.setTitle(GAMENAME+" Spiel: unbenannt");
@@ -218,16 +218,9 @@ public class gui {
     game = new gameInitialization(mm_core);
     JScrollPane scrollpane = new JScrollPane(game.initgameGround());
     jp.add(scrollpane);
-    jb = new JButton ("OK");
-    jb.addActionListener(new ActionListener () {
-      public void actionPerformed (ActionEvent e) {
-        addTry();
-      }
-    });
-    jp.add(jb);
     enabledColors = game.initenabledColors();
     jp.add(enabledColors);
-    frame.add(jp);
+    frame.add(jp,BorderLayout.CENTER);
     frame.repaint();
     frame.revalidate();
   }
