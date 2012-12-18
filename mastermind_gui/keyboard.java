@@ -21,19 +21,26 @@ class keyboard implements KeyEventDispatcher{
   }
 
   public void keypressed (KeyEvent e) {
+    //Enter press -> New Try
+    if(e.getKeyCode() == KeyEvent.VK_ENTER ) {
+      g.addTry();
+      resetValues();
+    }
+    //Add Color to Column
     if (a) {
-      if(setValues(e)) {
-          System.out.println("Hinzufügen: " + first_value + " zu " + second_value);
+      if(setValues(e) && first_value > -1 && second_value > -1) {
+        g.setColorAt(first_value-1,second_value-1);
       resetValues();
       }
     }
 
     if (d) {
       setValues(e);
-      System.out.println("Entfernen Farbe:" + first_value);
+      if(first_value > -1)
+        g.removeColor(first_value-1);
       resetValues();
     }
-
+    //Add / Delete Button are pressed
     switch(e.getKeyCode()) {
       case KeyEvent.VK_D: a = false;
                  d = true;
@@ -67,7 +74,6 @@ class keyboard implements KeyEventDispatcher{
     } else { //Reject
       resetValues();
     }
-
     return false;
   }
 

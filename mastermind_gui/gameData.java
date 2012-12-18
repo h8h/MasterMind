@@ -22,9 +22,9 @@ class gameData extends AbstractTableModel{
   public void createColumns() {
     columnNames = new String[mm_core.codeLength() + 1]; //codebuttons + hint field panel
     for (int i=0; i < mm_core.codeLength(); i++) {
-      columnNames[i] = i +"";
+      columnNames[i] = (i +1)+"";
     }
-    columnNames[mm_core.codeLength()] = "Hint";
+    columnNames[mm_core.codeLength()] = "";
   }
 
   public void showCode() {
@@ -42,8 +42,16 @@ class gameData extends AbstractTableModel{
     fireTableDataChanged();
   }
 
+  protected void setColorAt(String color, int column) {
+    setValueAt(color,0,column);
+  }
+
   public void setColor(String color) {
     setValueAt(color,0,getPos());
+  }
+
+  protected void removeColor(int column) {
+    setValueAt("",0,column);
   }
 
   public int getPos() {

@@ -68,6 +68,18 @@ class gameInitialization {
     return jp;
   }
 
+  protected void setColorAt(int color, int column) {
+    if(color < mm_core.EnabledColorsSize() && column < gD.getColumnCount()-1 ) {
+      gD.setColorAt(mm_core.getEnabledColors()[color],column);
+    }
+  }
+
+  protected void removeColor(int column) {
+    if(column < gD.getColumnCount() - 1) {
+      gD.removeColor(column);
+    }
+  }
+
   public void setColor(String color) {
     gD.setColor(color);
   }

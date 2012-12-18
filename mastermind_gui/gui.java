@@ -13,7 +13,7 @@ public class gui {
   private JButton jb;
   private options_gui options;
   private JFrame frame;
-  private JPanel jp;
+  private Box jp;
   private JPanel enabledColors;
   private File filename;
   static final String GAMENAME="MasterMind PP-1";
@@ -207,8 +207,7 @@ public class gui {
     //Create JPanel
     if (jp !=null)
       frame.remove(jp);
-    jp = new JPanel();
-    jp.setLayout(new FlowLayout());
+    jp = Box.createVerticalBox();
     // Enable Save Menu
     frame.getJMenuBar().getMenu(0).getItem(0).setEnabled(true); // item00
     frame.getJMenuBar().getMenu(0).getItem(1).setEnabled(true); // item01
@@ -233,7 +232,7 @@ public class gui {
     frame.revalidate();
   }
 
-  private void addTry() {
+  protected void addTry() {
     switch(game.addTry()) {
       case WIN:
         disableGame();
@@ -248,6 +247,14 @@ public class gui {
     }
     frame.repaint();
     frame.revalidate();
+  }
+
+  protected void setColorAt(int color, int column) {
+    game.setColorAt(color,column);
+  }
+
+  protected void removeColor(int column) {
+    game.removeColor(column);
   }
 
   private void disableGame() {
