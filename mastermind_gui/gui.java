@@ -205,8 +205,10 @@ public class gui {
 
   private void createGame(core mm_core) {
     //Create JPanel
-    if (jp !=null)
+    if (jp !=null) {
       frame.remove(jp);
+      frame.remove(enabledColors);
+    }
     jp = Box.createVerticalBox();
     // Enable Save Menu
     frame.getJMenuBar().getMenu(0).getItem(0).setEnabled(true); // item00
@@ -216,10 +218,16 @@ public class gui {
       mm_core = new core (options.getcodeLength(),options.getColorRange(),options.gettriesLength());
     }
     game = new gameInitialization(mm_core);
+    Box vbox = Box.createVerticalBox();
     JScrollPane scrollpane = new JScrollPane(game.initgameGround());
-    jp.add(scrollpane);
+    vbox.add(scrollpane);
+    JCheckBox cb = new JCheckBox("Hilfsfunktion aktivieren");
+    cb.setAlignmentX(Component.RIGHT_ALIGNMENT);
+    vbox.add(cb);
+    jp.add(vbox);
     enabledColors = game.initenabledColors();
-    jp.add(enabledColors);
+    //Validate Button
+    frame.add(enabledColors,BorderLayout.SOUTH);
     frame.add(jp,BorderLayout.CENTER);
     frame.repaint();
     frame.revalidate();

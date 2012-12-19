@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Color;
+
 public class options_gui extends JPanel {
     private int ColorRange = 8;
     private int codeLength = 4;
@@ -14,13 +17,23 @@ public class options_gui extends JPanel {
 
     public options_gui(gui g) {
     	  this.g = g;
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         Box vbox = Box.createVerticalBox();
 
         slide_colors = new JSlider(JSlider.VERTICAL,2,14,8);
         slide_code  = new JSlider(JSlider.VERTICAL,2,10,4);
         js_tries = new JSpinner();
-
+        js_tries.setMaximumSize(new Dimension(80,50));
+        ((JSpinner.DefaultEditor)js_tries.getEditor()).getTextField().setColumns(2);
+        setTriesLength((int)((3*codeLength)/2));
+        js_tries.addChangeListener(new ChangeListener() {
+          public void stateChanged(ChangeEvent e) {
+            JSpinner source = (JSpinner) e.getSource();
+            if ((int)source.getValue() > 99) {
+              source.setValue(99);
+            }
+          }
+        });
         slide_colors.setMajorTickSpacing(1);
         slide_colors.setPaintLabels(true);
         slide_colors.setPaintTicks(true);
@@ -42,35 +55,47 @@ public class options_gui extends JPanel {
           }
         });
         JButton ak = new JButton ("Neues Spiel");
-        ak.setAlignmentY(ak.LEFT_ALIGNMENT);
+        ak.setAlignmentX(Component.RIGHT_ALIGNMENT);
         ak.addActionListener(new ActionListener () {
           public void actionPerformed (ActionEvent e) {
             newGame();
           }
         });
-
-        setTriesLength((int)((3*codeLength)/2));
+        //Margin Top
         vbox.add(Box.createVerticalStrut(40));
-        vbox.add(new JLabel("Einstellungen:"));
-        vbox.add(Box.createVerticalStrut(20));
+        //Settings Label
+        JLabel settings = new JLabel ("Einstellungen:");
+        settings.setMaximumSize(new Dimension(98,0));
+        settings.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        vbox.add(settings);
+        //Margin Settings <-> Label for Color / Code Length Labels
+        vbox.add(Box.createVerticalStrut(22));
         Box hlabl = Box.createHorizontalBox();
-        hlabl.add(new JLabel("Anzahl Farben:"));
-        hlabl.add(new JLabel("Geheimer Code:"));
+        hlabl.add(new JLabel("<html>Anzahl<br>Farben:</html>"));
+        hlabl.add(Box.createHorizontalGlue());
+        hlabl.add(new JLabel("<html>Geheimer<br>Code:</html>"));
         vbox.add(hlabl);
-        vbox.add(Box.createVerticalStrut(20));
+        //Margin Label <-> JSpinner
+        vbox.add(Box.createVerticalStrut(15));
         Box hbox = Box.createHorizontalBox();
         hbox.add(slide_colors);
         hbox.add(Box.createHorizontalGlue());
         hbox.add(slide_code);
-        vbox.add(Box.createVerticalStrut(20));
+        hbox.add(Box.createVerticalStrut(10));
         vbox.add(hbox);
+        //Margin JSpinner <-> Tries
         vbox.add(Box.createVerticalStrut(20));
-        vbox.add(js_tries);
+        Box trieslbl = Box.createHorizontalBox();
+        trieslbl.add(new JLabel("Versuche:  "));
+        trieslbl.add(js_tries);
+        trieslbl.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        vbox.add(trieslbl);
+        //Margin Tries <-> New Game Button
         vbox.add(Box.createVerticalStrut(20));
         vbox.add(ak);
-        vbox.add(Box.createGlue());
         add(vbox);
     }
+
 
     private void newGame() {
       g.newGame();
