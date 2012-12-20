@@ -2,6 +2,7 @@ package mastermind_core;
 
 public class bot {
   core mm_core;
+  boolean makeValidate;
 
   public bot (core co) {
     mm_core = co;
@@ -10,7 +11,7 @@ public class bot {
 	protected void setBestColors () {
 
 		int space=0;
-
+    makeValidate = false;
 		for(int i=0; i < mm_core.codeLength(); i++) {
 			System.out.println(mm_core.getValueAt(i));
 			if(mm_core.getValueAt(i) == null || mm_core.getValueAt(i).equals("")) {
@@ -37,23 +38,24 @@ public class bot {
 					mm_core.setValueAt(mm_core.getEnabledColors()[0],i); //Set for examp red pin to empty pinSetting
 				}
 			}
-		}else{	//validate
-			System.out.println(validate());
-		}
+    }else{ //validate
+      makeValidate = true;
+    }
 	}
 
-	protected String validate() {
+	protected validator validate() {
+    if (!makeValidate) { return new validator(true,"Keine Kommentar, der Bot hat ja schon geholfen");}
 		boolean rightColors = true;
 
 		if (mm_core.data.size()==1)
-			return "Jede wahl ist eine gute Wahl.";
+			return new validator(true,"Jede Wahl ist eine gute Wahl.");
 		else{
 			for (int i = 1; i<mm_core.data.size(); i++){
 				for (int j = 0; j<mm_core.codeLength(); j++){
 					if (!(mm_core.getValueAt(i,j).equals(mm_core.getValueAt(j))))
 						break;
 					else if (j==mm_core.codeLength()-1)
-						return "Das ist die gleiche Zeile wie Zeile: " + (mm_core.data.size()-i);
+						return new validator(false,"Das ist die gleiche Zeile wie Zeile: " + (mm_core.data.size()-i));
 				}
 			}
 			if (!(mm_core.getHintPane(1)[mm_core.codeLength()-1].equals("-"))){
@@ -71,10 +73,10 @@ public class bot {
 						rightColors = false;
 				}
 				if (rightColors)
-					return "Gute Wahl solange die Farben vertauscht sind.";
-				return "Nicht so gut da Schon alle Farben bekannt sind sie müssen nur noch vertauscht werden.";
+					return new validator(true,"Gute Wahl, solange die Farben vertauscht sind.");
+				return new validator(false,"Nicht so gut, da schon alle Farben bekannt sind, sie mÃ¼ssen nur noch vertauscht werden.");
 			}
-			return "Alles ist gut was der Code findung dient.";
+			return new validator(true,"Alles ist gut was der Codefindung dient.");
 		}
 	}
 

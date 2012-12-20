@@ -22,7 +22,7 @@ class keyboard implements KeyEventDispatcher{
 
   public void keypressed (KeyEvent e) {
     //Enter press -> New Try
-    if(e.getKeyCode() == KeyEvent.VK_ENTER ) {
+    if(e.getKeyCode() == KeyEvent.VK_N ) {
       g.addTry();
       resetValues();
     }

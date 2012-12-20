@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import mastermind_core.core;
+import mastermind_core.validator;
 import mastermind_save_load.*;
 import mastermind_gui.mastermind_templates.*;
 
@@ -34,7 +35,6 @@ class gameInitialization {
     } //Get pinSetting from Table, check it and put it back in table
 
     //Check tries
-    //Check if last pin is black, else go on playing
     if (mm_core.checkTries()) {
       gD.setCellEditable(false);
       gD.showCode();
@@ -87,4 +87,13 @@ class gameInitialization {
   public Object[] getCore() {
     return mm_core.makePKG();
   }
+
+  protected void doitBot() {
+    mm_core.doitBot();
+  }
+
+  protected validator validate() {
+    return mm_core.validate();
+  }
+
 }

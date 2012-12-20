@@ -76,9 +76,8 @@ public class core {
   }
 
   public String[] color_check (){
-    String[] codeColors = code.clone(); 
-    System.arraycopy(code, 0, codeColors, 0, codeColors.length); 
-    core_bot.setBestColors();
+    String[] codeColors = code.clone();
+    System.arraycopy(code, 0, codeColors, 0, codeColors.length);
     String[] userColors = getDataArray();
 
     String[] check = new String[codeColors.length];
@@ -139,5 +138,13 @@ public class core {
   public Object[] makePKG() {
     Object[] o = {code.length, enabledColors.length, code, tries, triescount, data};
     return o;
+  }
+
+  public void doitBot() {
+    core_bot.setBestColors();
+  }
+
+  public validator validate() {
+    return core_bot.validate();
   }
 }

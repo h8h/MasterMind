@@ -6,17 +6,22 @@ import javax.swing.*;
 import java.io.*;
 import mastermind_save_load.*;
 import mastermind_core.core;
+import mastermind_core.validator;
 import  javax.swing.filechooser.FileFilter;
 
 public class gui {
   private gameInitialization game;
   private JButton jb;
+  private JLabel jl;
   private options_gui options;
   private JFrame frame;
   private Box jp;
   private JPanel enabledColors;
   private File filename;
+  private keyboard keylist;
+  private boolean makeValidate = false;
   static final String GAMENAME="MasterMind PP-1";
+
 
   public void showGUI() {
 		//Displays a new Window
@@ -38,8 +43,7 @@ public class gui {
         });
     // frame.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS);
     // KeyListener
-    KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-    manager.addKeyEventDispatcher(new keyboard(this));
+    keylist = new keyboard(this);
     // Make Menu
 		genMenu();
     options = new options_gui(this);
@@ -50,6 +54,10 @@ public class gui {
         addTry();
       }
     });
+    jl = new JLabel("Errate den geheimen Code ... | ");
+    jl.setBorder(BorderFactory.createTitledBorder(""));
+    jl.setAlignmentX(Component.CENTER_ALIGNMENT);
+    frame.add(jl,BorderLayout.NORTH);
     frame.add(jb,BorderLayout.LINE_END);
     newGame();
     frame.pack();
@@ -61,10 +69,10 @@ public class gui {
 		{
 			JMenu menu = new JMenu("File");
 			{
-			JMenuItem item00 = new JMenuItem("Speichern unter...");
+			JMenuItem item00 = new JMenuItem("Öffnen");
       item00.addActionListener(new ActionListener () {
-					public void actionPerformed (ActionEvent e) {
-            saveDialog();
+        public void actionPerformed (ActionEvent e) {
+            loadDialog();
           }
 			});
       JMenuItem item01 = new JMenuItem("Speichern");
@@ -73,15 +81,26 @@ public class gui {
             saveFile();
           }
 			});
-			JMenuItem item02 = new JMenuItem("Laden");
+			JMenuItem item02 = new JMenuItem("Speichern unter...");
       item02.addActionListener(new ActionListener () {
-        public void actionPerformed (ActionEvent e) {
-            loadDialog();
+					public void actionPerformed (ActionEvent e) {
+            saveDialog();
+          }
+			});
+      JMenuItem item03 = new JMenuItem("Beenden");
+      item03.addActionListener(new ActionListener () {
+					public void actionPerformed (ActionEvent e) {
+            if(!gameRunning()) {
+              frame.dispose();
+            }
           }
 			});
       menu.add(item00);
+      menu.addSeparator();
 			menu.add(item01);
       menu.add(item02);
+      menu.addSeparator();
+      menu.add(item03);
       }
 		bar.add(menu);
 		}
@@ -134,6 +153,7 @@ public class gui {
     save gamesave = new save(filn);
     try {
       gamesave.savefile(game.getCore());
+      jl.setText("Spiel "+filn.getName().substring(0,filn.getName().length()-3) +" wurde gespeichert ... |");
     } catch (Exception exc) {
         JOptionPane.showMessageDialog(frame,
         ":/ Speichern nicht möglich!",
@@ -175,12 +195,14 @@ public class gui {
     if (gameRunning()) {return;}
     filename = null;
     frame.setTitle(GAMENAME+" Spiel: unbenannt");
+    jl.setText("Neues Spiel ... neues Glück :)");
     createGame(null);
   }
 
   private void newGame(Object[] o) {
     if (gameRunning()) {return;}
     frame.setTitle(GAMENAME+" Spiel: " + filename.getName());
+    jl.setText("Spiel "+filename.getName().substring(0,filename.getName().length()-3) +" wurde geladen ... |");
     core co= new core(o);
     options.setColorRange(co.EnabledColorsSize());
     options.setcodeLength(co.codeLength());
@@ -190,11 +212,23 @@ public class gui {
 
   private boolean gameRunning() {
     if(frame.getTitle().endsWith("*")) {
-      int ret = JOptionPane.showConfirmDialog(frame, "Es läuft zur Zeit ein aktives Spiel\n"
+      Object [] options = {"Ja", "Nein", "Speichern"};
+      int ret = JOptionPane.showOptionDialog(frame, "Es läuft zur Zeit ein aktives Spiel\n"
                   +"Wollen Sie das Spiel wirklich beenden?",
                   "Spiel beenden?",
-                  JOptionPane.YES_NO_OPTION);
+                  JOptionPane.YES_NO_CANCEL_OPTION,
+                  JOptionPane.QUESTION_MESSAGE,
+                  null,
+                  options,
+                  options[2]);
       if(ret == 0) { //YES / OK
+        return false;
+      }
+      if(ret == 2) {
+        File tmp = filename;
+        filename = null;
+        saveFile();
+        filename = tmp;
         return false;
       }
       return true;
@@ -208,11 +242,13 @@ public class gui {
     if (jp !=null) {
       frame.remove(jp);
       frame.remove(enabledColors);
+      disableGame(); //Rest all settings
     }
     jp = Box.createVerticalBox();
+    jp.setBorder(BorderFactory.createTitledBorder(" "));
     // Enable Save Menu
-    frame.getJMenuBar().getMenu(0).getItem(0).setEnabled(true); // item00
-    frame.getJMenuBar().getMenu(0).getItem(1).setEnabled(true); // item01
+    frame.getJMenuBar().getMenu(0).getItem(2).setEnabled(true); // item01
+    frame.getJMenuBar().getMenu(0).getItem(3).setEnabled(true); // item02
     if (mm_core == null) {
       //params CodeLength, EnabledColors, Tries
       mm_core = new core (options.getcodeLength(),options.getColorRange(),options.gettriesLength());
@@ -222,11 +258,22 @@ public class gui {
     JScrollPane scrollpane = new JScrollPane(game.initgameGround());
     vbox.add(scrollpane);
     JCheckBox cb = new JCheckBox("Hilfsfunktion aktivieren");
+    cb.setSelected(makeValidate);
+    cb.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        JCheckBox source = (JCheckBox) e.getSource();
+        makeValidate = (boolean) source.isSelected();
+      }
+    });
     cb.setAlignmentX(Component.RIGHT_ALIGNMENT);
     vbox.add(cb);
     jp.add(vbox);
     enabledColors = game.initenabledColors();
+    enabledColors.setBorder(BorderFactory.createTitledBorder(""));
     //Validate Button
+    jb.setEnabled(true);
+    KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+    manager.addKeyEventDispatcher(keylist);
     frame.add(enabledColors,BorderLayout.SOUTH);
     frame.add(jp,BorderLayout.CENTER);
     frame.repaint();
@@ -234,14 +281,22 @@ public class gui {
   }
 
   protected void addTry() {
+    game.doitBot(); //Fill empty Rows - setBestColors
+    if(makeValidate) {
+      validator v = game.validate();
+      jl.setText(v.getText());
+      if(!v.isValid()) { return; }
+    } else {
+        jl.setText("Errate den geheimen Code ... |");
+    }
     switch(game.addTry()) {
       case WIN:
         disableGame();
-        jp.add(new JLabel("SIE HABEN GEWONNEN"));
+        jl.setText("SIE HABEN GEWONNEN :)");
         break;
       case LOST:
         disableGame();
-        jp.add(new JLabel("SIE HABEN VERLOREN"));
+        jl.setText("SIE HABEN VERLOREN :(");
         break;
       case PLAYING:
         frame.setTitle(frame.getTitle().endsWith("*") ? frame.getTitle() : frame.getTitle() + "*");
@@ -259,11 +314,12 @@ public class gui {
   }
 
   private void disableGame() {
-    frame.setTitle(GAMENAME + " Spiel: " + ((filename==null)  ? "unbeannt" : filename.getName()));
-    frame.getJMenuBar().getMenu(0).getItem(0).setEnabled(false); // item00
-    frame.getJMenuBar().getMenu(0).getItem(1).setEnabled(false); // item01
-
-    jp.remove(enabledColors);
+    frame.setTitle(GAMENAME + " Spiel: " + ((filename==null)  ? "unbenannt" : filename.getName()));
+    frame.getJMenuBar().getMenu(0).getItem(2).setEnabled(false); // item01
+    frame.getJMenuBar().getMenu(0).getItem(3).setEnabled(false); // item02
+    KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+    manager.removeKeyEventDispatcher(keylist);
+    frame.remove(enabledColors);
     jb.setEnabled(false);
   }
 

@@ -19,7 +19,7 @@ public class options_gui extends JPanel {
     	  this.g = g;
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         Box vbox = Box.createVerticalBox();
-
+        setBorder(BorderFactory.createTitledBorder("::Einstellungen::"));
         slide_colors = new JSlider(JSlider.VERTICAL,2,14,8);
         slide_code  = new JSlider(JSlider.VERTICAL,2,10,4);
         js_tries = new JSpinner();
@@ -61,15 +61,8 @@ public class options_gui extends JPanel {
             newGame();
           }
         });
-        //Margin Top
-        vbox.add(Box.createVerticalStrut(40));
-        //Settings Label
-        JLabel settings = new JLabel ("Einstellungen:");
-        settings.setMaximumSize(new Dimension(98,0));
-        settings.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        vbox.add(settings);
-        //Margin Settings <-> Label for Color / Code Length Labels
-        vbox.add(Box.createVerticalStrut(22));
+        //Margin Top <-> Label for Color / Code Length Labels
+        vbox.add(Box.createVerticalStrut(10));
         Box hlabl = Box.createHorizontalBox();
         hlabl.add(new JLabel("<html>Anzahl<br>Farben:</html>"));
         hlabl.add(Box.createHorizontalGlue());
