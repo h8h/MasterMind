@@ -26,7 +26,7 @@ public class gui {
   public void showGUI() {
 		//Displays a new Window
 		frame = new JFrame(GAMENAME+" Spiel: unbenannt");
-		frame.setPreferredSize(new Dimension(640, 480));
+		frame.setPreferredSize(new Dimension(800, 480));
 		frame.setMinimumSize(frame.getPreferredSize());
 
     frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

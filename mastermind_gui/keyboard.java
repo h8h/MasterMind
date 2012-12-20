@@ -66,7 +66,7 @@ class keyboard implements KeyEventDispatcher{
         case 114: key = 14;
                   break;
     }
-    if( (key > 48 && key < 58) || (key > 10 && key < 15)) {
+    if( (key > 48 && key < 58) || (key > 9 && key < 15)) {
       if (first_value == -1) {
         first_value = (key>9&&key<15) ? key : key  - 48;
       } else if (second_value == -1 ) {
