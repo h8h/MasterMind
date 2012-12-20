@@ -32,6 +32,9 @@ public class options_gui extends JPanel {
             if ((int)source.getValue() > 99) {
               source.setValue(99);
             }
+            if ((int)source.getValue() < 0) {
+              source.setValue(0);
+            }
           }
         });
         slide_colors.setMajorTickSpacing(1);
@@ -55,6 +58,7 @@ public class options_gui extends JPanel {
           }
         });
         JButton ak = new JButton ("Neues Spiel");
+        ak.setMnemonic(KeyEvent.VK_P);
         ak.setAlignmentX(Component.RIGHT_ALIGNMENT);
         ak.addActionListener(new ActionListener () {
           public void actionPerformed (ActionEvent e) {

@@ -26,8 +26,10 @@ public class gui {
   public void showGUI() {
 		//Displays a new Window
 		frame = new JFrame(GAMENAME+" Spiel: unbenannt");
-		//frame.setPreferredSize(new Dimension(640, 480));
-		frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		frame.setPreferredSize(new Dimension(640, 480));
+		frame.setMinimumSize(frame.getPreferredSize());
+
+    frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     frame.addWindowListener(new WindowListener() {
             public void windowClosed(WindowEvent arg0) { }
             public void windowActivated(WindowEvent arg0) { }
@@ -60,7 +62,15 @@ public class gui {
     frame.add(jl,BorderLayout.NORTH);
     frame.add(jb,BorderLayout.LINE_END);
     newGame();
+    frame.addComponentListener(new java.awt.event.ComponentAdapter() {
+    public void componentResized(ComponentEvent event) {
+      frame.setSize(
+        Math.max(100, frame.getWidth()),
+        Math.max(100, frame.getHeight()));
+      }
+    });
     frame.pack();
+    frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
   }
 
@@ -70,24 +80,32 @@ public class gui {
 			JMenu menu = new JMenu("File");
 			{
 			JMenuItem item00 = new JMenuItem("Öffnen");
+      item00.setAccelerator(KeyStroke.getKeyStroke(
+      KeyEvent.VK_O, ActionEvent.CTRL_MASK));
       item00.addActionListener(new ActionListener () {
         public void actionPerformed (ActionEvent e) {
             loadDialog();
           }
 			});
       JMenuItem item01 = new JMenuItem("Speichern");
+      item01.setAccelerator(KeyStroke.getKeyStroke(
+        KeyEvent.VK_S, ActionEvent.CTRL_MASK));
       item01.addActionListener(new ActionListener () {
 					public void actionPerformed (ActionEvent e) {
             saveFile();
           }
 			});
 			JMenuItem item02 = new JMenuItem("Speichern unter...");
+      item02.setAccelerator(KeyStroke.getKeyStroke(
+        KeyEvent.VK_S, ActionEvent.CTRL_MASK+ActionEvent.SHIFT_MASK));
       item02.addActionListener(new ActionListener () {
 					public void actionPerformed (ActionEvent e) {
             saveDialog();
           }
 			});
       JMenuItem item03 = new JMenuItem("Beenden");
+      item03.setAccelerator(KeyStroke.getKeyStroke(
+        KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
       item03.addActionListener(new ActionListener () {
 					public void actionPerformed (ActionEvent e) {
             if(!gameRunning()) {

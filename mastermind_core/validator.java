@@ -13,7 +13,7 @@ public final class validator {
   public boolean isValid() {
     return b;
   }
-
+//BLUB
   public String getText() {
     return text;
   }
