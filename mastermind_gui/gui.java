@@ -222,8 +222,8 @@ public class gui {
     frame.setTitle(GAMENAME+" Spiel: " + filename.getName());
     jl.setText("Spiel "+filename.getName().substring(0,filename.getName().length()-3) +" wurde geladen ... |");
     core co= new core(o);
-    options.setColorRange(co.EnabledColorsSize());
-    options.setcodeLength(co.codeLength());
+    options.setColorRange(co.getEnabledColorsSize());
+    options.setcodeLength(co.getCodeSize());
     options.setTriesLength(co.getTries());
     createGame(co);
   }
@@ -273,7 +273,7 @@ public class gui {
     }
     game = new gameInitialization(mm_core);
     Box vbox = Box.createVerticalBox();
-    JScrollPane scrollpane = new JScrollPane(game.initgameGround());
+    JScrollPane scrollpane = new JScrollPane(game.initGameGround());
     vbox.add(scrollpane);
     JCheckBox cb = new JCheckBox("Hilfsfunktion aktivieren");
     cb.setSelected(makeValidate);
@@ -286,7 +286,7 @@ public class gui {
     cb.setAlignmentX(Component.RIGHT_ALIGNMENT);
     vbox.add(cb);
     jp.add(vbox);
-    enabledColors = game.initenabledColors();
+    enabledColors = game.initEnabledColors();
     enabledColors.setBorder(BorderFactory.createTitledBorder(""));
     //Validate Button
     jb.setEnabled(true);
