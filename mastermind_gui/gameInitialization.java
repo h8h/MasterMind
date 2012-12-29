@@ -11,10 +11,12 @@ import mastermind_gui.mastermind_templates.*;
 /**
  * Generate Game - connector between core/gameData and the world out there (gui)
  */
-class gameInitialization {
+public class gameInitialization {
   private core mm_core;
   private gameData gD;
   private gameGround gG;
+  private Box jp;
+  private boolean makeValidate = false;
 
   /**
    * Class construction - generating gameGround and gameData with core data
@@ -40,7 +42,7 @@ class gameInitialization {
    *
    * @return JTable with core data
    */
-  public gameGround initGameGround ()  {
+  private gameGround initGameGround ()  {
     return gG;
   }
 
@@ -50,6 +52,7 @@ class gameInitialization {
    * @return current game status (Playing,Win,Lost)
    */
   public gameStatus addTry() {
+    doitBot();
     if (gD.setHint(mm_core.checkColor())) {
       gD.setCellEditable(false);
       return gameStatus.WIN;
@@ -92,6 +95,29 @@ class gameInitialization {
       });
       jp.add(jb);
     }
+    return jp;
+  }
+
+  /**
+   * Generate whole game on a single jpanel
+   *
+   */
+  public Box createGame() {
+    jp = Box.createVerticalBox();
+    Box vbox = Box.createVerticalBox();
+    JScrollPane scrollpane = new JScrollPane(gG);
+    vbox.add(scrollpane);
+    JCheckBox cb = new JCheckBox("Hilfsfunktion aktivieren");
+    cb.setSelected(makeValidate);
+    cb.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        JCheckBox source = (JCheckBox) e.getSource();
+        makeValidate = (boolean) source.isSelected();
+      }
+    });
+    cb.setAlignmentX(Component.RIGHT_ALIGNMENT);
+    vbox.add(cb);
+    jp.add(vbox);
     return jp;
   }
 
@@ -157,6 +183,16 @@ class gameInitialization {
    */
   protected validator validate() {
     return mm_core.validate();
+  }
+
+  /**
+   * Return if the user wishes help
+   * @return <code>true</code> please help me, i'm a worse gamer<br>
+   *         <code>false</code> i don't need your help
+   * @see #validate()
+   */
+  protected boolean getEnabledValidate() {
+    return makeValidate;
   }
 
 }

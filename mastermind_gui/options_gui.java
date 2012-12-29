@@ -7,7 +7,10 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Color;
 
-public class options_gui extends JPanel {
+/**
+ * Options gui, change code size, color range and number of tries
+ */
+class options_gui extends JPanel {
     private int ColorRange = 8;
     private int codeLength = 4;
     private JSlider slide_colors;
@@ -15,6 +18,11 @@ public class options_gui extends JPanel {
     private JSpinner js_tries;
     private gui g;
 
+    /**
+     * Class construction
+     *
+     * @param g back reference to gui, needed to call for example new game
+     */
     public options_gui(gui g) {
     	  this.g = g;
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -25,7 +33,7 @@ public class options_gui extends JPanel {
         js_tries = new JSpinner();
         js_tries.setMaximumSize(new Dimension(80,50));
         ((JSpinner.DefaultEditor)js_tries.getEditor()).getTextField().setColumns(2);
-        setTriesLength((int)((3*codeLength)/2));
+        setNumberOfTries((int)((3*codeLength)/2));
         js_tries.addChangeListener(new ChangeListener() {
           public void stateChanged(ChangeEvent e) {
             JSpinner source = (JSpinner) e.getSource();
@@ -53,8 +61,8 @@ public class options_gui extends JPanel {
         slide_code.addChangeListener(new ChangeListener() {
           public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
-            setcodeLength(source.getValue());
-            setTriesLength((int)((3*source.getValue())/2));
+            setCodeSize(source.getValue());
+            setNumberOfTries((int)((3*source.getValue())/2));
           }
         });
         JButton ak = new JButton ("Neues Spiel");
@@ -70,7 +78,7 @@ public class options_gui extends JPanel {
         Box hlabl = Box.createHorizontalBox();
         hlabl.add(new JLabel("<html>Anzahl<br>Farben:</html>"));
         hlabl.add(Box.createHorizontalGlue());
-        hlabl.add(new JLabel("<html>Geheimer<br>Code:</html>"));
+        hlabl.add(new JLabel("<html>Code<br>Länge:</html>"));
         vbox.add(hlabl);
         //Margin Label <-> JSpinner
         vbox.add(Box.createVerticalStrut(15));
@@ -94,35 +102,71 @@ public class options_gui extends JPanel {
     }
 
 
+    /**
+     * Create new game
+     *
+     * @see gui#newGame()
+     */
     private void newGame() {
       g.newGame();
     }
 
-    public int getColorRange() {
+    /**
+     * Return enabled colors size
+     *
+     * @return value which the user has selected
+     */
+    protected int getColorRange() {
       return ColorRange;
     }
 
+    /**
+     * Change value of enabled colors size
+     *
+     * @param cr set available color range
+     * @see mastermind_core.core#generateColors(int)
+     */
     protected void setColorRange(int cr) {
       ColorRange = cr;
       slide_colors.setValue(ColorRange);
     }
 
-    public int getcodeLength(){
+    /**
+     * Get secret code size
+     *
+     * @return value which the user has selected
+     */
+    protected int getCodeSize(){
       return codeLength;
     }
 
-    protected void setcodeLength(int cl) {
+    /**
+     * Change value of secret code size
+     *
+     * @param cl code size
+     * @see mastermind_core.core#generateCode()
+     */
+    protected void setCodeSize(int cl) {
       codeLength = cl;
       slide_code.setValue(codeLength);
     }
 
-    public int gettriesLength() {
+    /**
+     * Return number of tries, the user can do, before he lose the game
+     *
+     * @return value which the user has selected
+     */
+    protected int getNumberOfTries() {
     	return (int) js_tries.getValue();
     }
 
-    protected void setTriesLength(int tries) {
+    /**
+     * Change number of tries
+     *
+     * @param tries number of tries, user can do, before he lose the game
+     * @see mastermind_core.core#checkTries()
+     */
+    protected void setNumberOfTries(int tries) {
     	js_tries.setValue(tries);
     }
-
 }
-

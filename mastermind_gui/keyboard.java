@@ -2,17 +2,28 @@ package mastermind_gui;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyEvent;
-class keyboard implements KeyEventDispatcher{
+/**
+ * Key bindings for a - key and d - key
+ */
+public class keyboard implements KeyEventDispatcher{
   gui g;
   boolean d;
   boolean a;
   int first_value=-1;
   int second_value=-1;
 
+  /**
+   * Class construction
+   */
   public keyboard (gui g) {
     this.g = g;
   }
 
+  /**
+   * Call by java keyevent
+   *
+   * @param e keycode
+   */
   public boolean dispatchKeyEvent(KeyEvent e) {
     if (e.getID() == KeyEvent.KEY_PRESSED) {
       keypressed(e);
@@ -20,6 +31,11 @@ class keyboard implements KeyEventDispatcher{
     return false;
   }
 
+  /**
+   * Check which key (a or d) is pressed and do action
+   *
+   * @param e keycode
+   */
   public void keypressed (KeyEvent e) {
     //Enter press -> New Try
     if(e.getKeyCode() == KeyEvent.VK_N ) {
@@ -52,6 +68,14 @@ class keyboard implements KeyEventDispatcher{
 
   }
 
+  /**
+   * Set button and column number<br>
+   * and check if key action is complete
+   *
+   * @param e keycode
+   * @return <code>true</code> user pressed three (a or d / twice 1 - 0 + q-r ) keys.
+   *         <code>false</code> otherwise
+   */
   public boolean setValues(KeyEvent e) {
     int key = (int) e.getKeyChar();
     switch (key) {
@@ -79,6 +103,9 @@ class keyboard implements KeyEventDispatcher{
     return false;
   }
 
+  /**
+   * Reset values, if user presses other key
+   */
   public void resetValues() {
     first_value = -1;
     second_value = -1;

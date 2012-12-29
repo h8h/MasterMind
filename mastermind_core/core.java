@@ -235,7 +235,7 @@ public class core {
    * @return hex color at this position<br>
    *         or <code>null</code> if out-of-range
    */
-  public String getValueAt(int row, int col) {
+  protected String getValueAt(int row, int col) {
     if (row < data.size() && col < getCodeSize())
       return (String) ((Vector) data.get(row)).get(col);
     return null;
@@ -248,7 +248,7 @@ public class core {
    * @return array with hints
    * @see #checkColor()
    */
-  public String[] getHintPane(int row) {
+  protected String[] getHintPane(int row) {
     if (row < data.size())
       return (String []) ((Vector) data.get(row)).get(getCodeSize());
     return null;

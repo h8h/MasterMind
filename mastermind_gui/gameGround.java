@@ -7,8 +7,14 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import mastermind_gui.mastermind_templates.*;
 
-public class gameGround extends JTable {
+/**
+ * JTable with given column sizes, renderer and editors
+ */
+class gameGround extends JTable {
 
+  /**
+   * Class construction
+   */
   public gameGround(gameData gD,String[] enabledColors) {
     super(gD); //Init JTable with Column and Data
 
@@ -27,7 +33,10 @@ public class gameGround extends JTable {
     setRowHeight(50);
   }
 
-  public void setColumnWidth(TableColumn column, int width) {
+  /**
+   * Help class to set column width
+   */
+  private void setColumnWidth(TableColumn column, int width) {
     column.setPreferredWidth(width);
     column.setMaxWidth(width);
   }

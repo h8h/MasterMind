@@ -172,7 +172,7 @@ class gameData extends AbstractTableModel{
    * @see mastermind_core.core#getValueAt(int, int)
    */
   public Object getValueAt(int row, int col) {
-    return mm_core.getValueAt(row,col);
+    return ((Vector) mm_core.data.get(row)).get(col);
   }
 
   //Implement/Overwrite Functions

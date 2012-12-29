@@ -8,70 +8,24 @@ import mastermind_save_load.*;
 import mastermind_core.core;
 import mastermind_core.validator;
 import  javax.swing.filechooser.FileFilter;
-
+import mastermind_gui.mastermind_templates.gameArea;
+/**
+ * Global game gui manager, connect all gui classes
+ */
 public class gui {
   private gameInitialization game;
-  private JButton jb;
-  private JLabel jl;
-  private options_gui options;
-  private JFrame frame;
-  private Box jp;
-  private JPanel enabledColors;
+  private gameArea gA;
   private File filename;
-  private keyboard keylist;
-  private boolean makeValidate = false;
   static final String GAMENAME="MasterMind PP-1";
 
-
+  /**
+   * Call by main to show window
+   */
   public void showGUI() {
-		//Displays a new Window
-		frame = new JFrame(GAMENAME+" Spiel: unbenannt");
-		frame.setPreferredSize(new Dimension(800, 480));
-		frame.setMinimumSize(frame.getPreferredSize());
-
-    frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    frame.addWindowListener(new WindowListener() {
-            public void windowClosed(WindowEvent arg0) { }
-            public void windowActivated(WindowEvent arg0) { }
-            public void windowClosing(WindowEvent arg0) {
-              if(!gameRunning()) {
-                  frame.dispose();
-              }
-            }
-            public void windowDeactivated(WindowEvent arg0) { }
-            public void windowDeiconified(WindowEvent arg0) { }
-            public void windowIconified(WindowEvent arg0) { }
-            public void windowOpened(WindowEvent arg0) { }
-        });
-    // frame.setLayout(new BoxLayout(listPane, BoxLayout.PAGE_AXIS);
-    // KeyListener
-    keylist = new keyboard(this);
-    // Make Menu
-		genMenu();
-    options = new options_gui(this);
-    frame.add(options,BorderLayout.LINE_START);
-    jb = new JButton ("OK");
-    jb.addActionListener(new ActionListener () {
-      public void actionPerformed (ActionEvent e) {
-        addTry();
-      }
-    });
-    jl = new JLabel("Errate den geheimen Code ... | ");
-    jl.setBorder(BorderFactory.createTitledBorder(""));
-    jl.setAlignmentX(Component.CENTER_ALIGNMENT);
-    frame.add(jl,BorderLayout.NORTH);
-    frame.add(jb,BorderLayout.LINE_END);
+    gA = new gameArea(this);
+    gA.setTitle(GAMENAME + " Spiel: unbenannt");
+    genMenu();
     newGame();
-    frame.addComponentListener(new java.awt.event.ComponentAdapter() {
-    public void componentResized(ComponentEvent event) {
-      frame.setSize(
-        Math.max(100, frame.getWidth()),
-        Math.max(100, frame.getHeight()));
-      }
-    });
-    frame.pack();
-    frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
   }
 
   private void genMenu() {
@@ -109,7 +63,7 @@ public class gui {
       item03.addActionListener(new ActionListener () {
 					public void actionPerformed (ActionEvent e) {
             if(!gameRunning()) {
-              frame.dispose();
+              gA.dispose();
             }
           }
 			});
@@ -122,12 +76,16 @@ public class gui {
       }
 		bar.add(menu);
 		}
-		frame.setJMenuBar(bar);
+		gA.setJMenuBar(bar);
 	}
 
+  /**
+   * Show save dialog to select save file
+   */
   private void saveDialog() {
     JFileChooser fc = new JFileChooser();
     fc.setAcceptAllFileFilterUsed(false);
+    //Make save filter, only save *.mm files
     fc.setFileFilter( new FileFilter() {
       public boolean accept( File f )
       {
@@ -139,9 +97,10 @@ public class gui {
         return "MasterMind Savefile";
       }
     });
-    if(fc.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+    //Show Dialog
+    if(fc.showSaveDialog(gA) == JFileChooser.APPROVE_OPTION) {
       if(fc.getSelectedFile().exists()) {
-        int ret = JOptionPane.showConfirmDialog(frame, "Die Datei " + fc.getSelectedFile().getName() + " existiert bereits"
+        int ret = JOptionPane.showConfirmDialog(null, "Die Datei " + fc.getSelectedFile().getName() + " existiert bereits"
            +"wollen Sie die Datei wirklich überschreiben?"
            +"Alle Spielstände gehen dadurch verloren","Datei überschreiben?",
            JOptionPane.YES_NO_OPTION);
@@ -153,36 +112,49 @@ public class gui {
       if(!filename.getAbsolutePath().endsWith(".mm")) {
         filename = new File(filename.getAbsolutePath()+".mm");
       }
-      frame.setTitle(GAMENAME+" Spiel: " + filename.getName());
+      gA.setTitle(GAMENAME+" Spiel: " + filename.getName());
       saveFile(filename);
     }
   }
 
+  /**
+   * Save file, if filename was set (by saveDialog)
+   * otherwise show save Dialog
+   * @see #saveDialog()
+   */
   private void saveFile() {
     if(filename == null) {
       saveDialog();
     } else {
-      frame.setTitle(GAMENAME+" Spiel: " + filename.getName());
+      gA.setTitle(GAMENAME+" Spiel: " + filename.getName());
       saveFile(filename);
     }
   }
 
+  /**
+   * Save file to given filename
+   * @param filn filename
+   */
   private void saveFile(File filn) {
     save gamesave = new save(filn);
     try {
       gamesave.savefile(game.getCore());
-      jl.setText("Spiel "+filn.getName().substring(0,filn.getName().length()-3) +" wurde gespeichert ... |");
+      gA.setText("Spiel "+filn.getName().substring(0,filn.getName().length()-3) +" wurde gespeichert ... |");
     } catch (Exception exc) {
-        JOptionPane.showMessageDialog(frame,
+        JOptionPane.showMessageDialog(null,
         ":/ Speichern nicht möglich!",
         "Datei " + filn.getName() +  " wurde nicht gespeichert!",
         JOptionPane.ERROR_MESSAGE);
     }
   }
 
+  /**
+   * Show load dialog to load mastermind from file
+   */
   private void loadDialog() {
     JFileChooser fc = new JFileChooser();
     fc.setAcceptAllFileFilterUsed(false);
+    //only open *.mm files
     fc.setFileFilter( new FileFilter() {
       public boolean accept( File f )
       {
@@ -194,14 +166,15 @@ public class gui {
         return "MasterMind Savefile";
       }
     });
-    if(fc.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
+    //open file dialog and select file
+    if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
       try {
         filename = fc.getSelectedFile();
         load savegame = new load(filename);
         newGame(savegame.loadfile());
       } catch(Exception exc) {
         System.out.println(exc.toString());
-         JOptionPane.showMessageDialog(frame,
+         JOptionPane.showMessageDialog(null,
           ":/ Der Spielstand ist defekt oder nicht lesbar!",
           "Datei " + fc.getSelectedFile().getName() +  " ist beschädigt!",
           JOptionPane.ERROR_MESSAGE);
@@ -209,29 +182,44 @@ public class gui {
     }
   }
 
+  /**
+   * If no game is running, create a new game
+   */
   protected void newGame() {
     if (gameRunning()) {return;}
     filename = null;
-    frame.setTitle(GAMENAME+" Spiel: unbenannt");
-    jl.setText("Neues Spiel ... neues Glück :)");
+    gA.setTitle(GAMENAME+" Spiel: unbenannt");
+    gA.setText("Neues Spiel ... neues Glück :)");
     createGame(null);
   }
 
-  private void newGame(Object[] o) {
+  /**
+   * Create a new game from loaded file
+   *
+   * @param o with important core objects
+   * @see mastermind_core.core#makePKG()
+   */
+  protected void newGame(Object[] o) {
     if (gameRunning()) {return;}
-    frame.setTitle(GAMENAME+" Spiel: " + filename.getName());
-    jl.setText("Spiel "+filename.getName().substring(0,filename.getName().length()-3) +" wurde geladen ... |");
+    gA.setTitle(GAMENAME+" Spiel: " + filename.getName());
+    gA.setText("Spiel "+filename.getName().substring(0,filename.getName().length()-3) +" wurde geladen ... |");
     core co= new core(o);
-    options.setColorRange(co.getEnabledColorsSize());
-    options.setcodeLength(co.getCodeSize());
-    options.setTriesLength(co.getTries());
+    gA.options.setColorRange(co.getEnabledColorsSize());
+    gA.options.setCodeSize(co.getCodeSize());
+    gA.options.setNumberOfTries(co.getTries());
     createGame(co);
   }
 
-  private boolean gameRunning() {
-    if(frame.getTitle().endsWith("*")) {
+  /**
+   * Check if game is running
+   *
+   * @return <code>true</code> game is running<br>
+   *         <code>false</code> game is not running
+   */
+  public boolean gameRunning() {
+    if(gA.getTitle().endsWith("*")) {
       Object [] options = {"Ja", "Nein", "Speichern"};
-      int ret = JOptionPane.showOptionDialog(frame, "Es läuft zur Zeit ein aktives Spiel\n"
+      int ret = JOptionPane.showOptionDialog(null, "Es läuft zur Zeit ein aktives Spiel\n"
                   +"Wollen Sie das Spiel wirklich beenden?",
                   "Spiel beenden?",
                   JOptionPane.YES_NO_CANCEL_OPTION,
@@ -255,90 +243,77 @@ public class gui {
     }
   }
 
+  /**
+   * Create or recreate new gui with new/same game options<br>
+   * Please use newGame to call it
+   *
+   * @param mm_core core class if game is loaded
+   * @see #newGame()
+   * @see #newGame(Object[])
+   */
   private void createGame(core mm_core) {
-    //Create JPanel
-    if (jp !=null) {
-      frame.remove(jp);
-      frame.remove(enabledColors);
-      disableGame(); //Rest all settings
-    }
-    jp = Box.createVerticalBox();
-    jp.setBorder(BorderFactory.createTitledBorder(" "));
-    // Enable Save Menu
-    frame.getJMenuBar().getMenu(0).getItem(2).setEnabled(true); // item01
-    frame.getJMenuBar().getMenu(0).getItem(3).setEnabled(true); // item02
+    gA.enableGame();
     if (mm_core == null) {
-      //params CodeLength, EnabledColors, Tries
-      mm_core = new core (options.getcodeLength(),options.getColorRange(),options.gettriesLength());
+      mm_core = new core (gA.options.getCodeSize(),gA.options.getColorRange(),gA.options.getNumberOfTries());
     }
     game = new gameInitialization(mm_core);
-    Box vbox = Box.createVerticalBox();
-    JScrollPane scrollpane = new JScrollPane(game.initGameGround());
-    vbox.add(scrollpane);
-    JCheckBox cb = new JCheckBox("Hilfsfunktion aktivieren");
-    cb.setSelected(makeValidate);
-    cb.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        JCheckBox source = (JCheckBox) e.getSource();
-        makeValidate = (boolean) source.isSelected();
-      }
-    });
-    cb.setAlignmentX(Component.RIGHT_ALIGNMENT);
-    vbox.add(cb);
-    jp.add(vbox);
-    enabledColors = game.initEnabledColors();
-    enabledColors.setBorder(BorderFactory.createTitledBorder(""));
-    //Validate Button
-    jb.setEnabled(true);
-    KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-    manager.addKeyEventDispatcher(keylist);
-    frame.add(enabledColors,BorderLayout.SOUTH);
-    frame.add(jp,BorderLayout.CENTER);
-    frame.repaint();
-    frame.revalidate();
+    gA.setEnabledColors(game.initEnabledColors());
+    gA.setGameInitialization(game.createGame());
+    gA.revalidate();
+    gA.repaint();
   }
 
+  /**
+   * Add new try (next turn)<br>
+   * if user wishes validating show help text and reject new try if validator is false
+   * @see gameInitialization#getEnabledValidate()
+   */
   protected void addTry() {
-    game.doitBot(); //Fill empty Rows - setBestColors
-    if(makeValidate) {
+    if(game.getEnabledValidate()) {
       validator v = game.validate();
-      jl.setText(v.getText());
+      gA.setText(v.getText());
       if(!v.isValid()) { return; }
     } else {
-        jl.setText("Errate den geheimen Code ... |");
+        gA.setText("Errate den geheimen Code ... |");
     }
     switch(game.addTry()) {
       case WIN:
         disableGame();
-        jl.setText("SIE HABEN GEWONNEN :)");
+        gA.setText("SIE HABEN GEWONNEN :)");
         break;
       case LOST:
         disableGame();
-        jl.setText("SIE HABEN VERLOREN :(");
+        gA.setText("SIE HABEN VERLOREN :(");
         break;
       case PLAYING:
-        frame.setTitle(frame.getTitle().endsWith("*") ? frame.getTitle() : frame.getTitle() + "*");
+        gA.setTitle(gA.getTitle().endsWith("*") ? gA.getTitle() : gA.getTitle() + "*");
     }
-    frame.repaint();
-    frame.revalidate();
   }
 
+  /**
+   * Set color at position
+   *
+   * @see gameInitialization#setColorAt(int,int)
+   */
   protected void setColorAt(int color, int column) {
     game.setColorAt(color,column);
   }
 
+  /**
+   * Remove color at given column
+   *
+   * @see gameInitialization#removeColor(int)
+   */
   protected void removeColor(int column) {
     game.removeColor(column);
   }
 
+  /**
+   * Reset game settings
+   */
   private void disableGame() {
-    frame.setTitle(GAMENAME + " Spiel: " + ((filename==null)  ? "unbenannt" : filename.getName()));
-    frame.getJMenuBar().getMenu(0).getItem(2).setEnabled(false); // item01
-    frame.getJMenuBar().getMenu(0).getItem(3).setEnabled(false); // item02
-    KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-    manager.removeKeyEventDispatcher(keylist);
-    frame.remove(enabledColors);
-    jb.setEnabled(false);
+    gA.setTitle(GAMENAME + " Spiel: " + ((filename==null)  ? "unbenannt" : filename.getName()));
+    gA.disableGame();
   }
 
 }

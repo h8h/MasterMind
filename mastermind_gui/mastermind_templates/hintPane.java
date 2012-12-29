@@ -5,8 +5,19 @@ import java.awt.Color;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
-
+/**
+ * Render array to buttons<br>
+ */
 public class hintPane implements TableCellRenderer {
+
+  /**
+   * Render given array to buttons on jpanel<br>
+   *
+   * <code>black button</code> right color on right place<br>
+   * <code>red button</code> right color on wrong place<br>
+   * <code>null colored button</code> wrong color :(<br>
+   * @see mastermind_core.core#checkColor()
+   */
   public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column ) {
     String[] hints = (String[])value;
     if (hints[0] == null) { return new JPanel();}
