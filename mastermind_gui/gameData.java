@@ -9,6 +9,7 @@ import mastermind_core.core;
  *
  * @see mastermind_core.core#data
  */
+@SuppressWarnings("serial")
 class gameData extends AbstractTableModel{
   private String[] columnNames;
   private int position;
@@ -172,7 +173,7 @@ class gameData extends AbstractTableModel{
    * @see mastermind_core.core#getValueAt(int, int)
    */
   public Object getValueAt(int row, int col) {
-    return ((Vector) mm_core.data.get(row)).get(col);
+    return mm_core.data.get(row).get(col);
   }
 
   //Implement/Overwrite Functions
@@ -180,7 +181,7 @@ class gameData extends AbstractTableModel{
     return columnNames[col];
   }
 
-  public Class getColumnClass(int c) {
+  public Class<? extends Object> getColumnClass(int c) {
     return getValueAt(0, c).getClass();
   }
 

@@ -1,6 +1,6 @@
 package mastermind_core;
 
-public class bot {
+class bot {
   core mm_core;
   boolean makeValidate;
 

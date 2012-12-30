@@ -29,7 +29,7 @@ public class core {
   /**
    * Data container contains turns and hints (JTable use it)
    */
-  public Vector<Vector> data = new Vector<Vector>();
+  public Vector<Vector<Object>> data = new Vector<Vector<Object>>();
   private bot core_bot;
 
   /**
@@ -46,6 +46,7 @@ public class core {
   /**
    * Class construction for creating saved core
    */
+  @SuppressWarnings("unchecked")
   public core (Object[] o) {
     generateColors((int)o[1]);
     code = new String[(int)o[0]];
@@ -53,7 +54,7 @@ public class core {
     code = (String[]) o[2];
     tries = (int) o[3];
     triescount = (int) o[4];
-    data = (Vector<Vector>) o[5];
+    data = (Vector<Vector<Object>>) o[5];
   }
 
   /**
@@ -237,7 +238,7 @@ public class core {
    */
   protected String getValueAt(int row, int col) {
     if (row < data.size() && col < getCodeSize())
-      return (String) ((Vector) data.get(row)).get(col);
+      return (String) ((Vector<Object>) data.get(row)).get(col);
     return null;
   }
 
@@ -250,7 +251,7 @@ public class core {
    */
   protected String[] getHintPane(int row) {
     if (row < data.size())
-      return (String []) ((Vector) data.get(row)).get(getCodeSize());
+      return (String []) ((Vector<Object>) data.get(row)).get(getCodeSize());
     return null;
   }
 

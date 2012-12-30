@@ -5,11 +5,11 @@ import javax.swing.event.*;
 import java.awt.event.*;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Color;
 
 /**
  * Options gui, change code size, color range and number of tries
  */
+@SuppressWarnings("serial")
 class options_gui extends JPanel {
     private int ColorRange = 8;
     private int codeLength = 4;

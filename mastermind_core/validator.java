@@ -1,12 +1,15 @@
 package mastermind_core;
 
-public final class validator {
+/**
+ * Boolean with Text
+ */
+public class validator {
 
   private String text;
   private boolean b;
 
   /**
-   * Class constructor
+   * Class construction
    *
    * @param value fake Boolean
    * @param t for help text purpose
@@ -29,6 +32,7 @@ public final class validator {
    * Get the help text created by the bot
    *
    * @return help text which should help to solve mastermind ;) ... or not
+   * @see bot#validate()
    */
   public String getText() {
     return text;

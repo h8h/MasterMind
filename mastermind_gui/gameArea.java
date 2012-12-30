@@ -1,12 +1,18 @@
 package mastermind_gui;
+
 import javax.swing.*;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.*;
-import java.awt.*;
-import mastermind_gui.*;
+
 /**
  * JFrame with extra features<br>
  * Main frame to get MasterMind PP-1 running
  */
+@SuppressWarnings("serial")
 class gameArea extends JFrame implements WindowListener{
   private JButton nextTry;
   private JLabel help_text;
@@ -51,10 +57,10 @@ class gameArea extends JFrame implements WindowListener{
           Math.max(100, getHeight()));
         }
     });
-
+    addWindowListener(this);
     pack();
-    setLocationRelativeTo(null);
-		setVisible(true);
+    // setLocationRelativeTo(null);
+    setVisible(true);
   }
 
   /**

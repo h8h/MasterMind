@@ -1,17 +1,18 @@
 package mastermind_gui.mastermind_templates;
 
 import java.awt.*;
-import java.awt.Color;
-import java.awt.event.*;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.table.*;
 /**
- * Render array to buttons<br>
+ * Render array to buttons
  */
 public class hintPane implements TableCellRenderer {
 
   /**
-   * Render given array to buttons on jpanel<br>
+   * Render given array to buttons on JPanel<br>
    *
    * <code>black button</code> right color on right place<br>
    * <code>red button</code> right color on wrong place<br>

@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 /**
  * Key bindings for a - key and d - key
  */
-public class keyboard implements KeyEventDispatcher{
+class keyboard implements KeyEventDispatcher{
   gui g;
   boolean d;
   boolean a;

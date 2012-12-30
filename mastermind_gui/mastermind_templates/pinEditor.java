@@ -1,13 +1,18 @@
 package mastermind_gui.mastermind_templates;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.table.*;
+import javax.swing.AbstractCellEditor;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.table.TableCellEditor;
+
 
 /**
  * Editor for changing background color on table - returns button
  */
+@SuppressWarnings("serial")
 public class pinEditor extends AbstractCellEditor implements TableCellEditor,ActionListener {
   JButton button;
   String[] enabledColors;
@@ -41,8 +46,8 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
    */
   public String changeColor(){
     if(position > enabledColors.length-1) {
-      position = 0;
-      return null; // NO BackgroundColor, maybe to enable BOT
+      position=0;
+      return ""; // NO BackgroundColor, maybe to enable BOT
     }
     return enabledColors[position++];
   }
@@ -56,17 +61,14 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
                                                int row,
                                                int column) {
     if(row!=0) {return null;}
-      int i = 0;
-      position=0;
-      while (!enabledColors[i].equals((String)value)){ //Search current colorwalk position
-        i++;
-        position++;
-        if (i > enabledColors.length-1) {
-          position = enabledColors.length;
-          break;
-        }
+    position=0;
+    while (!enabledColors[position].equals(value)){ //Search current colorwalk position
+      position++;
+      if (position > enabledColors.length-1) {
+        position = enabledColors.length;
+        break;
       }
-
+    }
     button.setBackground(getButtonBackground((String)value));
     return button;
   }
@@ -77,8 +79,9 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
    * @return current hex color
    */
   public Object getCellEditorValue() {
-    if (button.getBackground()==null||position > enabledColors.length-1) //No BackgroundColor, maybe to enable BOT
-      return null;
+    if (button.getBackground()==null||position > enabledColors.length-1) {
+      return "";
+    }//No BackgroundColor, maybe to enable BOT
     return enabledColors[position];
   }
 
@@ -91,7 +94,7 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
      if (value == null || value.equals("")) {
       return null;
     } else {
-      return Color.decode((String) value);
+      return Color.decode(value);
     }
   }
 }

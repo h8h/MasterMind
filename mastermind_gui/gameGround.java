@@ -2,14 +2,12 @@ package mastermind_gui;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
-import java.awt.Dimension;
-import javax.swing.DefaultCellEditor;
-import javax.swing.JButton;
 import mastermind_gui.mastermind_templates.*;
 
 /**
  * JTable with given column sizes, renderer and editors
  */
+@SuppressWarnings("serial")
 class gameGround extends JTable {
 
   /**

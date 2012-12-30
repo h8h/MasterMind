@@ -1,17 +1,16 @@
 package mastermind_gui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.*;
 import javax.swing.*;
 import mastermind_core.core;
 import mastermind_core.validator;
-import mastermind_save_load.*;
-import mastermind_gui.mastermind_templates.*;
 
 /**
  * Generate Game - connector between core/gameData and the world out there (gui)
  */
-public class gameInitialization {
+class gameInitialization {
   private core mm_core;
   private gameData gD;
   private gameGround gG;
@@ -38,21 +37,11 @@ public class gameInitialization {
   }
 
   /**
-   * Get JTable generate by constructor
-   *
-   * @return JTable with core data
-   */
-  private gameGround initGameGround ()  {
-    return gG;
-  }
-
-  /**
    * Add new try (next turn)
    *
    * @return current game status (Playing,Win,Lost)
    */
   public gameStatus addTry() {
-    doitBot();
     if (gD.setHint(mm_core.checkColor())) {
       gD.setCellEditable(false);
       return gameStatus.WIN;

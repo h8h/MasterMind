@@ -16,20 +16,18 @@ import javax.swing.*;
  * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 public class main {
-	public static void main(String[] args) {
+  public static void main(String[] args) {
     final gui g = new gui();
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-
+    javax.swing.SwingUtilities.invokeLater(new Runnable() {
+      public void run() {
         try {
           UIManager.setLookAndFeel( "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel" );
         }
         catch ( Exception e ) {
           e.printStackTrace();
         }
-
         g.showGUI();
       }
     });
-	}
+  }
 }

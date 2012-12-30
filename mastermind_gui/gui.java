@@ -1,14 +1,16 @@
 package mastermind_gui;
 
-import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import javax.swing.filechooser.FileFilter;
+
 import javax.swing.*;
-import java.io.*;
-import mastermind_save_load.*;
+
 import mastermind_core.core;
 import mastermind_core.validator;
-import  javax.swing.filechooser.FileFilter;
-import mastermind_gui.mastermind_templates.gameArea;
+import mastermind_save_load.*;
+
+
 /**
  * Global game gui manager, connect all gui classes
  */
@@ -269,6 +271,7 @@ public class gui {
    * @see gameInitialization#getEnabledValidate()
    */
   protected void addTry() {
+    game.doitBot();
     if(game.getEnabledValidate()) {
       validator v = game.validate();
       gA.setText(v.getText());
