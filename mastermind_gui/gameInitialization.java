@@ -42,6 +42,8 @@ class gameInitialization {
    * @return current game status (Playing,Win,Lost)
    */
   public gameStatus addTry() {
+    if (gG.isEditing())
+      gG.getCellEditor().cancelCellEditing();
     if (gD.setHint(mm_core.checkColor())) {
       gD.setCellEditable(false);
       return gameStatus.WIN;
@@ -119,6 +121,8 @@ class gameInitialization {
    * @see gameData#setColorAt(String,int)
    */
   protected void setColorAt(int color, int column) {
+    if (gG.isEditing())
+      gG.getCellEditor().cancelCellEditing();
     if(color < mm_core.getEnabledColorsSize() && column < gD.getColumnCount()-1 ) {
       gD.setColorAt(mm_core.getEnabledColors()[color],column);
     }
@@ -131,6 +135,8 @@ class gameInitialization {
    * @see gameData#removeColor(int)
    */
   protected void removeColor(int column) {
+    if (gG.isEditing())
+      gG.getCellEditor().cancelCellEditing();
     if(column < gD.getColumnCount() - 1) {
       gD.removeColor(column);
     }
@@ -184,4 +190,13 @@ class gameInitialization {
     return makeValidate;
   }
 
+  /**
+   * Return number of left tries
+   *
+   * @return left tries
+   * @see mastermind_core.core#leftTries()
+   */
+  protected int leftTries() {
+    return mm_core.leftTries();
+  }
 }

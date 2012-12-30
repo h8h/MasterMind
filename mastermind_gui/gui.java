@@ -277,8 +277,9 @@ public class gui {
       gA.setText(v.getText());
       if(!v.isValid()) { return; }
     } else {
-        gA.setText("Errate den geheimen Code ... |");
+        gA.setText("Errate den geheimen Code ...");
     }
+    gA.setText(gA.getText()+ " - Noch " +game.leftTries() + " " + ((game.leftTries()<2) ? "Versuch" : "Versuche") + " möglich");
     switch(game.addTry()) {
       case WIN:
         disableGame();

@@ -123,6 +123,15 @@ public class core {
   }
 
   /**
+   * Return number of left tries
+   *
+   * @return left tries
+   */
+  public int leftTries(){
+    return tries-triescount-1;
+  }
+
+  /**
    * Check if user is allowed to make a new try
    *
    * @return <code>true</code> make new try<br>

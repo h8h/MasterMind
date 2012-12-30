@@ -101,6 +101,15 @@ class gameArea extends JFrame implements WindowListener{
   }
 
   /**
+   * Get text which is place on left upper corner of the frame
+   *
+   * @return help text
+   */
+  protected String getText(){
+    return help_text.getText();
+  }
+
+  /**
    * Add enabled color panel from given panel
    *
    * @param eC JPanel on which the enabled colors are place
