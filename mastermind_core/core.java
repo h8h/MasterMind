@@ -252,6 +252,35 @@ public class core {
   }
 
   /**
+   *
+   * Get the hex color columns as a string array
+   *
+   * @param row
+   * @return hex color as a string array
+   */
+
+  protected String [] getArAt(int row) {
+    String [] s = new String [getCodeSize()];
+    for (int i = 0 ; i < getCodeSize();i++){
+      s[i]= getValueAt( row, i);
+    }
+    return s;
+  }
+
+  /**
+   *
+   * Set an hex color array to first row
+   *
+   * @param colors as an String array
+   * @see #setValueAt
+   */
+  protected void setArAt(String[] colors) {
+    for (int i = 0; i < getCodeSize();i++) {
+     setValueAt(colors[i], i);
+    }
+  }
+
+  /**
    * Get hints (right color X / right/wrong place O) from given row
    *
    * @param row position for getting array
