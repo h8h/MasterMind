@@ -199,4 +199,14 @@ class gameInitialization {
   protected int leftTries() {
     return mm_core.leftTries();
   }
+
+  /**
+   * Return max number of tries
+   *
+   * @return max tries
+   * @see mastermind_core.core#getTries()
+   */
+  protected int getTries() {
+    return mm_core.getTries();
+  }
 }

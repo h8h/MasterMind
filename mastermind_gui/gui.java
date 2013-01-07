@@ -279,11 +279,18 @@ public class gui {
     } else {
         gA.setText("Errate den geheimen Code ...");
     }
-    gA.setText(gA.getText()+ " - Noch " +game.leftTries() + " " + ((game.leftTries()<2) ? "Versuch" : "Versuche") + " möglich");
+    int leftTries = game.leftTries();
+    if(leftTries<0){
+      leftTries = Math.abs(leftTries);
+      gA.setText(gA.getText()+ " - Schon " + leftTries + " " + ((leftTries == 1) ? "Versuch" : "Versuche") + " benötigt");
+    } else {
+      gA.setText(gA.getText()+ " - Noch " + leftTries  + " " + ((leftTries<2) ? "Versuch" : "Versuche") + " möglich");
+    }
     switch(game.addTry()) {
       case WIN:
         disableGame();
-        gA.setText("SIE HABEN GEWONNEN :)");
+        int sumTries = game.getTries()-game.leftTries();
+        gA.setText("SIE HABEN GEWONNEN :) - Mit " + sumTries + ((sumTries == 1) ? "em Versuch!" : " Versuchen!"));
         break;
       case LOST:
         disableGame();
