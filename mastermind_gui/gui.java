@@ -33,7 +33,7 @@ public class gui {
   private void genMenu() {
 		JMenuBar bar = new JMenuBar();
 		{
-			JMenu menu = new JMenu("File");
+			JMenu menu = new JMenu("Datei");
 			{
 			JMenuItem item00 = new JMenuItem("Öffnen");
       item00.setAccelerator(KeyStroke.getKeyStroke(
@@ -69,6 +69,7 @@ public class gui {
             }
           }
 			});
+
       menu.add(item00);
       menu.addSeparator();
 			menu.add(item01);
@@ -76,7 +77,19 @@ public class gui {
       menu.addSeparator();
       menu.add(item03);
       }
+      JMenu menu02 = new JMenu("Hilfe");
+      {
+      JMenuItem item21 = new JMenuItem("Anleitung");
+      item21.addActionListener(new ActionListener () {
+        public void actionPerformed (ActionEvent e) {
+            JDialog jD = new gameHelpDialog();
+            jD.setVisible(true);
+          }
+			});
+      menu02.add(item21);
+      }
 		bar.add(menu);
+    bar.add(menu02);
 		}
 		gA.setJMenuBar(bar);
 	}
