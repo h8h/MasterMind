@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.Random;
 
 class bot {
-  /**
-   * Size of the population within a generation.
-   */
-  private final int POPULATION_SIZE = 2000;
-  /**
-   * Number of generations. If no feasible code was found after all
-   * generations, a new guess with new generations and populations will be
-   * made.
-   */
-  private final int GENERATION_SIZE = 500;
-  core mm_core;
-  boolean makeValidate;
+
+	/**
+	 * Size of the population within a generation.
+	 */
+	private final int POPULATION_SIZE = 2000;
+
+	/**
+	 * Number of generations. If no feasible code was found after all
+	 * generations, a new guess with new generations and populations will be
+	 * made.
+	 */
+	private final int GENERATION_SIZE = 500;
+	core mm_core;
+	boolean makeValidate;
 
     private final int FEASIBLE_CODES_MAX = 1;
     private String[][] population;
@@ -36,69 +38,73 @@ class bot {
    * Check whether the bot should fill out empty pins - fill out empty pins or do some validate if the user wish some help
    *
    * @see core#doitBot()
-   */
-  protected void setBestColors () {
-
-    int space=0;
-    makeValidate = false;
-
-    for(int i=0; i < mm_core.getCodeSize(); i++) {
-      if(mm_core.getValueAt(i) == null || mm_core.getValueAt(i).equals("")) {
-        space++;
-      }
-    }
-    if (space==mm_core.getCodeSize()){//find a code
-      String[] turn = generateTurn();
-      mm_core.setArAt(turn);
-    }else if (space>0){	//fill the hole
-      String[] turn = generateTurn();
-      String[] hturn = mm_core.getArAt(0);
-      outer:
-      for (int i=0; i<mm_core.getCodeSize();i++){
-        for (int j=0; j<mm_core.getCodeSize(); j++){
-          if(turn[i].equals(hturn[j])) {
-            turn[i] = null;
-            hturn[j] = null;
-            continue outer;
-          }
-        }
-      }
-      outer2:
-      for(int i=0; i < mm_core.getCodeSize(); i++) {
-        if(mm_core.getValueAt(i) == null || mm_core.getValueAt(i).equals("")) {
-          for(int j=0; j < mm_core.getCodeSize(); j++) {
-            if(turn[j] != null) {
-              mm_core.setValueAt(turn[j],i);
-              turn[j] = null;
-              continue outer2;
-            }
-          }
-        }
-      }
-
-      for(int i=0; i < mm_core.getCodeSize(); i++) {
-        if (mm_core.getValueAt(i).equals("")){
-          mm_core.setValueAt(mm_core.getEnabledColors()[0],i);
-        }
-      }
-    }else{ //validate
-      makeValidate = true;
-    }
-  }
-
-  /**
-   * generate a turn which are able to set to a new row
+   * @see core#getArAt(int)
+   * @see core#getCodeSize()
+   * @see core#getValueAt(int)
    *
-   * @return generated turn
-   *
-   * @see #initPopulation()
-   * @see #calcFitness()
-   * @see #sortFeasibleByFitness(int[], String[][])
-   * @see #evolvePopulation()
-   * @see #addToFeasibleCodes()
+   * @see #generateTurn()
    */
+	protected void setBestColors () {
 
-    public String[] generateTurn() {
+		int space=0;
+		makeValidate = false;
+
+		for(int i=0; i < mm_core.getCodeSize(); i++) {
+			if(mm_core.getValueAt(i) == null || mm_core.getValueAt(i).equals("")) {
+				space++;
+			}
+		}
+		if (space==mm_core.getCodeSize()){	//find a code
+	        String[] turn = generateTurn();
+	        mm_core.setArAt(turn);
+		}else if (space>0){	//fill the hole
+			String[] turn = generateTurn();
+			String[] hturn = mm_core.getArAt(0);
+			outer:
+			for (int i=0; i<mm_core.getCodeSize();i++){
+				for (int j=0; j<mm_core.getCodeSize(); j++){
+					if(turn[i].equals(hturn[j])) {
+						turn[i] = null;
+						hturn[j] = null;
+						continue outer;
+					}
+				}
+			}
+			outer2:
+			for(int i=0; i < mm_core.getCodeSize(); i++) {
+				if(mm_core.getValueAt(i) == null || mm_core.getValueAt(i).equals("")) {
+					for(int j=0; j < mm_core.getCodeSize(); j++) {
+						if(turn[j] != null) {
+							mm_core.setValueAt(turn[j],i);
+							turn[j] = null;
+							continue outer2;
+						}
+					}
+				}
+			}
+
+			for(int i=0; i < mm_core.getCodeSize(); i++) {
+				if (mm_core.getValueAt(i).equals("")){
+					mm_core.setValueAt(mm_core.getEnabledColors()[0],i);
+				}
+			}
+		}else{ //validate
+			makeValidate = true;
+		}
+	}
+
+	/**
+	 * This function generate a turn which are able to set to a new row
+	 *
+	 * @return generated turn
+	 *
+	 * @see #initPopulation()
+     * @see #calcFitness()
+     * @see #sortFeasibleByFitness(int[], String[][])
+     * @see #evolvePopulation()
+     * @see #addToFeasibleCodes()
+	 */
+	public String[] generateTurn() {
         String[] turn = new String[mm_core.getCodeSize()];
         boolean doCalc;
         // First try
@@ -131,7 +137,6 @@ class bot {
      *
      * @see #generateRndColor()
      */
-
     private void initPopulation() {
         int i = 0;
         feasibleCodes.clear();
@@ -141,42 +146,70 @@ class bot {
         }
     }
 
+    /**
+     * Generates a Array with random colors from the enabled colors
+     *
+     * @return An array with randomized colors from the enabled colors
+     *
+     * @see core#getEnabledColors()
+     * @see core#getEnabledColorsSize()
+     * @see core#getCodeSize()
+     */
+    private String[] generateRndColor() {
+    	String[] colors = new String[mm_core.getCodeSize()];
+        int randomizeColor = 0;
+        Random r = new Random();
+        for (int i = 0; i < mm_core.getCodeSize(); i++) {
+          randomizeColor = r.nextInt(mm_core.getEnabledColorsSize());
+          colors[i] = mm_core.getEnabledColors()[randomizeColor];
+        }
+        return colors;
+      }
 
-
+    /**
+	 * Test if a code for all done tries makes sense and return the result.<br>
+	 * Cancel if nothing makes sense and fesaibleCodes is full.<br>
+	 *
+	 * @return <code>false</code> if fesaibleCodes is full.<br>
+	 * <code>true</code> otherwise.
+     *
+     * @see core#getArAt(int)
+     * @see #compare(String[], String[])
+     */
     private boolean addToFeasibleCodes() {
-      int[][]cHints = countHints();
-      outer:
-      for (int i = 0; i < POPULATION_SIZE; i++) {
-          for (int j = 1; j < mm_core.data.size(); j++) {
-            int[] result = compare(population[i], mm_core.getArAt(j));
-            if (result[0] != cHints[j][0] || result[1] != cHints[j][1]){
-                continue outer;
-            }
-          }
-          if (feasibleCodes.size() < FEASIBLE_CODES_MAX) {
-            if (feasibleCodes.contains(population[i]) == false) {
-                feasibleCodes.add(population[i]);
-                if (feasibleCodes.size() < FEASIBLE_CODES_MAX) {
-                    return false;
+    	int[][]cHints = countHints();
+        outer:
+        for (int i = 0; i < POPULATION_SIZE; i++) {
+            for (int j = 1; j < mm_core.data.size(); j++) {
+                int[] result = compare(population[i], mm_core.getArAt(j));
+                if (result[0] != cHints[j][0] || result[1] != cHints[j][1]) {
+                    continue outer;
                 }
             }
-          } else {
-            return false;
-          }
+            if (feasibleCodes.size() < FEASIBLE_CODES_MAX) {
+                if (!feasibleCodes.contains(population[i])) {
+                    feasibleCodes.add(population[i]);
+                    if (feasibleCodes.size() < FEASIBLE_CODES_MAX) {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
         }
         return true;
     }
-    private String[] generateRndColor() {
-      String[] colors = new String[mm_core.getCodeSize()];
-      int randomizeColor = 0;
-      Random r = new Random();
-      for (int i = 0; i < mm_core.getCodeSize(); i++) {
-        randomizeColor = r.nextInt(mm_core.getEnabledColorsSize());
-        colors[i] = mm_core.getEnabledColors()[randomizeColor];
-      }
-      return colors;
-    }
 
+    /**
+     * Calculates the fitness of every Row in population.
+     * A fitness-value and the corresponding element of the population array
+     * both have the same index in their respective arrays.
+     *
+     * It should resemble the function as described in the paper:
+     * <a href="https://lirias.kuleuven.be/bitstream/123456789/164803/1/KBI_0806.pdf">
+     * Efficient solutions for Mastermind using genetic algorithms</a>
+     * on page 6.
+     */
     private void calcFitness() {
         int xtmp;
         int ytmp;
@@ -191,6 +224,48 @@ class bot {
             }
             fitness[i] = (xtmp + ytmp);
         }
+    }
+
+    /**
+     * This function compare two arrays of strings an counts how many
+     * strings are the same and on the same position or only in the other array.
+     *
+     * return[0] = number of same string at both string same position
+     * return[1] = number of same string in both string and NOT on the same position
+     *
+     * @param a The first string for the compare (with includes colors as a hex string)
+     * @param b The second string for the compare (with includes colors as a hex string)
+     *
+     * @return A int array with the result
+     *
+     * @see core#getCodeSize()
+     */
+    private int[] compare(String[] a, String[] b) {
+        int[] result = {0, 0};
+        String[] code = new String[mm_core.getCodeSize()];
+        String[] secret = new String[mm_core.getCodeSize()];
+        System.arraycopy(a, 0, code, 0, mm_core.getCodeSize());
+        System.arraycopy(b, 0, secret, 0, mm_core.getCodeSize());
+        for (int i = 0; i < mm_core.getCodeSize(); i++) {
+            if (code[i].equals(secret[i])) {
+                result[0]++;
+                secret[i] = null;
+                code[i] = null;
+            }
+        }
+        outer:
+        for (int i = 0; i < mm_core.getCodeSize(); i++) {
+            if (code[i] != null) {
+                for (int j = 0; j < mm_core.getCodeSize(); j++) {
+                    if (code[i].equals(secret[j])) {
+                        result[1]++;
+                        secret[j] = null;
+                        continue outer;
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     /**
@@ -217,28 +292,26 @@ class bot {
      * @param low The lower limit.
      * @param up The upper limit.
      */
-   private void sort(int[] fitness, String[][] pop, int low, int up) {
-         int p = (low + up) / 2;
-          if (up > low) {
-              //Feld zerlegen
-              int pn = divide(fitness, pop, low, up, p);
-              //und sortieren
-              sort(fitness, pop, low, pn - 1);
-              sort(fitness, pop, pn + 1, up);
-          }
-      }
+	private void sort(int[] fitness, String[][] pop, int low, int up) {
+	       int p = (low + up) / 2;
+	        if (up > low) {
+	            int pn = divide(fitness, pop, low, up, p);
+	            sort(fitness, pop, low, pn - 1);
+	            sort(fitness, pop, pn + 1, up);
+	        }
+	    }
 
-   /**
-    * Helper function for partitioning.
-    *
-    * @param fitness An int array.
-    * @param pop An array of Rows.
-    * @param low The lower limit.
-    * @param up The upper limit.
-    * @param pivot The position of the Pivot element.
-    *
-    * @return The new Position of the Pivot element.
-    */
+	 /**
+	  * Helper function for partitioning.
+	  *
+	  * @param fitness An int array.
+	  * @param pop An array of Rows.
+	  * @param low The lower limit.
+	  * @param up The upper limit.
+	  * @param pivot The position of the Pivot element.
+	  *
+	  * @return The new Position of the Pivot element.
+	  */
     private int divide(int[] fitness, String[][] pop, int low, int up, int pivot) {
         int pn = low;
         int pv = fitness[pivot];
@@ -276,12 +349,26 @@ class bot {
      * @param b Position of the second element.
      *
      */
-    private void swap(String[][] pop, int a, int b) {
-      String[] tmp = pop[a];
-      pop[a] = pop[b];
-      pop[b] = tmp;
+  	private void swap(String[][] pop, int a, int b) {
+		String[] tmp = pop[a];
+	    pop[a] = pop[b];
+	    pop[b] = tmp;
     }
 
+  	/**
+  	 * Evolve the population using cross over, mutation, permutation and
+     * inversion.
+  	 *
+     * <a href="http://en.wikipedia.org/wiki/Genetic_algorithm#Reproduction">
+     * Reproduction</a>
+     *
+  	 * @see #xOver1(String[][], int, int)
+  	 * @see #xOver2(String[][], int, int)
+  	 * @see #mutation(String[][], int)
+  	 * @see #permutation(String[][], int)
+  	 * @see #inversion(String[][], int)
+  	 * @see #doubleToRnd(String[][])
+  	 */
     private void evolvePopulation() {
         String[][] newPopulation = new String[POPULATION_SIZE][mm_core.getCodeSize()];
 
@@ -305,6 +392,19 @@ class bot {
         population = newPopulation;
     }
 
+    /**
+     * One-point crossover. A single crossover point on both parents' organism
+     * strings is selected. All data beyond that point in either organism string
+     * is swapped between the two parent organisms. The resulting organisms are
+     * the children.
+     *
+     * <a href="http://en.wikipedia.org/wiki/Crossover_%28genetic_algorithm%29#One-point_crossover">
+     * One-point crossover</a>
+     *
+     * @param newPopulation The population array that will be manipulated.
+     * @param child1Pos The position of the newPopulation array within the population array that will be changed.
+     * @param child2Pos The position of the newPopulation array within the population array that will be changed.
+     */
     private void xOver1(String[][] newPopulation, int child1Pos, int child2Pos) {
         int mother = getParentPos();
         int father = getParentPos();
@@ -320,6 +420,18 @@ class bot {
         }
     }
 
+    /**
+     * Two-point crossover. Two points are selected on the parent organism
+     * strings. Everything between the two points is swapped between the parent
+     * organisms, rendering two child organisms.
+     *
+     * <a href="http://en.wikipedia.org/wiki/Crossover_%28genetic_algorithm%29#Two-point_crossover">
+     * Two-point crossover</a>
+     *
+     * @param newPopulation The population array that will be manipulated.
+     * @param child1Pos The position of a newPopulation line within the population array that will be changed.
+     * @param child2Pos The position of a newPopulation line within the population array that will be changed.
+     */
     private void xOver2(String[][] newPopulation, int child1Pos, int child2Pos) {
         int mother = getParentPos();
         int father = getParentPos();
@@ -344,10 +456,25 @@ class bot {
         }
     }
 
+    /**
+     * Mutation. Replaces the color of one randomly chosen position by a random
+     * other color.
+     *
+     * @param newPopulation The population array that will be manipulated.
+     * @param popPos The position of the line within the population array that
+     * will be changed.
+     */
     private void mutation(String[][] newPopulation, int popPos) {
         newPopulation[popPos][(int) (Math.random() * mm_core.getCodeSize())] = mm_core.getEnabledColors()[(int) (Math.random() * mm_core.getEnabledColorsSize())];
     }
 
+    /**
+     * Permutation. The colors of two random positions are switched.
+     *
+     * @param newPopulation The population array that will be manipulated.
+     * @param popPos The position of the line within the population array that
+     * will be changed.
+     */
     private void permutation(String[][] newPopulation, int popPos) {
         int pos1 = (int) (Math.random() * mm_core.getCodeSize());
         int pos2 = (int) (Math.random() * mm_core.getCodeSize());
@@ -356,6 +483,14 @@ class bot {
         newPopulation[popPos][pos2] = tmp;
     }
 
+    /**
+     * Inversion. Two positions are randomly picked, and the sequence of colors
+     * between these positions is inverted.
+     *
+     * @param newPopulation The population array that will be manipulated.
+     * @param popPos The position of the line within the population array that
+     * will be changed.
+     */
     private void inversion(String[][] newPopulation, int popPos) {
         int pos1 = (int) (Math.random() * mm_core.getCodeSize());
         int pos2 = (int) (Math.random() * mm_core.getCodeSize());
@@ -371,72 +506,58 @@ class bot {
         }
     }
 
+    /**
+     * Replaces double elements in newPopulation.
+     *
+     * @param newPopulation The population array that will be manipulated.
+     *
+     * @see #lookForSame(String[][], int)
+     */
     private void doubleToRnd(String[][] newPopulation) {
         for (int i = 0; i < POPULATION_SIZE; i++) {
-            if (lookForSame(newPopulation, i) == true) {
+            if (lookForSame(newPopulation, i)) {
                 newPopulation[i] = generateRndColor();
             }
         }
     }
 
-    protected boolean lookForSame(String[][] newPopulation, int popPos) {
-      for (int i=0;i< mm_core.getCodeSize();i++) {
-        if(!population[popPos][i].equals(newPopulation[popPos][i])) {
-          return false;
-        }
-      }
-      return true;
-    }
+    /**
+     * Looking for equal rows at popPos in newPopulation.
+     *
+     * @param newPopulation The population array that will be searched.
+     * @param popPos The position of the row within the population array that will be compared.
+     *
+     * @return true if an equal row is found if not return false.
+     * @return <code>true</code> if a equal row is found<br />
+     *         <code>false</code> if no equal row is found
+     */
+	protected boolean lookForSame(String[][] newPopulation, int popPos) {
+		for (int i=0;i< mm_core.getCodeSize();i++) {
+			if(!population[popPos][i].equals(newPopulation[popPos][i])) {
+				return false;
+			}
+		}
+		return true;
+	}
 
+	/**
+	 *  Get best parent position (one of the best fifth) in population array for good fitness value purposes
+	 *
+	 * @return The best parent position (one of the best fifth)
+	 */
     private int getParentPos() {
         parentPos += (int) (Math.random() * 7);
-        if (parentPos < POPULATION_SIZE / 5) {
-            return parentPos;
-        } else {
-            parentPos = 0;
-        }
-        return parentPos;
+        if (!(parentPos < POPULATION_SIZE / 5))
+             parentPos = 0;
+         return parentPos;
     }
 
-    /**
-     *
-     * @param a
-     * @param b
-     *
-     * @return
-     *
-     * @see core#getCodeSize()
-     */
-    private int[] compare(String[] a, String[] b) {
-        int[] result = {0, 0};
-        String[] code = new String[mm_core.getCodeSize()];
-        String[] secret = new String[mm_core.getCodeSize()];
-        System.arraycopy(a, 0, code, 0, mm_core.getCodeSize());
-        System.arraycopy(b, 0, secret, 0, mm_core.getCodeSize());
-        for (int i = 0; i < mm_core.getCodeSize(); i++) {
-            if (code[i].equals(secret[i])) {
-                result[0]++;
-                secret[i] = null;
-                code[i] = null;
-            }
-        }
-        outer:
-        for (int i = 0; i < mm_core.getCodeSize(); i++) {
-            if (code[i] != null) {
-                for (int j = 0; j < mm_core.getCodeSize(); j++) {
-                    if (code[i].equals(secret[j])) {
-                        result[1]++;
-                        secret[j] = null;
-                        continue outer;
-                    }
-                }
-            }
-        }
-        return result;
-    }
 
     /**
      * This function write the pins into an int array
+     *
+     * <a href="http://en.wikipedia.org/wiki/Mastermind_%28board_game%29#Gameplay_and_rules">
+     * Mastermind Rules</a>
      *
      * counts[row][0]=black
      * counts[row][1]=red
@@ -447,20 +568,20 @@ class bot {
      * @see core#getCodeSize()
      */
     protected int[][] countHints() {
-      int[][] counts = new int[mm_core.data.size()][2];
-      for (int i=1;i< counts.length;i++) {
-        String[] hints = mm_core.getHintPane(i);
-        for(int j=0; j < mm_core.getCodeSize(); j++) {
-          if(hints[j].equals("X"))
-              counts[i][0]++;
-          else if(hints[j].equals("O"))
-              counts[i][1]++;
-          else
-              continue;
-        }
-      }
-      return counts;
-    }
+		int[][] counts = new int[mm_core.data.size()][2];
+		for (int i=1;i< counts.length;i++) {
+			String[] hints = mm_core.getHintPane(i);
+			for(int j=0; j < mm_core.getCodeSize(); j++) {
+				if(hints[j].equals("X"))
+						counts[i][0]++;
+				else if(hints[j].equals("O"))
+						counts[i][1]++;
+				else
+						continue;
+			}
+		}
+		return counts;
+	}
 
    /**
    * Validate the users try and accept or reject turn
@@ -471,39 +592,39 @@ class bot {
    * @see core#validate()
    * @see validator
    */
-  protected validator validate() {
-    if (!makeValidate) { return new validator(true,"Keine Kommentar, der Bot hat ja schon geholfen");}
-    boolean rightColors = true;
-    if (mm_core.data.size()==1)
-      return new validator(true,"Jede Wahl ist eine gute Wahl.");
-    else{
-      for (int i = 1; i<mm_core.data.size(); i++){
-        for (int j = 0; j<mm_core.getCodeSize(); j++){
-          if (!(mm_core.getValueAt(i,j).equals(mm_core.getValueAt(j))))
-            break;
-          else if (j==mm_core.getCodeSize()-1)
-            return new validator(false,"Das ist die gleiche Zeile wie Zeile: " + (mm_core.data.size()-i));
-        }
-      }
-      if (!(mm_core.getHintPane(1)[mm_core.getCodeSize()-1].equals("-"))){
-        String[] validateColor = mm_core.getDataArray(1);
-        for (int i = 0; i<mm_core.getCodeSize(); i++){
-          for (int j = 0; j<mm_core.getCodeSize(); j++){
-            if (mm_core.getValueAt(i).equals(validateColor[j])){
-              validateColor[j]="";
-              break;
-            }
-          }
-        }
-        for (int j = 0; j<mm_core.getCodeSize();j++){
-          if (!validateColor[j].equals(""))
-            rightColors = false;
-        }
-        if (rightColors)
-          return new validator(true,"Gute Wahl, solange die Farben vertauscht sind.");
-        return new validator(false,"Nicht so gut, da schon alle Farben bekannt sind, sie müssen nur noch vertauscht werden.");
-      }
-      return new validator(true,"Alles ist gut was der Codefindung dient.");
-    }
-  }
+	protected validator validate() {
+		if (!makeValidate) { return new validator(true,"Keine Kommentar, der Bot hat ja schon geholfen");}
+		boolean rightColors = true;
+		if (mm_core.data.size()==1)
+			return new validator(true,"Jede Wahl ist eine gute Wahl.");
+		else{
+			for (int i = 1; i<mm_core.data.size(); i++){
+				for (int j = 0; j<mm_core.getCodeSize(); j++){
+					if (!(mm_core.getValueAt(i,j).equals(mm_core.getValueAt(j))))
+						break;
+					else if (j==mm_core.getCodeSize()-1)
+						return new validator(false,"Das ist die gleiche Zeile wie Zeile: " + (mm_core.data.size()-i));
+				}
+			}
+			if (!(mm_core.getHintPane(1)[mm_core.getCodeSize()-1].equals("-"))){
+				String[] validateColor = mm_core.getDataArray(1);
+				for (int i = 0; i<mm_core.getCodeSize(); i++){
+					for (int j = 0; j<mm_core.getCodeSize(); j++){
+						if (mm_core.getValueAt(i).equals(validateColor[j])){
+							validateColor[j]="";
+							break;
+						}
+					}
+				}
+				for (int j = 0; j<mm_core.getCodeSize();j++){
+					if (!validateColor[j].equals(""))
+						rightColors = false;
+				}
+				if (rightColors)
+					return new validator(true,"Gute Wahl, solange die Farben vertauscht sind.");
+				return new validator(false,"Nicht so gut, da schon alle Farben bekannt sind, sie müssen nur noch vertauscht werden.");
+			}
+			return new validator(true,"Alles ist gut was der Codefindung dient.");
+		}
+	}
 }

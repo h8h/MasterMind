@@ -85,12 +85,20 @@ public class gui {
             JDialog jD = new gameHelpDialog();
             jD.setVisible(true);
           }
-			});
+      });
+     JMenuItem item22 = new JMenuItem("Info");
+      item22.addActionListener(new ActionListener () {
+        public void actionPerformed (ActionEvent e) {
+            JDialog jA = new gameAboutDialog();
+            jA.setVisible(true);
+          }
+      });
       menu02.add(item21);
+      menu02.add(item22);
       }
-		bar.add(menu);
-    bar.add(menu02);
-		}
+      bar.add(menu);
+      bar.add(menu02);
+	  }
 		gA.setJMenuBar(bar);
 	}
 
