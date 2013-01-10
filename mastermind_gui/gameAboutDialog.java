@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.BoxLayout;
 import javax.swing.Box;
 /**
- * Shows about dialog, to get link to github and to know who developed this nice programm
+ * Shows about dialog to know who developed this nice programm
  */
 class gameAboutDialog extends JDialog {
 

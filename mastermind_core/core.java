@@ -1,10 +1,14 @@
 package mastermind_core;
 import java.util.*;
 
+/**
+ *
+ * Central game engine. Contains the secret code, all colors, done tries and a list with all turnsi and hints
+ */
 public class core {
 
   /**
-   *  &nbsp;Available colors user can play with
+   *  &nbsp;Available colors user can plays with
    *  <div style='background-color:#2305e1;width:10px;height:10px;float:left'></div>
    *  <div style='background-color:#e02f24;width:10px;height:10px;float:left'></div>
    *  <div style='background-color:#e8ec0e;width:10px;height:10px;float:left'></div>

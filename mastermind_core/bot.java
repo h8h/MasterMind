@@ -3,6 +3,9 @@ package mastermind_core;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Automatic mastermind solver, mastermind helper and tipster
+ */
 class bot {
 
 	/**

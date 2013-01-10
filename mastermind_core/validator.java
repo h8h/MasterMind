@@ -1,7 +1,7 @@
 package mastermind_core;
 
 /**
- * Boolean with Text
+ * Boolean with Text - For Bot tipster, to get help and decision while playing
  */
 public class validator {
 
