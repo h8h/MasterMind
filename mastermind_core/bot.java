@@ -609,7 +609,15 @@ class bot {
 						return new validator(false,"Das ist die gleiche Zeile wie Zeile: " + (mm_core.data.size()-i));
 				}
 			}
-			if (!(mm_core.getHintPane(1)[mm_core.getCodeSize()-1].equals("-"))){
+            String[] s = mm_core.getHintPane(1);
+            boolean isWrong=false;
+            for(int i=0; i < s.length;i++) {
+              if(s[i].equals("-")) {
+                isWrong = true;
+                break;
+              }
+            }
+			if (!isWrong){
 				String[] validateColor = mm_core.getDataArray(1);
 				for (int i = 0; i<mm_core.getCodeSize(); i++){
 					for (int j = 0; j<mm_core.getCodeSize(); j++){

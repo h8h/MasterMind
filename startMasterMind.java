@@ -15,7 +15,7 @@ import javax.swing.*;
  * You should have received a copy of the GNU General Public License along
  * with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-public class main {
+public class startMasterMind {
   public static void main(String[] args) {
     final gui g = new gui();
     javax.swing.SwingUtilities.invokeLater(new Runnable() {
