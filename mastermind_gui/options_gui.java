@@ -11,11 +11,13 @@ import java.awt.Dimension;
  */
 @SuppressWarnings("serial")
 class options_gui extends JPanel {
-    private int ColorRange = 8;
+    private int ColorRange = 6;
     private int codeLength = 4;
+    protected boolean manuellCode;
     private JSlider slide_colors;
     private JSlider slide_code;
     private JSpinner js_tries;
+    private JCheckBox manuCode;
     private gui g;
 
     /**
@@ -28,8 +30,8 @@ class options_gui extends JPanel {
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         Box vbox = Box.createVerticalBox();
         setBorder(BorderFactory.createTitledBorder("::Einstellungen::"));
-        slide_colors = new JSlider(JSlider.VERTICAL,2,14,8);
-        slide_code  = new JSlider(JSlider.VERTICAL,2,10,4);
+        slide_colors = new JSlider(JSlider.VERTICAL,2,14,ColorRange);
+        slide_code  = new JSlider(JSlider.VERTICAL,2,10,codeLength);
         js_tries = new JSpinner();
         js_tries.setMaximumSize(new Dimension(80,50));
         ((JSpinner.DefaultEditor)js_tries.getEditor()).getTextField().setColumns(2);
@@ -65,11 +67,15 @@ class options_gui extends JPanel {
             setNumberOfTries((int)((3*source.getValue())/2));
           }
         });
+        manuCode = new JCheckBox("Code manuell setzen");
+        manuCode.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
         JButton ak = new JButton ("Neues Spiel");
         ak.setMnemonic(KeyEvent.VK_P);
         ak.setAlignmentX(Component.RIGHT_ALIGNMENT);
         ak.addActionListener(new ActionListener () {
           public void actionPerformed (ActionEvent e) {
+            manuellCode = manuCode.isSelected();
             newGame();
           }
         });
@@ -96,6 +102,8 @@ class options_gui extends JPanel {
         trieslbl.setAlignmentX(Component.RIGHT_ALIGNMENT);
         vbox.add(trieslbl);
         //Margin Tries <-> New Game Button
+        vbox.add(Box.createVerticalStrut(20));
+        vbox.add(manuCode);
         vbox.add(Box.createVerticalStrut(20));
         vbox.add(ak);
         add(vbox);

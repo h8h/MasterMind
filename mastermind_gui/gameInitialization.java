@@ -129,6 +129,14 @@ class gameInitialization {
   }
 
   /**
+   * Get the hex color columns as a string array on row zero
+   *
+   * @return hex color as a string array
+   */
+  protected String[] getColorArray() {
+    return mm_core.getArAt(0);
+  }
+  /**
    * Remove value (HEX Color) at first row and given column in <code>data</code>
    *
    * @param column position to delete color from

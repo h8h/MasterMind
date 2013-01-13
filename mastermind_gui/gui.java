@@ -212,8 +212,22 @@ public class gui {
     if (gameRunning()) {return;}
     filename = null;
     gA.setTitle(GAMENAME+" Spiel: unbenannt");
-    gA.setText("Neues Spiel ... neues Glück :)");
+    if(gA.isManuellCode()) {
+      gA.setText("Setze den geheimen Code");
+    } else {
+      gA.setText("Neues Spiel ... neues Glück :)");
+    }
     createGame(null);
+  }
+
+  /**
+   * Users secret code is set
+   * @see #createGame()
+   */
+  protected void setCodeAndNewGame () {
+    gA.removeManuellCode();
+    createGame();
+    gA.setText("Geheimer Code wurde erstellt...Viel Spaß beim Erraten");
   }
 
   /**
@@ -287,12 +301,28 @@ public class gui {
   }
 
   /**
+   * Create or recreate new gui with new/same game options and user secret code<br>
+   * Please use setCodeAndNewGame()
+   *
+   * @see #setCodeAndNewGame()
+   */
+  private void createGame() {
+    core mm_core = new core (gA.options.getCodeSize(),gA.options.getColorRange(),gA.options.getNumberOfTries(),game.getColorArray());
+    createGame(mm_core);
+  }
+
+  /**
    * Add new try (next turn)<br>
    * if user wishes validating show help text and reject new try if validator is false
    * @see gameInitialization#getEnabledValidate()
    */
   protected void addTry() {
     game.doitBot();
+    if(gA.isManuellCode()) {
+      disableGame();
+      setCodeAndNewGame();
+      return;
+    }
     if(game.getEnabledValidate()) {
       validator v = game.validate();
       gA.setText(v.getText());

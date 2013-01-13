@@ -191,6 +191,20 @@ class gameArea extends JFrame implements WindowListener{
   }
 
   /**
+   * Check how to set code - automatically or manuell
+   *
+   * @return <code>true</code> if code should be set manuell<br>
+   *         <code>false</code> if code should be set auto
+   */
+  protected boolean isManuellCode() {
+    return options.manuellCode;
+  }
+
+  protected void removeManuellCode() {
+    options.manuellCode = false;
+  }
+
+  /**
    * Set and activate key listener from given keyboard class
    *
    * @param k keyboard class

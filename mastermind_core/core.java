@@ -40,17 +40,13 @@ public class core {
    * Class construction
    */
   public core (int codeLength,int enabledColorRange, int tries) {
-    generateColors(enabledColorRange);
-    code = new String[codeLength];
-    core_bot = new bot(this);
-    generateCode();
-    this.tries = tries;
+    this(codeLength,enabledColorRange,tries,null);
   }
 
   /**
    * Class construction for creating saved core
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("unchecked") //for line 61
   public core (Object[] o) {
     generateColors((int)o[1]);
     code = new String[(int)o[0]];
@@ -61,6 +57,20 @@ public class core {
     data = (Vector<Vector<Object>>) o[5];
   }
 
+  /**
+   * Class construction for "user sets color"
+   */
+  public core(int codeLength, int enabledColorRange, int tries, String[] code) {
+    generateColors(enabledColorRange);
+    this.code = new String[codeLength];
+    core_bot = new bot(this);
+    if(code != null) {
+      this.code = code;
+    } else {
+      generateCode();
+    }
+    this.tries = tries;
+  }
   /**
    * Generate colors which users are able to play with
    *
@@ -263,7 +273,7 @@ public class core {
    * @return hex color as a string array
    */
 
-  protected String [] getArAt(int row) {
+  public String [] getArAt(int row) {
     String [] s = new String [getCodeSize()];
     for (int i = 0 ; i < getCodeSize();i++){
       s[i]= getValueAt( row, i);
