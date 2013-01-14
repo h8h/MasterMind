@@ -13,7 +13,7 @@ import java.awt.Dimension;
 class options_gui extends JPanel {
     private int ColorRange = 6;
     private int codeLength = 4;
-    protected boolean manuellCode;
+    protected boolean manualCode;
     private JSlider slide_colors;
     private JSlider slide_code;
     private JSpinner js_tries;
@@ -75,7 +75,7 @@ class options_gui extends JPanel {
         ak.setAlignmentX(Component.RIGHT_ALIGNMENT);
         ak.addActionListener(new ActionListener () {
           public void actionPerformed (ActionEvent e) {
-            manuellCode = manuCode.isSelected();
+            manualCode = manuCode.isSelected();
             newGame();
           }
         });

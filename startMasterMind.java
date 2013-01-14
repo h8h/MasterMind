@@ -1,5 +1,6 @@
+import javax.swing.UIManager;
+
 import mastermind_gui.*;
-import javax.swing.*;
 
 /**
  * MasterMind PP-1 is free software: you can redistribute it and/or modify it

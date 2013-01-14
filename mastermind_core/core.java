@@ -1,9 +1,10 @@
 package mastermind_core;
-import java.util.*;
+
+import java.util.Random;
+import java.util.Vector;
 
 /**
- *
- * Central game engine. Contains the secret code, all colors, done tries and a list with all turnsi and hints
+ * Central game engine. Contains the secret code, all colors, done tries and a list with all turns and hints
  */
 public class core {
 
@@ -58,13 +59,13 @@ public class core {
   }
 
   /**
-   * Class construction for "user sets color"
+   * Class construction for given code (User set code - Mode)
    */
   public core(int codeLength, int enabledColorRange, int tries, String[] code) {
     generateColors(enabledColorRange);
     this.code = new String[codeLength];
     core_bot = new bot(this);
-    if(code != null) {
+    if(code != null) { // If given code is not set, generate random code
       this.code = code;
     } else {
       generateCode();
@@ -87,7 +88,7 @@ public class core {
   /**
    * Generate randomize secret code
    */
-  public void generateCode() {
+  private void generateCode() {
     int randomizeColor = 0;
     Random r = new Random();
     for (int i = 0; i < code.length; i++) {
@@ -329,7 +330,7 @@ public class core {
   }
 
   /**
-   * Let the Bot check the turn (before creating a new try)
+   * Let the bot check the turn (before creating a new try)
    */
   public void doitBot() {
     core_bot.setBestColors();

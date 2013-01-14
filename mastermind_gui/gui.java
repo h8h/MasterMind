@@ -30,6 +30,9 @@ public class gui {
     newGame();
   }
 
+  /**
+   * Generate Menu for JFrame
+   */
   private void genMenu() {
 		JMenuBar bar = new JMenuBar();
 		{
@@ -207,13 +210,15 @@ public class gui {
 
   /**
    * If no game is running, create a new game
+   *
+   * @see #createGame(core)
    */
   protected void newGame() {
     if (gameRunning()) {return;}
     filename = null;
     gA.setTitle(GAMENAME+" Spiel: unbenannt");
-    if(gA.isManuellCode()) {
-      gA.setText("Setze den geheimen Code");
+    if(gA.isManualCode()) {
+      gA.setText("Setze den geheimen Code und klicke anschließend auf OK ...");
     } else {
       gA.setText("Neues Spiel ... neues Glück :)");
     }
@@ -221,11 +226,11 @@ public class gui {
   }
 
   /**
-   * Users secret code is set
+   * Users secret code is set, now create new game
    * @see #createGame()
    */
   protected void setCodeAndNewGame () {
-    gA.removeManuellCode();
+    gA.removeManualCode();
     createGame();
     gA.setText("Geheimer Code wurde erstellt...Viel Spaß beim Erraten");
   }
@@ -234,6 +239,8 @@ public class gui {
    * Create a new game from loaded file
    *
    * @param o with important core objects
+   *
+   * @see #createGame(core)
    * @see mastermind_core.core#makePKG()
    */
   protected void newGame(Object[] o) {
@@ -301,7 +308,7 @@ public class gui {
   }
 
   /**
-   * Create or recreate new gui with new/same game options and user secret code<br>
+   * Create or recreate new gui with new/same game options and secret code given from user<br>
    * Please use setCodeAndNewGame()
    *
    * @see #setCodeAndNewGame()
@@ -315,15 +322,17 @@ public class gui {
    * Add new try (next turn)<br>
    * if user wishes validating show help text and reject new try if validator is false
    * @see gameInitialization#getEnabledValidate()
+   * @see gameInitialization#validate()
+   * @see gameInitialization#addTry()
    */
   protected void addTry() {
     game.doitBot();
-    if(gA.isManuellCode()) {
+    if(gA.isManualCode()) { //User gives secret code
       disableGame();
       setCodeAndNewGame();
       return;
     }
-    if(game.getEnabledValidate()) {
+    if(game.getEnabledValidate()) { //User wishes help
       validator v = game.validate();
       gA.setText(v.getText());
       if(!v.isValid()) { return; }

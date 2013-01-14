@@ -2,7 +2,6 @@ package mastermind_gui;
 
 import java.awt.Dimension;
 import java.awt.event.*;
-import java.awt.Desktop;
 import javax.swing.JDialog;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -11,6 +10,7 @@ import javax.swing.Box;
 /**
  * Shows help dialog, to get starting with the mastermind game
  */
+@SuppressWarnings("serial")
 class gameHelpDialog extends JDialog {
 
         /**

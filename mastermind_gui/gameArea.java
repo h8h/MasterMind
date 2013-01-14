@@ -59,7 +59,6 @@ class gameArea extends JFrame implements WindowListener{
     });
     addWindowListener(this);
     pack();
-    // setLocationRelativeTo(null);
     setVisible(true);
   }
 
@@ -160,7 +159,8 @@ class gameArea extends JFrame implements WindowListener{
   }
 
   /**
-   * Remove table
+   * Remove table (gameGround)
+   * @see gameGround
    */
   protected void removeGameInitialization() {
     if(gameInit == null) { return; }
@@ -191,17 +191,22 @@ class gameArea extends JFrame implements WindowListener{
   }
 
   /**
-   * Check how to set code - automatically or manuell
+   * Check how to set code - automatically or manually
    *
-   * @return <code>true</code> if code should be set manuell<br>
+   * @return <code>true</code> if code should be set manually<br>
    *         <code>false</code> if code should be set auto
+   * @see options_gui#manualCode
    */
-  protected boolean isManuellCode() {
-    return options.manuellCode;
+  protected boolean isManualCode() {
+    return options.manualCode;
   }
 
-  protected void removeManuellCode() {
-    options.manuellCode = false;
+  /**
+   * Set manualCode in options gui to false, ready to start game
+   * @see options_gui#manualCode
+   */
+  protected void removeManualCode() {
+    options.manualCode = false;
   }
 
   /**
