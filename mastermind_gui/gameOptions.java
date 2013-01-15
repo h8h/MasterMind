@@ -10,13 +10,13 @@ import java.awt.Dimension;
  * Options gui, change code size, color range and number of tries
  */
 @SuppressWarnings("serial")
-class options_gui extends JPanel {
-    private int ColorRange = 6;
+class gameOptions extends JPanel {
+    private int colorRange = 6;
     private int codeLength = 4;
     protected boolean manualCode;
-    private JSlider slide_colors;
-    private JSlider slide_code;
-    private JSpinner js_tries;
+    private JSlider slideColors;
+    private JSlider slideCode;
+    private JSpinner jsTries;
     private JCheckBox manuCode;
     private gui g;
 
@@ -25,18 +25,18 @@ class options_gui extends JPanel {
      *
      * @param g back reference to gui, needed to call for example new game
      */
-    public options_gui(gui g) {
+    public gameOptions(gui g) {
     	  this.g = g;
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         Box vbox = Box.createVerticalBox();
         setBorder(BorderFactory.createTitledBorder("::Einstellungen::"));
-        slide_colors = new JSlider(JSlider.VERTICAL,2,14,ColorRange);
-        slide_code  = new JSlider(JSlider.VERTICAL,2,10,codeLength);
-        js_tries = new JSpinner();
-        js_tries.setMaximumSize(new Dimension(80,50));
-        ((JSpinner.DefaultEditor)js_tries.getEditor()).getTextField().setColumns(2);
+        slideColors = new JSlider(JSlider.VERTICAL,2,14,colorRange);
+        slideCode  = new JSlider(JSlider.VERTICAL,2,10,codeLength);
+        jsTries = new JSpinner();
+        jsTries.setMaximumSize(new Dimension(80,50));
+        ((JSpinner.DefaultEditor)jsTries.getEditor()).getTextField().setColumns(2);
         setNumberOfTries((int)((3*codeLength)/2));
-        js_tries.addChangeListener(new ChangeListener() {
+        jsTries.addChangeListener(new ChangeListener() {
           public void stateChanged(ChangeEvent e) {
             JSpinner source = (JSpinner) e.getSource();
             if ((int)source.getValue() > 99) {
@@ -47,20 +47,20 @@ class options_gui extends JPanel {
             }
           }
         });
-        slide_colors.setMajorTickSpacing(1);
-        slide_colors.setPaintLabels(true);
-        slide_colors.setPaintTicks(true);
-        slide_colors.addChangeListener(new ChangeListener() {
+        slideColors.setMajorTickSpacing(1);
+        slideColors.setPaintLabels(true);
+        slideColors.setPaintTicks(true);
+        slideColors.addChangeListener(new ChangeListener() {
           public void stateChanged(ChangeEvent e) {
                     JSlider source = (JSlider) e.getSource();
                     setColorRange(source.getValue());
           }
         });
 
-        slide_code.setMajorTickSpacing(1);
-        slide_code.setPaintLabels(true);
-        slide_code.setPaintTicks(true);
-        slide_code.addChangeListener(new ChangeListener() {
+        slideCode.setMajorTickSpacing(1);
+        slideCode.setPaintLabels(true);
+        slideCode.setPaintTicks(true);
+        slideCode.addChangeListener(new ChangeListener() {
           public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             setCodeSize(source.getValue());
@@ -70,12 +70,10 @@ class options_gui extends JPanel {
         manuCode = new JCheckBox("Code manuell setzen");
         manuCode.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
-        JButton ak = new JButton ("Neues Spiel");
-        ak.setMnemonic(KeyEvent.VK_P);
+        JButton ak = new JButton ("<html><u>N</u>eues Spiel</html>");
         ak.setAlignmentX(Component.RIGHT_ALIGNMENT);
         ak.addActionListener(new ActionListener () {
           public void actionPerformed (ActionEvent e) {
-            manualCode = manuCode.isSelected();
             newGame();
           }
         });
@@ -89,16 +87,16 @@ class options_gui extends JPanel {
         //Margin Label <-> JSpinner
         vbox.add(Box.createVerticalStrut(15));
         Box hbox = Box.createHorizontalBox();
-        hbox.add(slide_colors);
+        hbox.add(slideColors);
         hbox.add(Box.createHorizontalGlue());
-        hbox.add(slide_code);
+        hbox.add(slideCode);
         hbox.add(Box.createVerticalStrut(10));
         vbox.add(hbox);
         //Margin JSpinner <-> Tries
         vbox.add(Box.createVerticalStrut(20));
         Box trieslbl = Box.createHorizontalBox();
         trieslbl.add(new JLabel("Versuche:  "));
-        trieslbl.add(js_tries);
+        trieslbl.add(jsTries);
         trieslbl.setAlignmentX(Component.RIGHT_ALIGNMENT);
         vbox.add(trieslbl);
         //Margin Tries <-> New Game Button
@@ -125,7 +123,7 @@ class options_gui extends JPanel {
      * @return value which the user has selected
      */
     protected int getColorRange() {
-      return ColorRange;
+      return colorRange;
     }
 
     /**
@@ -135,8 +133,8 @@ class options_gui extends JPanel {
      * @see mastermind_core.core#generateColors(int)
      */
     protected void setColorRange(int cr) {
-      ColorRange = cr;
-      slide_colors.setValue(ColorRange);
+      colorRange = cr;
+      slideColors.setValue(colorRange);
     }
 
     /**
@@ -156,7 +154,7 @@ class options_gui extends JPanel {
      */
     protected void setCodeSize(int cl) {
       codeLength = cl;
-      slide_code.setValue(codeLength);
+      slideCode.setValue(codeLength);
     }
 
     /**
@@ -165,7 +163,7 @@ class options_gui extends JPanel {
      * @return value which the user has selected
      */
     protected int getNumberOfTries() {
-    	return (int) js_tries.getValue();
+    	return (int) jsTries.getValue();
     }
 
     /**
@@ -175,6 +173,15 @@ class options_gui extends JPanel {
      * @see mastermind_core.core#checkTries()
      */
     protected void setNumberOfTries(int tries) {
-    	js_tries.setValue(tries);
+    	jsTries.setValue(tries);
+    }
+    
+    /**
+     * Update manualCode
+     * 
+     * @see gameArea#removeManualCode()
+     */
+    protected void initManualCode() {
+        manualCode = manuCode.isSelected();
     }
 }

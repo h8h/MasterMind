@@ -20,8 +20,8 @@ class gameGround extends JTable {
     for(int i=0; i < getColumnCount() - 1;i++) {
       getColumnModel().getColumn(i).setCellRenderer(new pin());
       getColumnModel().getColumn(i).setCellEditor(new pinEditor(enabledColors));
-      //setColumnWidth(getColumnModel().getColumn(i),20);
     }
+    //Table Preferences
     putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
     setColumnWidth(getColumnModel().getColumn(getColumnCount()-1),(getColumnCount()-1)*65);
     getColumnModel().getColumn(getColumnCount()-1).setCellRenderer(new hintPane());

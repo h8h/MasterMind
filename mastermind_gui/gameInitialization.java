@@ -11,22 +11,22 @@ import mastermind_core.validator;
  * Generate Game - connector between core/gameData and the world out there (gui)
  */
 class gameInitialization {
-  private core mm_core;
+  private core mmCore;
   private gameData gD;
   private gameGround gG;
-  private Box jp;
+  private Box gP;
   private boolean makeValidate = false;
 
   /**
    * Class construction - generating gameGround and gameData with core data
    *
-   * @param mm_core core class
+   * @param mmCore core class
    * @see mastermind_core.core#data
    */
-  public gameInitialization(core mm_core) {
-    this.mm_core = mm_core;
-    gD = new gameData(mm_core);
-    gG = new gameGround(gD,mm_core.getEnabledColors()); //Table with set and hint buttons
+  public gameInitialization(core mmCore) {
+    this.mmCore = mmCore;
+    gD = new gameData(mmCore);
+    gG = new gameGround(gD,mmCore.getEnabledColors()); //Table with set and hint buttons
   }
 
   /**
@@ -44,13 +44,14 @@ class gameInitialization {
   public gameStatus addTry() {
     if (gG.isEditing())
       gG.getCellEditor().cancelCellEditing();
-    if (gD.setHint(mm_core.checkColor())) {
+    
+    if (gD.setHint(mmCore.checkColor())) {
       gD.setCellEditable(false);
       return gameStatus.WIN;
     } //Get pinSetting from Table, check it and put it back in table
 
     //Check tries
-    if (mm_core.checkTries()) {
+    if (mmCore.checkTries()) {
       gD.setCellEditable(false);
       gD.showCode();
       gG.setRowHeight(0,80);
@@ -70,7 +71,7 @@ class gameInitialization {
   public JPanel initEnabledColors () {
     JPanel jp = new JPanel();
     String abc = "0QWER";
-    String[] enabledColorsHEX = mm_core.getEnabledColors();
+    String[] enabledColorsHEX = mmCore.getEnabledColors();
     for (int i=0; i < enabledColorsHEX.length; i++) {
       JButton jb;
       if ((i+1)  < 10) {
@@ -90,11 +91,10 @@ class gameInitialization {
   }
 
   /**
-   * Generate whole game on a single jpanel
-   *
+   * Generate whole game on a single Box (gamePanel = gP)
    */
   public Box createGame() {
-    jp = Box.createVerticalBox();
+    gP = Box.createVerticalBox();
     Box vbox = Box.createVerticalBox();
     JScrollPane scrollpane = new JScrollPane(gG);
     vbox.add(scrollpane);
@@ -108,8 +108,8 @@ class gameInitialization {
     });
     cb.setAlignmentX(Component.RIGHT_ALIGNMENT);
     vbox.add(cb);
-    jp.add(vbox);
-    return jp;
+    gP.add(vbox);
+    return gP;
   }
 
   /**
@@ -123,8 +123,8 @@ class gameInitialization {
   protected void setColorAt(int color, int column) {
     if (gG.isEditing())
       gG.getCellEditor().cancelCellEditing();
-    if(color < mm_core.getEnabledColorsSize() && column < gD.getColumnCount()-1 ) {
-      gD.setColorAt(mm_core.getEnabledColors()[color],column);
+    if(color < mmCore.getEnabledColorsSize() && column < gD.getColumnCount()-1 ) {
+      gD.setColorAt(mmCore.getEnabledColors()[color],column);
     }
   }
 
@@ -134,7 +134,7 @@ class gameInitialization {
    * @return hex color as a string array
    */
   protected String[] getColorArray() {
-    return mm_core.getArAt(0);
+    return mmCore.getArAt(0);
   }
   /**
    * Remove value (HEX Color) at first row and given column in <code>data</code>
@@ -167,14 +167,14 @@ class gameInitialization {
    * @see mastermind_core.core#makePKG()
    */
   public Object[] getCore() {
-    return mm_core.makePKG();
+    return mmCore.makePKG();
   }
 
   /**
    * Let the Bot check the turn (before creating a new try)
    */
   protected void doitBot() {
-    mm_core.doitBot();
+    mmCore.doitBot();
   }
 
   /**
@@ -185,7 +185,7 @@ class gameInitialization {
    * @see mastermind_core.validator
    */
   protected validator validate() {
-    return mm_core.validate();
+    return mmCore.validate();
   }
 
   /**
@@ -205,7 +205,7 @@ class gameInitialization {
    * @see mastermind_core.core#leftTries()
    */
   protected int leftTries() {
-    return mm_core.leftTries();
+    return mmCore.leftTries();
   }
 
   /**
@@ -215,6 +215,6 @@ class gameInitialization {
    * @see mastermind_core.core#getTries()
    */
   protected int getTries() {
-    return mm_core.getTries();
+    return mmCore.getTries();
   }
 }

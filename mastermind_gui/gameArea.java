@@ -14,13 +14,13 @@ import java.awt.event.*;
  */
 @SuppressWarnings("serial")
 class gameArea extends JFrame implements WindowListener{
-  private JButton nextTry;
-  private JLabel help_text;
-  protected options_gui options;
+  protected JButton nextTry;
+  private JLabel helpText;
+  protected gameOptions options;
   private JPanel enabledColors;
-  private keyboard keylist;
   private Box gameInit;
   private gui game;
+  private gameDialog gD;
 
   /**
    * Class construction
@@ -33,8 +33,9 @@ class gameArea extends JFrame implements WindowListener{
 
     initFrame();
     // KeyListener for add / delete colors on gameGround
-    keylist = new keyboard(game);
-    options = new options_gui(game);
+    setKeyListener(new gameKeyboard(game));
+
+    options = new gameOptions(game);
 
     add(options,BorderLayout.LINE_START);
 
@@ -45,19 +46,12 @@ class gameArea extends JFrame implements WindowListener{
       }
     });
     add(nextTry,BorderLayout.LINE_END);
-    help_text = new JLabel("Errate den geheimen Code ... | ");
-    help_text.setBorder(BorderFactory.createTitledBorder(""));
-    help_text.setAlignmentX(Component.CENTER_ALIGNMENT);
-    add(help_text,BorderLayout.NORTH);
 
-    addComponentListener(new java.awt.event.ComponentAdapter() {
-      public void componentResized(ComponentEvent event) {
-        setSize(
-          Math.max(100, getWidth()),
-          Math.max(100, getHeight()));
-        }
-    });
-    addWindowListener(this);
+    helpText = new JLabel("Errate den geheimen Code ... | ");
+    helpText.setBorder(BorderFactory.createTitledBorder(""));
+    helpText.setAlignmentX(Component.CENTER_ALIGNMENT);
+    add(helpText,BorderLayout.NORTH);
+
     pack();
     setVisible(true);
   }
@@ -66,13 +60,29 @@ class gameArea extends JFrame implements WindowListener{
    * Set design and size
    */
   private void initFrame() {
-    setPreferredSize(new Dimension(800, 480));
+    setPreferredSize(new Dimension(800, 550));
+
+    addComponentListener(new java.awt.event.ComponentAdapter() {
+        public void componentResized(ComponentEvent event) { //Set minimum window size
+          setSize(
+            Math.max(100, getWidth()),
+            Math.max(100, getHeight()));
+          }
+      });
+    addWindowListener(this);
+
     setMinimumSize(getPreferredSize());
     setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
   }
 
   /**
-   * Exit game, if it is not running
+   * Select which game dialog to open
+   */
+  public enum gameDialogSelector {
+	    HELP,INFO
+  }
+  /**
+   * Exit game and dispose window, if no game is running
    *
    * @see gui#gameRunning()
    */
@@ -93,10 +103,10 @@ class gameArea extends JFrame implements WindowListener{
   /**
    * Set text which is place on left upper corner of the frame
    *
-   * @param s text you want to set (overwrite the old text)
+   * @param s text you want to set (overwrites the old text)
    */
   protected void setText(String s) {
-    help_text.setText(s);
+    helpText.setText(s);
   }
 
   /**
@@ -105,7 +115,7 @@ class gameArea extends JFrame implements WindowListener{
    * @return help text
    */
   protected String getText(){
-    return help_text.getText();
+    return helpText.getText();
   }
 
   /**
@@ -191,11 +201,21 @@ class gameArea extends JFrame implements WindowListener{
   }
 
   /**
+   * Set manualCode, by requesting on options checkbox
+   *
+   * @see gameOptions#manualCode
+   * @see gameOptions#initManualCode
+   */
+  protected void initManualCode() {
+    options.initManualCode();
+  }
+
+  /**
    * Check how to set code - automatically or manually
    *
    * @return <code>true</code> if code should be set manually<br>
    *         <code>false</code> if code should be set auto
-   * @see options_gui#manualCode
+   * @see gameOptions#manualCode
    */
   protected boolean isManualCode() {
     return options.manualCode;
@@ -203,7 +223,7 @@ class gameArea extends JFrame implements WindowListener{
 
   /**
    * Set manualCode in options gui to false, ready to start game
-   * @see options_gui#manualCode
+   * @see gameOptions#manualCode
    */
   protected void removeManualCode() {
     options.manualCode = false;
@@ -213,22 +233,45 @@ class gameArea extends JFrame implements WindowListener{
    * Set and activate key listener from given keyboard class
    *
    * @param k keyboard class
-   * @see keyboard
+   * @see gameKeyboard
    */
-  protected void setKeyListener(keyboard k) {
-    removeKeyListener();
-    keylist = k;
+  protected void setKeyListener(gameKeyboard k) {
     KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-    manager.addKeyEventDispatcher(keylist);
+    manager.addKeyEventDispatcher(k);
   }
 
   /**
-   * Deactivate key listener
+   * Show Info / About Dialog
    */
-  protected void removeKeyListener() {
-    KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-    if (manager != null)
-      manager.removeKeyEventDispatcher(keylist);
+  protected void showDialog(gameDialogSelector gDS) {
+	  switch(gDS) {
+      case HELP:
+          gD = new gameDialog("Anleitung","<html><br><font size =+2>Anleitung</font><br><br>Klicke auf die Farben, um sie in ein leeres Feld einzusetzen oder klicke auf die Felder um die Farbe zu wechseln.<br><br>Alternativ, klicke die Taste <b>a</b>, dann die Farbnummer (1-9/0 für 10 bzw. Q W E R), dann die Spalte(1 - 9 / 0 für 10).<br><br>Zum löschen klicke die Taste <b>d</b>, dann die Spaltennummer.<br><br>Alt+p startet ein neues Spiel.<br><br>Leere Felder (grau) füllt der Computer, nach klicken der OK oder n-Taste, automatisch aus.<br><br>Durch benutzen der Hilfefunktion, können unnötige Spielzüge verhindert werden, indem der Computer einen entsprechenden Hinweis gibt.<br><br> Ein <b>schwarzer Pin</b> bedeutet richtige Farbe und richtiger Platz.<br><br>Ein <b>roter Pin</b>, meist auch bekannt mit weißem Pin, bedeutet richtige Farbe und falscher Platz.</html>");
+        break;
+      case INFO:
+    	  gD = new gameDialog("Programminfo","<html><br><font size=+2>Info</font><br><br>MasterMind PP-1 wurde im Rahmen eines Hochschulprojektes entwickelt, in der Hoffnung es ist intuitiv und hilfreich, um die grauen Zellen zu reaktivieren.<br><br><b><u>Wichtig: </u>Für evtl. geschädigte oder zerstörte Gehirnzellen, beim Versuch den Code zu lösen tragen weder die HTW-Aalen, noch die Entwickler Haftung.</b><br><br>Beim mehrmaligen KLICK auf die OK oder n-Taste, kann der Code ohne große Bemühungen automatisch gelöst werden (durch den Computer).<br><br><font size =+2>Entwickler und Projekt</font><br><br>Entwickler:<br>Christian Homeyer (H8H)<br>Sebastian Orlowski<br>Stefan Schmid<br>Timo Bonzheim<br><br>MasterMind PP-1 wurde unter GNU General Public License veröffentlich,<br>dieses Projekt finden Sie unter GitHub www.github.com/h8h/MasterMind</html>");
+        break;
+    }
+    gD.setVisible(true);
+  }
+
+  /**
+   * Check if gameDialog has focus
+   *
+   * @return <code>true</code> gameDialog is open
+   * 		 <code>false</code> gameDialog is closed
+   */
+  public boolean hasDialogFocus() {
+	  if(gD == null) { return false; }
+	  return gD.isShowing();
+  }
+
+  /**
+   * Close dialog, if opened
+   */
+  public void closeDialog() {
+	  if(!hasDialogFocus()) { return; }
+	  gD.dispose();
   }
 
   /**
@@ -236,7 +279,6 @@ class gameArea extends JFrame implements WindowListener{
    */
   protected void disableGame() {
     setEnabledSaveMenu(false);
-    removeKeyListener();
     removeEnabledColors();
     setEnabledNextTry(false);
   }
@@ -246,7 +288,6 @@ class gameArea extends JFrame implements WindowListener{
    */
   protected void enableGame() {
     setEnabledSaveMenu(true);
-    setKeyListener(keylist);
     setEnabledNextTry(true);
   }
 
@@ -266,4 +307,5 @@ class gameArea extends JFrame implements WindowListener{
   public void windowDeiconified(WindowEvent arg0) { }
   public void windowIconified(WindowEvent arg0) { }
   public void windowOpened(WindowEvent arg0) { }
+
 }

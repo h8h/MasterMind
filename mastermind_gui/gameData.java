@@ -14,16 +14,16 @@ class gameData extends AbstractTableModel{
   private String[] columnNames;
   private int position;
   private boolean celledit=true;
-  private core mm_core;
+  private core mmCore;
 
   /**
    * Class construction
    *
-   * @param mm_core core class
+   * @param mmCore
    */
-  public gameData(core mm_core) {
+  public gameData(core mmCore) {
     super();
-    this.mm_core = mm_core;
+    this.mmCore = mmCore;
     createColumns();
     if(getRowCount() == 0) { //New Game or game loaded?
       addTry(); //Add first Try
@@ -34,18 +34,18 @@ class gameData extends AbstractTableModel{
    * Create columns: code index numbs + hintPane
    */
   public void createColumns() {
-    columnNames = new String[mm_core.getCodeSize() + 1]; //code size + hintPane
-    for (int i=0; i < mm_core.getCodeSize(); i++) {
+    columnNames = new String[mmCore.getCodeSize() + 1]; //code size + hintPane
+    for (int i=0; i < mmCore.getCodeSize(); i++) {
       columnNames[i] = (i +1)+"";
     }
-    columnNames[mm_core.getCodeSize()] = "";
+    columnNames[mmCore.getCodeSize()] = "";
   }
 
   /**
    * Show secret code (if user lost game)
    */
   public void showCode() {
-    mm_core.showCode();
+    mmCore.showCode();
     fireTableDataChanged();
   }
 
@@ -54,11 +54,11 @@ class gameData extends AbstractTableModel{
    */
   public void addTry() {
     position = 0; //Rest position;
-    mm_core.data.add(0,new Vector<Object>());
-    for(int i=0; i < mm_core.getCodeSize(); i++){
-      mm_core.data.get(0).add("");
+    mmCore.data.add(0,new Vector<Object>());
+    for(int i=0; i < mmCore.getCodeSize(); i++){
+      mmCore.data.get(0).add("");
     }
-    mm_core.data.get(0).add(new String[mm_core.getCodeSize()]); //HINT PANE
+    mmCore.data.get(0).add(new String[mmCore.getCodeSize()]); //HINT PANE
     fireTableDataChanged();
   }
 
@@ -101,8 +101,8 @@ class gameData extends AbstractTableModel{
     // Search the button, on which the color was deleted
     while (getValueAt(0,i) != null && !((String)getValueAt(0,i)).equals("")) {
       i++;
-      if (i > mm_core.getCodeSize()-1) // All buttons already have colors
-        return position++%mm_core.getCodeSize(); // go on colorwalking...
+      if (i > mmCore.getCodeSize()-1) // All buttons already have colors
+        return position++%mmCore.getCodeSize(); // go on colorwalking...
     }
     return i; //Position of color deleted button
   }
@@ -115,7 +115,7 @@ class gameData extends AbstractTableModel{
    * @param col (column) position to set value less than code size
    */
   public void setValueAt(Object value, int row, int col){
-    mm_core.setValueAt((String) value, col);
+    mmCore.setValueAt((String) value, col);
     fireTableCellUpdated(0,col);
   }
 
@@ -128,7 +128,7 @@ class gameData extends AbstractTableModel{
    * @see mastermind_core.core#checkColor()
    */
   public boolean setHint(String[] hints){
-    mm_core.data.get(0).setElementAt(hints, getColumnCount()-1);
+    mmCore.data.get(0).setElementAt(hints, getColumnCount()-1);
     fireTableCellUpdated(0,getColumnCount()-1);
     if(hints[hints.length-1] == "X") { //check if user has won
       return true;
@@ -151,7 +151,7 @@ class gameData extends AbstractTableModel{
    * @return number of tries
    */
   public int getRowCount() {
-    return mm_core.data.size();
+    return mmCore.data.size();
   }
 
   /**
@@ -173,7 +173,7 @@ class gameData extends AbstractTableModel{
    * @see mastermind_core.core#getValueAt(int, int)
    */
   public Object getValueAt(int row, int col) {
-    return mm_core.data.get(row).get(col);
+    return mmCore.data.get(row).get(col);
   }
 
   //Implement/Overwrite Functions

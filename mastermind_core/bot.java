@@ -19,7 +19,7 @@ class bot {
 	 * made.
 	 */
 	private final int GENERATION_SIZE = 500;
-	core mm_core;
+	core mmCore;
 	boolean makeValidate;
 
     private final int FEASIBLE_CODES_MAX = 1;
@@ -30,11 +30,11 @@ class bot {
 
   /**
    * Class construction
-   * @param co core class
+   * @param mmCore core class
    */
-  public bot (core co) {
-    mm_core = co;
-    population = new String[POPULATION_SIZE][mm_core.getCodeSize()];
+  public bot (core mmCore) {
+    this.mmCore = mmCore;
+    population = new String[POPULATION_SIZE][mmCore.getCodeSize()];
   }
 
   /**
@@ -52,20 +52,20 @@ class bot {
 		int space=0;
 		makeValidate = false;
 
-		for(int i=0; i < mm_core.getCodeSize(); i++) {
-			if(mm_core.getValueAt(i) == null || mm_core.getValueAt(i).equals("")) {
+		for(int i=0; i < mmCore.getCodeSize(); i++) {
+			if(mmCore.getValueAt(i) == null || mmCore.getValueAt(i).equals("")) {
 				space++;
 			}
 		}
-		if (space==mm_core.getCodeSize()){	//find a code
+		if (space==mmCore.getCodeSize()){	//find a code
 	        String[] turn = generateTurn();
-	        mm_core.setArAt(turn);
+	        mmCore.setArAt(turn);
 		}else if (space>0){	//fill the hole
 			String[] turn = generateTurn();
-			String[] hturn = mm_core.getArAt(0);
+			String[] hturn = mmCore.getArAt(0);
 			outer:
-			for (int i=0; i<mm_core.getCodeSize();i++){
-				for (int j=0; j<mm_core.getCodeSize(); j++){
+			for (int i=0; i<mmCore.getCodeSize();i++){
+				for (int j=0; j<mmCore.getCodeSize(); j++){
 					if(turn[i].equals(hturn[j])) {
 						turn[i] = null;
 						hturn[j] = null;
@@ -74,11 +74,11 @@ class bot {
 				}
 			}
 			outer2:
-			for(int i=0; i < mm_core.getCodeSize(); i++) {
-				if(mm_core.getValueAt(i) == null || mm_core.getValueAt(i).equals("")) {
-					for(int j=0; j < mm_core.getCodeSize(); j++) {
+			for(int i=0; i < mmCore.getCodeSize(); i++) {
+				if(mmCore.getValueAt(i) == null || mmCore.getValueAt(i).equals("")) {
+					for(int j=0; j < mmCore.getCodeSize(); j++) {
 						if(turn[j] != null) {
-							mm_core.setValueAt(turn[j],i);
+							mmCore.setValueAt(turn[j],i);
 							turn[j] = null;
 							continue outer2;
 						}
@@ -86,9 +86,9 @@ class bot {
 				}
 			}
 
-			for(int i=0; i < mm_core.getCodeSize(); i++) {
-				if (mm_core.getValueAt(i).equals("")){
-					mm_core.setValueAt(mm_core.getEnabledColors()[0],i);
+			for(int i=0; i < mmCore.getCodeSize(); i++) {
+				if (mmCore.getValueAt(i).equals("")){
+					mmCore.setValueAt(mmCore.getEnabledColors()[0],i);
 				}
 			}
 		}else{ //validate
@@ -107,11 +107,11 @@ class bot {
      * @see #evolvePopulation()
      * @see #addToFeasibleCodes()
 	 */
-	public String[] generateTurn() {
-        String[] turn = new String[mm_core.getCodeSize()];
+	private String[] generateTurn() {
+        String[] turn = new String[mmCore.getCodeSize()];
         boolean doCalc;
         // First try
-        if (mm_core.data.size() == 1) {
+        if (mmCore.data.size() == 1) {
             return generateRndColor();
         }
         do {
@@ -159,12 +159,12 @@ class bot {
      * @see core#getCodeSize()
      */
     private String[] generateRndColor() {
-    	String[] colors = new String[mm_core.getCodeSize()];
+    	String[] colors = new String[mmCore.getCodeSize()];
         int randomizeColor = 0;
         Random r = new Random();
-        for (int i = 0; i < mm_core.getCodeSize(); i++) {
-          randomizeColor = r.nextInt(mm_core.getEnabledColorsSize());
-          colors[i] = mm_core.getEnabledColors()[randomizeColor];
+        for (int i = 0; i < mmCore.getCodeSize(); i++) {
+          randomizeColor = r.nextInt(mmCore.getEnabledColorsSize());
+          colors[i] = mmCore.getEnabledColors()[randomizeColor];
         }
         return colors;
       }
@@ -183,8 +183,8 @@ class bot {
     	int[][]cHints = countHints();
         outer:
         for (int i = 0; i < POPULATION_SIZE; i++) {
-            for (int j = 1; j < mm_core.data.size(); j++) {
-                int[] result = compare(population[i], mm_core.getArAt(j));
+            for (int j = 1; j < mmCore.data.size(); j++) {
+                int[] result = compare(population[i], mmCore.getArAt(j));
                 if (result[0] != cHints[j][0] || result[1] != cHints[j][1]) {
                     continue outer;
                 }
@@ -220,8 +220,8 @@ class bot {
         for (int i = 0; i < POPULATION_SIZE; i++) {
             xtmp = 0;
             ytmp = 0;
-            for (int j = 1; j < mm_core.data.size(); j++) {
-                int[] result = compare(population[i], mm_core.getArAt(j));
+            for (int j = 1; j < mmCore.data.size(); j++) {
+                int[] result = compare(population[i], mmCore.getArAt(j));
                 xtmp += Math.abs(result[0] - cHints[j][0]);// black
                 ytmp += Math.abs(result[1] - cHints[j][1]);// red
             }
@@ -245,11 +245,11 @@ class bot {
      */
     private int[] compare(String[] a, String[] b) {
         int[] result = {0, 0};
-        String[] code = new String[mm_core.getCodeSize()];
-        String[] secret = new String[mm_core.getCodeSize()];
-        System.arraycopy(a, 0, code, 0, mm_core.getCodeSize());
-        System.arraycopy(b, 0, secret, 0, mm_core.getCodeSize());
-        for (int i = 0; i < mm_core.getCodeSize(); i++) {
+        String[] code = new String[mmCore.getCodeSize()];
+        String[] secret = new String[mmCore.getCodeSize()];
+        System.arraycopy(a, 0, code, 0, mmCore.getCodeSize());
+        System.arraycopy(b, 0, secret, 0, mmCore.getCodeSize());
+        for (int i = 0; i < mmCore.getCodeSize(); i++) {
             if (code[i].equals(secret[i])) {
                 result[0]++;
                 secret[i] = null;
@@ -257,9 +257,9 @@ class bot {
             }
         }
         outer:
-        for (int i = 0; i < mm_core.getCodeSize(); i++) {
+        for (int i = 0; i < mmCore.getCodeSize(); i++) {
             if (code[i] != null) {
-                for (int j = 0; j < mm_core.getCodeSize(); j++) {
+                for (int j = 0; j < mmCore.getCodeSize(); j++) {
                     if (code[i].equals(secret[j])) {
                         result[1]++;
                         secret[j] = null;
@@ -373,7 +373,7 @@ class bot {
   	 * @see #doubleToRnd(String[][])
   	 */
     private void evolvePopulation() {
-        String[][] newPopulation = new String[POPULATION_SIZE][mm_core.getCodeSize()];
+        String[][] newPopulation = new String[POPULATION_SIZE][mmCore.getCodeSize()];
 
         for (int i = 0; i < POPULATION_SIZE; i += 2) {
             if ((int) (Math.random() * 2) == 0) {
@@ -411,8 +411,8 @@ class bot {
     private void xOver1(String[][] newPopulation, int child1Pos, int child2Pos) {
         int mother = getParentPos();
         int father = getParentPos();
-        int sep = ((int) (Math.random() * mm_core.getCodeSize())) + 1;
-        for (int i = 0; i < mm_core.getCodeSize(); i++) {
+        int sep = ((int) (Math.random() * mmCore.getCodeSize())) + 1;
+        for (int i = 0; i < mmCore.getCodeSize(); i++) {
             if (i <= sep) {
                 newPopulation[child1Pos][i]= population[mother][i];
                 newPopulation[child2Pos][i]= population[father][i];
@@ -440,15 +440,15 @@ class bot {
         int father = getParentPos();
         int sep1;
         int sep2;
-        sep1 = ((int) (Math.random() * mm_core.getCodeSize())) + 1;
-        sep2 = ((int) (Math.random() * mm_core.getCodeSize())) + 1;
+        sep1 = ((int) (Math.random() * mmCore.getCodeSize())) + 1;
+        sep2 = ((int) (Math.random() * mmCore.getCodeSize())) + 1;
         if (sep1 > sep2) {
             int temp = sep1;
             sep1 = sep2;
             sep2 = temp;
         }
 
-        for (int i = 0; i < mm_core.getCodeSize(); i++) {
+        for (int i = 0; i < mmCore.getCodeSize(); i++) {
             if (i <= sep1 || i > sep2) {
                 newPopulation[child1Pos][i]= population[mother][i];
                 newPopulation[child2Pos][i]= population[father][i];
@@ -468,7 +468,7 @@ class bot {
      * will be changed.
      */
     private void mutation(String[][] newPopulation, int popPos) {
-        newPopulation[popPos][(int) (Math.random() * mm_core.getCodeSize())] = mm_core.getEnabledColors()[(int) (Math.random() * mm_core.getEnabledColorsSize())];
+        newPopulation[popPos][(int) (Math.random() * mmCore.getCodeSize())] = mmCore.getEnabledColors()[(int) (Math.random() * mmCore.getEnabledColorsSize())];
     }
 
     /**
@@ -479,8 +479,8 @@ class bot {
      * will be changed.
      */
     private void permutation(String[][] newPopulation, int popPos) {
-        int pos1 = (int) (Math.random() * mm_core.getCodeSize());
-        int pos2 = (int) (Math.random() * mm_core.getCodeSize());
+        int pos1 = (int) (Math.random() * mmCore.getCodeSize());
+        int pos2 = (int) (Math.random() * mmCore.getCodeSize());
         String tmp = newPopulation[popPos][pos1];
         newPopulation[popPos][pos1] = newPopulation[popPos][pos2];
         newPopulation[popPos][pos2] = tmp;
@@ -495,8 +495,8 @@ class bot {
      * will be changed.
      */
     private void inversion(String[][] newPopulation, int popPos) {
-        int pos1 = (int) (Math.random() * mm_core.getCodeSize());
-        int pos2 = (int) (Math.random() * mm_core.getCodeSize());
+        int pos1 = (int) (Math.random() * mmCore.getCodeSize());
+        int pos2 = (int) (Math.random() * mmCore.getCodeSize());
         if (pos2 < pos1) {
             int tmp = pos2;
             pos2 = pos1;
@@ -534,8 +534,8 @@ class bot {
      * @return <code>true</code> if a equal row is found<br />
      *         <code>false</code> if no equal row is found
      */
-	protected boolean lookForSame(String[][] newPopulation, int popPos) {
-		for (int i=0;i< mm_core.getCodeSize();i++) {
+	private boolean lookForSame(String[][] newPopulation, int popPos) {
+		for (int i=0;i< mmCore.getCodeSize();i++) {
 			if(!population[popPos][i].equals(newPopulation[popPos][i])) {
 				return false;
 			}
@@ -570,11 +570,11 @@ class bot {
      * @see core#getHintPane(int)
      * @see core#getCodeSize()
      */
-    protected int[][] countHints() {
-		int[][] counts = new int[mm_core.data.size()][2];
+    private int[][] countHints() {
+		int[][] counts = new int[mmCore.data.size()][2];
 		for (int i=1;i< counts.length;i++) {
-			String[] hints = mm_core.getHintPane(i);
-			for(int j=0; j < mm_core.getCodeSize(); j++) {
+			String[] hints = mmCore.getHintPane(i);
+			for(int j=0; j < mmCore.getCodeSize(); j++) {
 				if(hints[j].equals("X"))
 						counts[i][0]++;
 				else if(hints[j].equals("O"))
@@ -598,18 +598,18 @@ class bot {
 	protected validator validate() {
 		if (!makeValidate) { return new validator(true,"Keine Kommentar, der Bot hat ja schon geholfen");}
 		boolean rightColors = true;
-		if (mm_core.data.size()==1)
+		if (mmCore.data.size()==1)
 			return new validator(true,"Jede Wahl ist eine gute Wahl.");
 		else{
-			for (int i = 1; i<mm_core.data.size(); i++){
-				for (int j = 0; j<mm_core.getCodeSize(); j++){
-					if (!(mm_core.getValueAt(i,j).equals(mm_core.getValueAt(j))))
+			for (int i = 1; i<mmCore.data.size(); i++){
+				for (int j = 0; j<mmCore.getCodeSize(); j++){
+					if (!(mmCore.getValueAt(i,j).equals(mmCore.getValueAt(j))))
 						break;
-					else if (j==mm_core.getCodeSize()-1)
-						return new validator(false,"Das ist die gleiche Zeile wie Zeile: " + (mm_core.data.size()-i));
+					else if (j==mmCore.getCodeSize()-1)
+						return new validator(false,"Das ist die gleiche Zeile wie Zeile: " + (mmCore.data.size()-i));
 				}
 			}
-            String[] s = mm_core.getHintPane(1);
+            String[] s = mmCore.getHintPane(1);
             boolean isWrong=false;
             for(int i=0; i < s.length;i++) {
               if(s[i].equals("-")) {
@@ -618,16 +618,16 @@ class bot {
               }
             }
 			if (!isWrong){
-				String[] validateColor = mm_core.getDataArray(1);
-				for (int i = 0; i<mm_core.getCodeSize(); i++){
-					for (int j = 0; j<mm_core.getCodeSize(); j++){
-						if (mm_core.getValueAt(i).equals(validateColor[j])){
+				String[] validateColor = mmCore.getDataArray(1);
+				for (int i = 0; i<mmCore.getCodeSize(); i++){
+					for (int j = 0; j<mmCore.getCodeSize(); j++){
+						if (mmCore.getValueAt(i).equals(validateColor[j])){
 							validateColor[j]="";
 							break;
 						}
 					}
 				}
-				for (int j = 0; j<mm_core.getCodeSize();j++){
+				for (int j = 0; j<mmCore.getCodeSize();j++){
 					if (!validateColor[j].equals(""))
 						rightColors = false;
 				}

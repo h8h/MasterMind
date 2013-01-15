@@ -2,10 +2,12 @@ package mastermind_gui;
 
 import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyEvent;
+import mastermind_gui.gameArea.gameDialogSelector;
+
 /**
  * Key bindings for a - key and d - key
  */
-class keyboard implements KeyEventDispatcher{
+class gameKeyboard implements KeyEventDispatcher{
   private gui g;
   boolean d;
   boolean a;
@@ -15,7 +17,7 @@ class keyboard implements KeyEventDispatcher{
   /**
    * Class construction
    */
-  public keyboard (gui g) {
+  public gameKeyboard (gui g) {
     this.g = g;
   }
 
@@ -36,13 +38,37 @@ class keyboard implements KeyEventDispatcher{
    *
    * @param e keycode
    */
-  public void keypressed (KeyEvent e) {
-    //Enter press -> New Try
+  private void keypressed (KeyEvent e) {
+	
+	if(g.hasDialogFocus()) {  //Only enter, if gameDialog is opened
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+			g.closeDialog();
+		return;
+	}
+	// Show Help Dialog
+	if(e.getKeyCode() == KeyEvent.VK_F1) {
+	  g.showDialog(gameDialogSelector.HELP);
+      return;
+	}
+	// Show Info Dialog
+	if(e.getKeyCode() == KeyEvent.VK_A && e.isControlDown()) {
+      g.showDialog(gameDialogSelector.INFO);
+      return;
+	}	
+	// CTRL + N -> New Game
+	if(e.getKeyCode() == KeyEvent.VK_N && e.isControlDown()) {
+	  	g.newGame();
+	   	return;
+	}
+	if(g.gameFinished()) { return; } //Only enter, if game is not finished
+	// N pressed -> New Try
     if(e.getKeyCode() == KeyEvent.VK_N ) {
       g.addTry();
       resetValues();
+      return;
     }
-    //Add Color to Column
+
+    //Add color first_value to column second_value
     if (a) {
       if(setValues(e) && first_value > -1 && second_value > -1) {
         g.setColorAt(first_value-1,second_value-1);
@@ -50,6 +76,7 @@ class keyboard implements KeyEventDispatcher{
       }
     }
 
+    // Delete color from column first_value
     if (d) {
       setValues(e);
       if(first_value > -1)
@@ -76,7 +103,7 @@ class keyboard implements KeyEventDispatcher{
    * @return <code>true</code> user pressed three (a or d / twice 1 - 0 + q-r ) keys.
    *         <code>false</code> otherwise
    */
-  public boolean setValues(KeyEvent e) {
+  private boolean setValues(KeyEvent e) {
     int key = (int) e.getKeyChar();
     switch (key) {
         case  48: key = 10;
@@ -106,7 +133,7 @@ class keyboard implements KeyEventDispatcher{
   /**
    * Reset values, if user presses other key
    */
-  public void resetValues() {
+  private void resetValues() {
     first_value = -1;
     second_value = -1;
     a = false;

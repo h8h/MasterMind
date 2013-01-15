@@ -29,13 +29,13 @@ public class core {
   private String[] enabledColors;
   private String[] code;
   private int tries;
-  private int triescount;
+  private int triesCount;
 
   /**
    * Data container contains turns and hints (JTable use it)
    */
   public Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-  private bot core_bot;
+  private bot coreBot;
 
   /**
    * Class construction
@@ -51,10 +51,10 @@ public class core {
   public core (Object[] o) {
     generateColors((int)o[1]);
     code = new String[(int)o[0]];
-    core_bot = new bot(this);
+    coreBot = new bot(this);
     code = (String[]) o[2];
     tries = (int) o[3];
-    triescount = (int) o[4];
+    triesCount = (int) o[4];
     data = (Vector<Vector<Object>>) o[5];
   }
 
@@ -64,7 +64,7 @@ public class core {
   public core(int codeLength, int enabledColorRange, int tries, String[] code) {
     generateColors(enabledColorRange);
     this.code = new String[codeLength];
-    core_bot = new bot(this);
+    coreBot = new bot(this);
     if(code != null) { // If given code is not set, generate random code
       this.code = code;
     } else {
@@ -143,7 +143,7 @@ public class core {
    * @return left tries
    */
   public int leftTries(){
-    return tries-triescount-1;
+    return tries-triesCount-1;
   }
 
   /**
@@ -153,7 +153,7 @@ public class core {
    *         <code>false</code> game over :(
    */
   public boolean checkTries() {
-    if(++triescount == tries) {
+    if(++triesCount == tries) {
       return true;
     }
     return false;
@@ -325,7 +325,7 @@ public class core {
    * @return secret code size<br>enabled color range<br>code colors<br>maximum tries<br>number of done tries<br>data with all turns and hints<br>
    */
   public Object[] makePKG() {
-    Object[] o = {getCodeSize(), getEnabledColorsSize(), code, tries, triescount, data};
+    Object[] o = {getCodeSize(), getEnabledColorsSize(), code, tries, triesCount, data};
     return o;
   }
 
@@ -333,7 +333,7 @@ public class core {
    * Let the bot check the turn (before creating a new try)
    */
   public void doitBot() {
-    core_bot.setBestColors();
+    coreBot.setBestColors();
   }
 
   /**
@@ -344,6 +344,6 @@ public class core {
    * @see validator
    */
   public validator validate() {
-    return core_bot.validate();
+    return coreBot.validate();
   }
 }

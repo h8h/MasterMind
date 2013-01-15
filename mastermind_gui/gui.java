@@ -3,11 +3,10 @@ package mastermind_gui;
 import java.awt.event.*;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
-
 import javax.swing.*;
-
 import mastermind_core.core;
 import mastermind_core.validator;
+import mastermind_gui.gameArea.gameDialogSelector;
 import mastermind_save_load.*;
 
 
@@ -21,7 +20,7 @@ public class gui {
   static final String GAMENAME="MasterMind PP-1";
 
   /**
-   * Call by main to show window
+   * Called by startMasterMind to show window
    */
   public void showGUI() {
     gA = new gameArea(this);
@@ -31,7 +30,7 @@ public class gui {
   }
 
   /**
-   * Generate Menu for JFrame
+   * Generate Menubar
    */
   private void genMenu() {
 		JMenuBar bar = new JMenuBar();
@@ -85,15 +84,13 @@ public class gui {
       JMenuItem item21 = new JMenuItem("Anleitung");
       item21.addActionListener(new ActionListener () {
         public void actionPerformed (ActionEvent e) {
-            JDialog jD = new gameHelpDialog();
-            jD.setVisible(true);
+        	showDialog(gameDialogSelector.HELP);
           }
       });
      JMenuItem item22 = new JMenuItem("Info");
       item22.addActionListener(new ActionListener () {
         public void actionPerformed (ActionEvent e) {
-            JDialog jA = new gameAboutDialog();
-            jA.setVisible(true);
+        	showDialog(gameDialogSelector.INFO);
           }
       });
       menu02.add(item21);
@@ -104,7 +101,35 @@ public class gui {
 	  }
 		gA.setJMenuBar(bar);
 	}
-
+  
+  /**
+   * Show Info / About Dialog
+   * 
+   * @see gameArea#showDialog(gameDialogSelector)
+   */
+  protected void showDialog(gameDialogSelector gDS) {
+	  gA.showDialog(gDS);
+  }
+  
+  /**
+   * Check if gameDialog has focus
+   * 
+   * @return <code>true</code> gameDialog is open
+   * 		 <code>false</code> gameDialog is closed
+   * @see gameArea#hasDialogFocus()
+   */
+  protected boolean hasDialogFocus() {
+		return gA.hasDialogFocus();
+  }
+  
+  /**
+   * Close open dialog
+   * 
+   * @see gameArea#closeDialog
+   */
+  protected void closeDialog() {
+	  gA.closeDialog();
+  }
   /**
    * Show save dialog to select save file
    */
@@ -160,6 +185,7 @@ public class gui {
   /**
    * Save file to given filename
    * @param filn filename
+   * @see mastermind_save_load.save
    */
   private void saveFile(File filn) {
     save gamesave = new save(filn);
@@ -176,6 +202,7 @@ public class gui {
 
   /**
    * Show load dialog to load mastermind from file
+   * @see mastermind_save_load.load
    */
   private void loadDialog() {
     JFileChooser fc = new JFileChooser();
@@ -206,116 +233,6 @@ public class gui {
           JOptionPane.ERROR_MESSAGE);
       }
     }
-  }
-
-  /**
-   * If no game is running, create a new game
-   *
-   * @see #createGame(core)
-   */
-  protected void newGame() {
-    if (gameRunning()) {return;}
-    filename = null;
-    gA.setTitle(GAMENAME+" Spiel: unbenannt");
-    if(gA.isManualCode()) {
-      gA.setText("Setze den geheimen Code und klicke anschließend auf OK ...");
-    } else {
-      gA.setText("Neues Spiel ... neues Glück :)");
-    }
-    createGame(null);
-  }
-
-  /**
-   * Users secret code is set, now create new game
-   * @see #createGame()
-   */
-  protected void setCodeAndNewGame () {
-    gA.removeManualCode();
-    createGame();
-    gA.setText("Geheimer Code wurde erstellt...Viel Spaß beim Erraten");
-  }
-
-  /**
-   * Create a new game from loaded file
-   *
-   * @param o with important core objects
-   *
-   * @see #createGame(core)
-   * @see mastermind_core.core#makePKG()
-   */
-  protected void newGame(Object[] o) {
-    if (gameRunning()) {return;}
-    gA.setTitle(GAMENAME+" Spiel: " + filename.getName());
-    gA.setText("Spiel "+filename.getName().substring(0,filename.getName().length()-3) +" wurde geladen ... |");
-    core co= new core(o);
-    gA.options.setColorRange(co.getEnabledColorsSize());
-    gA.options.setCodeSize(co.getCodeSize());
-    gA.options.setNumberOfTries(co.getTries());
-    createGame(co);
-  }
-
-  /**
-   * Check if game is running
-   *
-   * @return <code>true</code> game is running<br>
-   *         <code>false</code> game is not running
-   */
-  public boolean gameRunning() {
-    if(gA.getTitle().endsWith("*")) {
-      Object [] options = {"Ja", "Nein", "Speichern"};
-      int ret = JOptionPane.showOptionDialog(null, "Es läuft zur Zeit ein aktives Spiel\n"
-                  +"Wollen Sie das Spiel wirklich beenden?",
-                  "Spiel beenden?",
-                  JOptionPane.YES_NO_CANCEL_OPTION,
-                  JOptionPane.QUESTION_MESSAGE,
-                  null,
-                  options,
-                  options[2]);
-      if(ret == 0) { //YES / OK
-        return false;
-      }
-      if(ret == 2) {
-        File tmp = filename;
-        filename = null;
-        saveFile();
-        filename = tmp;
-        return false;
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
-   * Create or recreate new gui with new/same game options<br>
-   * Please use newGame to call it
-   *
-   * @param mm_core core class if game is loaded
-   * @see #newGame()
-   * @see #newGame(Object[])
-   */
-  private void createGame(core mm_core) {
-    gA.enableGame();
-    if (mm_core == null) {
-      mm_core = new core (gA.options.getCodeSize(),gA.options.getColorRange(),gA.options.getNumberOfTries());
-    }
-    game = new gameInitialization(mm_core);
-    gA.setEnabledColors(game.initEnabledColors());
-    gA.setGameInitialization(game.createGame());
-    gA.revalidate();
-    gA.repaint();
-  }
-
-  /**
-   * Create or recreate new gui with new/same game options and secret code given from user<br>
-   * Please use setCodeAndNewGame()
-   *
-   * @see #setCodeAndNewGame()
-   */
-  private void createGame() {
-    core mm_core = new core (gA.options.getCodeSize(),gA.options.getColorRange(),gA.options.getNumberOfTries(),game.getColorArray());
-    createGame(mm_core);
   }
 
   /**
@@ -362,6 +279,128 @@ public class gui {
   }
 
   /**
+   * Users secret code is set, now create new game
+   * @see #createGame()
+   */
+  protected void setCodeAndNewGame () {
+    gA.removeManualCode();
+    createGame();
+    gA.setText("Geheimer Code wurde erstellt...Viel Spaß beim Erraten");
+  }
+
+  /**
+   * If no game is running, create a new game
+   *
+   * @see #createGame(core)
+   */
+  protected void newGame() {
+    if (gameRunning()) {return;}
+    filename = null;
+    gA.setTitle(GAMENAME+" Spiel: unbenannt");
+    gA.initManualCode();
+    if(gA.isManualCode()) {
+      gA.setText("Setze den geheimen Code und klicke anschließend auf OK ...");
+    } else {
+      gA.setText("Neues Spiel ... neues Glück :)");
+    }
+    createGame(null);
+  }
+  
+  /**
+   * Create a new game from loaded file
+   *
+   * @param o with important core objects
+   *
+   * @see #createGame(core)
+   * @see mastermind_core.core#makePKG()
+   */
+  protected void newGame(Object[] o) {
+    if (gameRunning()) {return;}
+    gA.setTitle(GAMENAME+" Spiel: " + filename.getName());
+    gA.setText("Spiel "+filename.getName().substring(0,filename.getName().length()-3) +" wurde geladen ... |");
+    core co= new core(o);
+    gA.options.setColorRange(co.getEnabledColorsSize());
+    gA.options.setCodeSize(co.getCodeSize());
+    gA.options.setNumberOfTries(co.getTries());
+    createGame(co);
+  }
+
+  /**
+   * Create or recreate new gui with new/same game options and secret code given from user<br>
+   * Please use setCodeAndNewGame()
+   *
+   * @see #setCodeAndNewGame()
+   */
+  private void createGame() {
+    core mm_core = new core (gA.options.getCodeSize(),gA.options.getColorRange(),gA.options.getNumberOfTries(),game.getColorArray());
+    createGame(mm_core);
+  }
+
+  /**
+   * Create or recreate new gui with new/same game options<br>
+   * Please use newGame to call it
+   *
+   * @param mm_core core class if game is loaded
+   * @see #newGame()
+   * @see #newGame(Object[])
+   */
+  private void createGame(core mm_core) {
+    gA.enableGame();
+    if (mm_core == null) {
+      mm_core = new core (gA.options.getCodeSize(),gA.options.getColorRange(),gA.options.getNumberOfTries());
+    }
+    game = new gameInitialization(mm_core);
+    gA.setEnabledColors(game.initEnabledColors());
+    gA.setGameInitialization(game.createGame());
+    gA.revalidate();
+    gA.repaint();
+  }
+
+
+  /**
+   * Check if game is running
+   *
+   * @return <code>true</code> game is running<br>
+   *         <code>false</code> game is not running
+   */
+  protected boolean gameRunning() {
+    if(gA.getTitle().endsWith("*")) {
+      Object [] options = {"Ja", "Nein", "Speichern"};
+      int ret = JOptionPane.showOptionDialog(null, "Es läuft zur Zeit ein aktives Spiel\n"
+                  +"Wollen Sie das Spiel wirklich beenden?",
+                  "Spiel beenden?",
+                  JOptionPane.YES_NO_CANCEL_OPTION,
+                  JOptionPane.QUESTION_MESSAGE,
+                  null,
+                  options,
+                  options[2]);
+      if(ret == 0) { //YES / OK
+        return false;
+      }
+      if(ret == 2) {
+        File tmp = filename;
+        filename = null;
+        saveFile();
+        filename = tmp;
+        return false;
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Check if game is finished (same as gameRunning, without a prompt)
+   * 
+   * @return <code>true</code> game is finished<br>
+   *         <code>false</code> game is running
+   */
+  protected boolean gameFinished() {
+	  return !gA.nextTry.isEnabled();
+  }
+  
+  /**
    * Set color at position
    *
    * @see gameInitialization#setColorAt(int,int)
@@ -386,5 +425,4 @@ public class gui {
     gA.setTitle(GAMENAME + " Spiel: " + ((filename==null)  ? "unbenannt" : filename.getName()));
     gA.disableGame();
   }
-
 }
