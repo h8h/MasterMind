@@ -9,16 +9,15 @@ import javax.swing.BoxLayout;
 import javax.swing.Box;
 /**
  * Shows dialog with given text and title
- * 
- * @param title gameDialog title
- * @param text text to show
  */
 @SuppressWarnings("serial")
 class gameDialog extends JDialog {
 
         /**
-         * Class construction<br>
-         * Creates JLabel with text
+         * Class construction
+         *
+         * @param title gameDialog title
+         * @param text text to show
          */
         public gameDialog(String title, String text) {
           setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
