@@ -163,7 +163,7 @@ class gameOptions extends JPanel {
      * @return value which the user has selected
      */
     protected int getNumberOfTries() {
-    	return (int) jsTries.getValue();
+    	return (Integer) jsTries.getValue();
     }
 
     /**

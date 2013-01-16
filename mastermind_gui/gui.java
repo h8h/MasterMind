@@ -130,6 +130,7 @@ public class gui {
   protected void closeDialog() {
 	  gA.closeDialog();
   }
+
   /**
    * Show save dialog to select save file
    */
@@ -171,6 +172,7 @@ public class gui {
   /**
    * Save file, if filename was set (by saveDialog)
    * otherwise show save Dialog
+   *
    * @see #saveDialog()
    */
   private void saveFile() {
@@ -184,6 +186,7 @@ public class gui {
 
   /**
    * Save file to given filename
+   *
    * @param filn filename
    * @see mastermind_save_load.save
    */
@@ -202,6 +205,7 @@ public class gui {
 
   /**
    * Show load dialog to load mastermind from file
+   *
    * @see mastermind_save_load.load
    */
   private void loadDialog() {
@@ -238,6 +242,7 @@ public class gui {
   /**
    * Add new try (next turn)<br>
    * if user wishes validating show help text and reject new try if validator is false
+   *
    * @see gameInitialization#getEnabledValidate()
    * @see gameInitialization#validate()
    * @see gameInitialization#addTry()
@@ -280,6 +285,7 @@ public class gui {
 
   /**
    * Users secret code is set, now create new game
+   *
    * @see #createGame()
    */
   protected void setCodeAndNewGame () {
