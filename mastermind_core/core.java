@@ -49,12 +49,12 @@ public class core {
    */
   @SuppressWarnings("unchecked") //for line 61
   public core (Object[] o) {
-    generateColors((int)o[1]);
-    code = new String[(int)o[0]];
+    generateColors((Integer)o[1]);
+    code = new String[(Integer)o[0]];
     coreBot = new bot(this);
     code = (String[]) o[2];
-    tries = (int) o[3];
-    triesCount = (int) o[4];
+    tries = (Integer) o[3];
+    triesCount = (Integer) o[4];
     data = (Vector<Vector<Object>>) o[5];
   }
 

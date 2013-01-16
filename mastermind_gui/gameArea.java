@@ -130,7 +130,6 @@ class gameArea extends JFrame implements WindowListener{
     enabledColors.setBorder(BorderFactory.createTitledBorder(""));
     add(enabledColors,BorderLayout.SOUTH);
     repaint();
-    revalidate();
   }
 
   /**
@@ -150,7 +149,6 @@ class gameArea extends JFrame implements WindowListener{
     if(enabledColors == null) { return; }
     remove(enabledColors);
     repaint();
-    revalidate();
   }
 
   /**
@@ -165,7 +163,6 @@ class gameArea extends JFrame implements WindowListener{
     gameInit.setBorder(BorderFactory.createTitledBorder(" "));
     add(gI,BorderLayout.CENTER);
     repaint();
-    revalidate();
   }
 
   /**
@@ -176,7 +173,6 @@ class gameArea extends JFrame implements WindowListener{
     if(gameInit == null) { return; }
     remove(gameInit);
     repaint();
-    revalidate();
   }
 
   /**

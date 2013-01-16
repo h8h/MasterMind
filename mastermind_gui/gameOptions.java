@@ -39,10 +39,10 @@ class gameOptions extends JPanel {
         jsTries.addChangeListener(new ChangeListener() {
           public void stateChanged(ChangeEvent e) {
             JSpinner source = (JSpinner) e.getSource();
-            if ((int)source.getValue() > 99) {
+            if ((Integer)source.getValue() > 99) {
               source.setValue(99);
             }
-            if ((int)source.getValue() < 0) {
+            if ((Integer)source.getValue() < 0) {
               source.setValue(0);
             }
           }
@@ -64,7 +64,7 @@ class gameOptions extends JPanel {
           public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             setCodeSize(source.getValue());
-            setNumberOfTries((int)((3*source.getValue())/2));
+            setNumberOfTries((Integer)((3*source.getValue())/2));
           }
         });
         manuCode = new JCheckBox("Code manuell setzen");
@@ -175,10 +175,10 @@ class gameOptions extends JPanel {
     protected void setNumberOfTries(int tries) {
     	jsTries.setValue(tries);
     }
-    
+
     /**
      * Update manualCode
-     * 
+     *
      * @see gameArea#removeManualCode()
      */
     protected void initManualCode() {
