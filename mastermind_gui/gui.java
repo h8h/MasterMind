@@ -101,19 +101,19 @@ public class gui {
 	  }
 		gA.setJMenuBar(bar);
 	}
-  
+
   /**
    * Show Info / About Dialog
-   * 
+   *
    * @see gameArea#showDialog(gameDialogSelector)
    */
   protected void showDialog(gameDialogSelector gDS) {
 	  gA.showDialog(gDS);
   }
-  
+
   /**
    * Check if gameDialog has focus
-   * 
+   *
    * @return <code>true</code> gameDialog is open
    * 		 <code>false</code> gameDialog is closed
    * @see gameArea#hasDialogFocus()
@@ -121,10 +121,10 @@ public class gui {
   protected boolean hasDialogFocus() {
 		return gA.hasDialogFocus();
   }
-  
+
   /**
    * Close open dialog
-   * 
+   *
    * @see gameArea#closeDialog
    */
   protected void closeDialog() {
@@ -305,7 +305,7 @@ public class gui {
     }
     createGame(null);
   }
-  
+
   /**
    * Create a new game from loaded file
    *
@@ -352,7 +352,7 @@ public class gui {
     game = new gameInitialization(mm_core);
     gA.setEnabledColors(game.initEnabledColors());
     gA.setGameInitialization(game.createGame());
-    gA.revalidate();
+    gA.validate();
     gA.repaint();
   }
 
@@ -392,14 +392,14 @@ public class gui {
 
   /**
    * Check if game is finished (same as gameRunning, without a prompt)
-   * 
+   *
    * @return <code>true</code> game is finished<br>
    *         <code>false</code> game is running
    */
   protected boolean gameFinished() {
 	  return !gA.nextTry.isEnabled();
   }
-  
+
   /**
    * Set color at position
    *

@@ -35,7 +35,7 @@ class gameOptions extends JPanel {
         jsTries = new JSpinner();
         jsTries.setMaximumSize(new Dimension(80,50));
         ((JSpinner.DefaultEditor)jsTries.getEditor()).getTextField().setColumns(2);
-        setNumberOfTries((int)((3*codeLength)/2));
+        setNumberOfTries((Integer)((3*codeLength)/2));
         jsTries.addChangeListener(new ChangeListener() {
           public void stateChanged(ChangeEvent e) {
             JSpinner source = (JSpinner) e.getSource();

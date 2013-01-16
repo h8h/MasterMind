@@ -26,7 +26,7 @@ public class load {
    * @see mastermind_core.core#core(Object[] o)
    * @see mastermind_core.core#makePKG()
    */
-  public Object[] loadfile() throws IOException,ClassNotFoundException {
+  public Object[] loadfile() throws IOException,ClassNotFoundException,Exception {
     try {
       FileInputStream loadFile = new FileInputStream(filename);
       ObjectInputStream load = new ObjectInputStream(loadFile);
