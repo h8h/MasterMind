@@ -59,7 +59,7 @@ public class core {
   }
 
   /**
-   * Class construction for given code (User set code - Mode)
+   * Class construction for given code (User sets code - Mode)
    */
   public core(int codeLength, int enabledColorRange, int tries, String[] code) {
     generateColors(enabledColorRange);
@@ -73,7 +73,7 @@ public class core {
     this.tries = tries;
   }
   /**
-   * Generate colors which users are able to play with
+   * Generate the colors which ables the user to plays with
    *
    * @param enabledColorRange select colors in availableColors from 0 til enabledColorRange
    * @see #availableColors
@@ -119,7 +119,7 @@ public class core {
   }
 
   /**
-   *  Return secret code size
+   *  Return size of the secret code
    *
    *  @return code size
    *  @see #generateCode()
@@ -173,7 +173,7 @@ public class core {
   }
 
   /**
-   * Check whether the user set the right color at the right place or the right color at the wrong place
+   * Check whether the user sets the right color at the right place or the right color at the wrong place
    *
    * @return <code>X</code> for the right color at the right place<br>
    *         <code>O</code> for the right color at the wrong place
@@ -218,7 +218,7 @@ public class core {
   /**
    * Get color setting (turn) from first row of <code>data</code>
    *
-   * @return String array with hex colors
+   * @return string array with hex colors
    */
   protected String[] getDataArray () {
     return getDataArray(0);
@@ -230,7 +230,7 @@ public class core {
    * @param row which you want to get the color setting from
    * @return array with hex colors
    */
-  protected String[] getDataArray (int row) {
+  public String[] getDataArray (int row) {
     if (row < data.size()) {
       String[] s = new String[getCodeSize()];
       for(int i=0; i < s.length;i++) {
@@ -264,22 +264,6 @@ public class core {
     if (row < data.size() && col < getCodeSize())
       return (String) ((Vector<Object>) data.get(row)).get(col);
     return null;
-  }
-
-  /**
-   *
-   * Get the hex color columns as a string array
-   *
-   * @param row
-   * @return hex color as a string array
-   */
-
-  public String [] getArAt(int row) {
-    String [] s = new String [getCodeSize()];
-    for (int i = 0 ; i < getCodeSize();i++){
-      s[i]= getValueAt( row, i);
-    }
-    return s;
   }
 
   /**
@@ -342,6 +326,7 @@ public class core {
    * @return <code>true</code> plus help text - go on playing (next try)<br>
    *         <code>false</code> plus help text - stop current turn - correct your fault
    * @see validator
+   * @see bot#validate()
    */
   public validator validate() {
     return coreBot.validate();

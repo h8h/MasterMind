@@ -140,7 +140,7 @@ class gameOptions extends JPanel {
     /**
      * Get secret code size
      *
-     * @return value which the user has selected
+     * @return secret code size which the user has selected
      */
     protected int getCodeSize(){
       return codeLength;

@@ -83,7 +83,7 @@ class gameData extends AbstractTableModel{
   }
 
   /**
-   * Remove value (HEX Color) at  first row and given column in <code>data</code>
+   * Remove value (HEX Color) at first row and given column in <code>data</code>
    *
    * @param column position to delete color from
    */
@@ -108,7 +108,7 @@ class gameData extends AbstractTableModel{
   }
 
   /**
-   * Set value (HEX Color) at given (first) row and given column on data and make Table update
+   * Set value (HEX Color) at given (first) row and given column on data
    *
    * @param value hex color to be set
    * @param row row position almost 0 (value not used, but needed cause of overwriting)
@@ -120,7 +120,7 @@ class gameData extends AbstractTableModel{
   }
 
   /**
-   * Set hint array at first row on data, update Table and check if user has won
+   * Set hint array at first row on data and check if user has won
    *
    * @param hints array containing hints (X / O)
    * @return <code>true</code> user win<br>
@@ -146,7 +146,7 @@ class gameData extends AbstractTableModel{
   }
 
   /**
-   * Turns the user has make
+   * Turns the user has made
    *
    * @return number of tries
    */

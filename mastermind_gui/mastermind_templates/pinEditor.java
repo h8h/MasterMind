@@ -10,7 +10,7 @@ import javax.swing.table.TableCellEditor;
 
 
 /**
- * Editor for changing background color on table - returns button
+ * Editor for changing the background color on table - gets and returns buttons
  */
 @SuppressWarnings("serial")
 public class pinEditor extends AbstractCellEditor implements TableCellEditor,ActionListener {
@@ -40,7 +40,7 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
   }
 
   /**
-   * Change color to next color in enabledColors
+   * Change color to next color in enabled colors array
    *
    * @return next color
    */
@@ -62,7 +62,7 @@ public class pinEditor extends AbstractCellEditor implements TableCellEditor,Act
                                                int column) {
     if(row!=0) {return null;}
     position=0;
-    while (!enabledColors[position].equals(value)){ //Search current colorwalk position
+    while (!enabledColors[position].equals(value)){ //Make colorwalk to search current position
       position++;
       if (position > enabledColors.length-1) {
         position = enabledColors.length;

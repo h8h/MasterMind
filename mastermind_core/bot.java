@@ -38,10 +38,10 @@ class bot {
   }
 
   /**
-   * Check whether the bot should fill out empty pins - fill out empty pins or do some validate if the user wish some help
+   * Check whether the bot should fill out empty pins - fill out empty pins or do some validate if the user wishes some help
    *
    * @see core#doitBot()
-   * @see core#getArAt(int)
+   * @see core#getDataArray()
    * @see core#getCodeSize()
    * @see core#getValueAt(int)
    *
@@ -62,7 +62,7 @@ class bot {
 	        mmCore.setArAt(turn);
 		}else if (space>0){	//fill the hole
 			String[] turn = generateTurn();
-			String[] hturn = mmCore.getArAt(0);
+			String[] hturn = mmCore.getDataArray();
 			outer:
 			for (int i=0; i<mmCore.getCodeSize();i++){
 				for (int j=0; j<mmCore.getCodeSize(); j++){
@@ -97,7 +97,7 @@ class bot {
 	}
 
 	/**
-	 * This function generate a turn which are able to set to a new row
+	 * This function generates a turn which can be set on a new row
 	 *
 	 * @return generated turn
 	 *
@@ -136,7 +136,7 @@ class bot {
     }
 
     /**
-     * Initializes the Population with random turns
+     * Initializes the population with random turns
      *
      * @see #generateRndColor()
      */
@@ -150,9 +150,9 @@ class bot {
     }
 
     /**
-     * Generates a Array with random colors from the enabled colors
+     * Generates an array with random colors from the enabled colors
      *
-     * @return An array with randomized colors from the enabled colors
+     * @return An array with randomized colors from the enabled colors array
      *
      * @see core#getEnabledColors()
      * @see core#getEnabledColorsSize()
@@ -173,10 +173,10 @@ class bot {
 	 * Test if a code for all done tries makes sense and return the result.<br>
 	 * Cancel if nothing makes sense and fesaibleCodes is full.<br>
 	 *
-	 * @return <code>false</code> if fesaibleCodes is full.<br>
-	 * <code>true</code> otherwise.
+	 * @return <code>false</code> If fesaibleCodes is full.<br>
+	 * <code>true</code> Otherwise.
      *
-     * @see core#getArAt(int)
+     * @see core#getDataArray(int)
      * @see #compare(String[], String[])
      */
     private boolean addToFeasibleCodes() {
@@ -184,7 +184,7 @@ class bot {
         outer:
         for (int i = 0; i < POPULATION_SIZE; i++) {
             for (int j = 1; j < mmCore.data.size(); j++) {
-                int[] result = compare(population[i], mmCore.getArAt(j));
+                int[] result = compare(population[i], mmCore.getDataArray(j));
                 if (result[0] != cHints[j][0] || result[1] != cHints[j][1]) {
                     continue outer;
                 }
@@ -204,7 +204,7 @@ class bot {
     }
 
     /**
-     * Calculates the fitness of every Row in population.
+     * Calculates the fitness of every row in population.
      * A fitness-value and the corresponding element of the population array
      * both have the same index in their respective arrays.
      *
@@ -221,7 +221,7 @@ class bot {
             xtmp = 0;
             ytmp = 0;
             for (int j = 1; j < mmCore.data.size(); j++) {
-                int[] result = compare(population[i], mmCore.getArAt(j));
+                int[] result = compare(population[i], mmCore.getDataArray(j));
                 xtmp += Math.abs(result[0] - cHints[j][0]);// black
                 ytmp += Math.abs(result[1] - cHints[j][1]);// red
             }
@@ -230,16 +230,16 @@ class bot {
     }
 
     /**
-     * This function compare two arrays of strings an counts how many
+     * This function compares two arrays of strings an counts how many
      * strings are the same and on the same position or only in the other array.
      *
      * return[0] = number of same string at both string same position
      * return[1] = number of same string in both string and NOT on the same position
      *
-     * @param a The first string for the compare (with includes colors as a hex string)
-     * @param b The second string for the compare (with includes colors as a hex string)
+     * @param a The first string for the compare (with included colors as a hex string)
+     * @param b The second string for the compare (with included colors as a hex string)
      *
-     * @return A int array with the result
+     * @return An int array with the result
      *
      * @see core#getCodeSize()
      */
@@ -272,11 +272,11 @@ class bot {
     }
 
     /**
-     * This is a Quicksort that sorts the fitness and pop Arrays by the criteria
+     * This is a Quicksort that sorts the fitness and pop arrays by the criteria
      * in the fitness-array.
      *
      * @param fitness An int array.
-     * @param pop an array of lines.
+     * @param pop An array of lines.
      *
      * @see #sort(int[], String[][], int, int)
      * @see #divide(int[], String[][], int, int, int)
@@ -291,7 +291,7 @@ class bot {
      * Helper function for recursive sorting.
      *
      * @param fitness An int array.
-     * @param pop .
+     * @param pop An array of lines.
      * @param low The lower limit.
      * @param up The upper limit.
      */
@@ -345,7 +345,7 @@ class bot {
     }
 
     /**
-     * Helper function to swap two elements of an array of Rows.
+     * Helper function to swap two elements of an string array.
      *
      * @param pop An array of Rows.
      * @param a Position of the first element.
@@ -530,9 +530,8 @@ class bot {
      * @param newPopulation The population array that will be searched.
      * @param popPos The position of the row within the population array that will be compared.
      *
-     * @return true if an equal row is found if not return false.
-     * @return <code>true</code> if a equal row is found<br />
-     *         <code>false</code> if no equal row is found
+     * @return <code>true</code> If an equal row is found<br />
+     *         <code>false</code> If no equal row is found
      */
 	private boolean lookForSame(String[][] newPopulation, int popPos) {
 		for (int i=0;i< mmCore.getCodeSize();i++) {
@@ -544,7 +543,7 @@ class bot {
 	}
 
 	/**
-	 *  Get best parent position (one of the best fifth) in population array for good fitness value purposes
+	 * Get best parent position (one of the best fifth) in population array for good fitness value purposes
 	 *
 	 * @return The best parent position (one of the best fifth)
 	 */
@@ -557,7 +556,7 @@ class bot {
 
 
     /**
-     * This function write the pins into an int array
+     * This function writes the pins into an int array
      *
      * <a href="http://en.wikipedia.org/wiki/Mastermind_%28board_game%29#Gameplay_and_rules">
      * Mastermind Rules</a>
@@ -565,7 +564,7 @@ class bot {
      * counts[row][0]=black
      * counts[row][1]=red
      *
-     * @return the black and red pins in a int int array
+     * @return The black and red pins in an int int array
      *
      * @see core#getHintPane(int)
      * @see core#getCodeSize()
@@ -589,8 +588,8 @@ class bot {
    /**
    * Validate the users try and accept or reject turn
    *
-   * @return <code>true</code> plus help text - go on playing (next try)<br>
-   *         <code>false</code> plus help text - stop current turn - correct your fault
+   * @return <code>true</code> Plus help text - go on playing (next try)<br>
+   *         <code>false</code> Plus help text - stop current turn - correct your fault
    *
    * @see core#validate()
    * @see validator

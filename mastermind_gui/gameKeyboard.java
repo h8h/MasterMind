@@ -5,15 +5,15 @@ import java.awt.event.KeyEvent;
 import mastermind_gui.gameArea.gameDialogSelector;
 
 /**
- * Key bindings for a - key and d - key
+ * Key bindings for a - key, d - key, f1, strg+a, strg+n
  */
 class gameKeyboard implements KeyEventDispatcher{
   private gui g;
-  boolean d;
-  boolean a;
-  int first_value=-1;
-  int second_value=-1;
-
+  private boolean d;
+  private boolean a;
+  private int first_value=-1;
+  private int second_value=-1;
+  private String tmpHelpText="";
   /**
    * Class construction
    */
@@ -34,12 +34,12 @@ class gameKeyboard implements KeyEventDispatcher{
   }
 
   /**
-   * Check which key (a or d) is pressed and do action
+   * Check which key is pressed and do action
    *
    * @param e keycode
    */
   private void keypressed (KeyEvent e) {
-	
+    if(g.gameRunningDialog) { return; } //If gameRunningDialog is shown, don't accept any keys
 	if(g.hasDialogFocus()) {  //Only enter, if gameDialog is opened
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
 			g.closeDialog();
@@ -54,17 +54,18 @@ class gameKeyboard implements KeyEventDispatcher{
 	if(e.getKeyCode() == KeyEvent.VK_A && e.isControlDown()) {
       g.showDialog(gameDialogSelector.INFO);
       return;
-	}	
+	}
 	// CTRL + N -> New Game
 	if(e.getKeyCode() == KeyEvent.VK_N && e.isControlDown()) {
 	  	g.newGame();
 	   	return;
 	}
-	if(g.gameFinished()) { return; } //Only enter, if game is not finished
+	if(g.gameFinished()) { return; }
+    //Only enter, if game is not finished
 	// N pressed -> New Try
     if(e.getKeyCode() == KeyEvent.VK_N ) {
-      g.addTry();
       resetValues();
+      g.addTry();
       return;
     }
 
@@ -72,7 +73,7 @@ class gameKeyboard implements KeyEventDispatcher{
     if (a) {
       if(setValues(e) && first_value > -1 && second_value > -1) {
         g.setColorAt(first_value-1,second_value-1);
-      resetValues();
+        resetValues();
       }
     }
 
@@ -83,12 +84,21 @@ class gameKeyboard implements KeyEventDispatcher{
         g.removeColor(first_value-1);
       resetValues();
     }
-    //Add / Delete Button are pressed
+
+    if (tmpHelpText.equals("")) {
+      tmpHelpText = g.getHapticFeedback();
+    }
+
+    //Add / Delete button is pressed
     switch(e.getKeyCode()) {
-      case KeyEvent.VK_D: a = false;
+      case KeyEvent.VK_D:
+                 g.setHapticFeedback(tmpHelpText + " - D: Lösche - Farbe 1-10-Q-R");
+                 a = false;
                  d = true;
                  break;
-      case KeyEvent.VK_A: a = true;
+      case KeyEvent.VK_A:
+                 g.setHapticFeedback(tmpHelpText + " - A: Hinzufügen - Farbe 1-10-Q-R/Spalte 1-10");
+                 a = true;
                  d = false;
                  break;
     }
@@ -105,7 +115,7 @@ class gameKeyboard implements KeyEventDispatcher{
    */
   private boolean setValues(KeyEvent e) {
     int key = (int) e.getKeyChar();
-    switch (key) {
+    switch (key) { //convert Q W E R T to integer
         case  48: key = 10;
                   break;
         case 113: key = 11;
@@ -124,7 +134,7 @@ class gameKeyboard implements KeyEventDispatcher{
         second_value = (key>9&&key<15) ? key: key - 48;
         return true;
       }
-    } else { //Reject
+    } else { //Reject wrong key
       resetValues();
     }
     return false;
@@ -138,5 +148,8 @@ class gameKeyboard implements KeyEventDispatcher{
     second_value = -1;
     a = false;
     d = false;
+    if(!tmpHelpText.equals(""))
+      g.setHapticFeedback(tmpHelpText);
+    tmpHelpText = "";
   }
 }

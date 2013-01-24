@@ -20,7 +20,7 @@ class gameInitialization {
   /**
    * Class construction - generating gameGround and gameData with core data
    *
-   * @param mmCore core class
+   * @param mmCore mastermind core class
    * @see mastermind_core.core#data
    */
   public gameInitialization(core mmCore) {
@@ -42,9 +42,9 @@ class gameInitialization {
    * @return current game status (Playing,Win,Lost)
    */
   public gameStatus addTry() {
-    if (gG.isEditing())
+    if (gG.isEditing()) //Cancel all editings on table
       gG.getCellEditor().cancelCellEditing();
-    
+
     if (gD.setHint(mmCore.checkColor())) {
       gD.setCellEditable(false);
       return gameStatus.WIN;
@@ -134,7 +134,7 @@ class gameInitialization {
    * @return hex color as a string array
    */
   protected String[] getColorArray() {
-    return mmCore.getArAt(0);
+    return mmCore.getDataArray(0);
   }
   /**
    * Remove value (HEX Color) at first row and given column in <code>data</code>

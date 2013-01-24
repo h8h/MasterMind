@@ -17,6 +17,7 @@ public class gui {
   private gameInitialization game;
   private gameArea gA;
   private File filename;
+  protected boolean gameRunningDialog;
   static final String GAMENAME="MasterMind PP-1";
 
   /**
@@ -240,10 +241,11 @@ public class gui {
   }
 
   /**
-   * Add new try (next turn)<br>
-   * if user wishes validating show help text and reject new try if validator is false
+   * Add new try (next turn).<br>
+   * If user wishes validating show help text and reject new try if validator is false
    *
    * @see gameInitialization#getEnabledValidate()
+   * @see gameArea#isManualCode()
    * @see gameInitialization#validate()
    * @see gameInitialization#addTry()
    */
@@ -256,27 +258,27 @@ public class gui {
     }
     if(game.getEnabledValidate()) { //User wishes help
       validator v = game.validate();
-      gA.setText(v.getText());
+      setHapticFeedback(v.getText());
       if(!v.isValid()) { return; }
     } else {
-        gA.setText("Errate den geheimen Code ...");
+        setHapticFeedback("Errate den geheimen Code ...");
     }
     int leftTries = game.leftTries();
     if(leftTries<0){
       leftTries = Math.abs(leftTries);
-      gA.setText(gA.getText()+ " - Schon " + leftTries + " " + ((leftTries == 1) ? "Versuch" : "Versuche") + " benötigt");
+      setHapticFeedback(getHapticFeedback()+ " - Schon " + leftTries + " " + ((leftTries == 1) ? "Versuch" : "Versuche") + " benötigt");
     } else {
-      gA.setText(gA.getText()+ " - Noch " + leftTries  + " " + ((leftTries<2) ? "Versuch" : "Versuche") + " möglich");
+      setHapticFeedback(getHapticFeedback()+ " - Noch " + leftTries  + " " + ((leftTries<2) ? "Versuch" : "Versuche") + " möglich");
     }
-    switch(game.addTry()) {
+    switch(game.addTry()) { // Check game status
       case WIN:
         disableGame();
         int sumTries = game.getTries()-game.leftTries();
-        gA.setText("SIE HABEN GEWONNEN :) - Mit " + sumTries + ((sumTries == 1) ? "em Versuch!" : " Versuchen!"));
+        setHapticFeedback("SIE HABEN GEWONNEN :) - Mit " + sumTries + ((sumTries == 1) ? "em Versuch!" : " Versuchen!"));
         break;
       case LOST:
         disableGame();
-        gA.setText("SIE HABEN VERLOREN :(");
+        setHapticFeedback("SIE HABEN VERLOREN :(");
         break;
       case PLAYING:
         gA.setTitle(gA.getTitle().endsWith("*") ? gA.getTitle() : gA.getTitle() + "*");
@@ -284,7 +286,27 @@ public class gui {
   }
 
   /**
-   * Users secret code is set, now create new game
+   * Set text which gives user feedback, help and tips
+   *
+   * @param s text that helps user while playing
+   * @see gameArea#setText(String)
+   */
+  protected void setHapticFeedback(String s) {
+    gA.setText(s);
+  }
+
+  /**
+   * Get text which you are set
+   *
+   * @return string with help text
+   * @see gameArea#getText()
+   */
+  protected String getHapticFeedback() {
+    return gA.getText();
+  }
+
+  /**
+   * User's secret code is set, now create a new game
    *
    * @see #createGame()
    */
@@ -332,8 +354,8 @@ public class gui {
   }
 
   /**
-   * Create or recreate new gui with new/same game options and secret code given from user<br>
-   * Please use setCodeAndNewGame()
+   * Create or recreate new gui with new/same game options and secret code given from user.<br>
+   * Please use setCodeAndNewGame() to create a new game.
    *
    * @see #setCodeAndNewGame()
    */
@@ -343,12 +365,13 @@ public class gui {
   }
 
   /**
-   * Create or recreate new gui with new/same game options<br>
-   * Please use newGame to call it
+   * Create or recreate new gui with new/same game options.<br>
+   * Please use newGame() to create a new game.
    *
-   * @param mm_core core class if game is loaded
+   * @param mm_core mastermind core class if game is loaded
    * @see #newGame()
    * @see #newGame(Object[])
+   * @see mastermind_core.core
    */
   private void createGame(core mm_core) {
     gA.enableGame();
@@ -372,6 +395,7 @@ public class gui {
   protected boolean gameRunning() {
     if(gA.getTitle().endsWith("*")) {
       Object [] options = {"Ja", "Nein", "Speichern"};
+      gameRunningDialog = true;
       int ret = JOptionPane.showOptionDialog(null, "Es läuft zur Zeit ein aktives Spiel\n"
                   +"Wollen Sie das Spiel wirklich beenden?",
                   "Spiel beenden?",
@@ -381,17 +405,21 @@ public class gui {
                   options,
                   options[2]);
       if(ret == 0) { //YES / OK
+        gameRunningDialog = false;
         return false;
       }
-      if(ret == 2) {
+      if(ret == 2) { // Save
         File tmp = filename;
         filename = null;
         saveFile();
         filename = tmp;
+        gameRunningDialog = false;
         return false;
       }
+      gameRunningDialog = false;
       return true;
     } else {
+      gameRunningDialog = false;
       return false;
     }
   }
@@ -425,7 +453,7 @@ public class gui {
   }
 
   /**
-   * Reset game settings
+   * Reset game, after WIN or LOST
    */
   private void disableGame() {
     gA.setTitle(GAMENAME + " Spiel: " + ((filename==null)  ? "unbenannt" : filename.getName()));

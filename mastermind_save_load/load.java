@@ -1,6 +1,3 @@
-/**
- * Save and loader Files
- */
 package mastermind_save_load;
 import java.io.*;
 

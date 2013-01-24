@@ -33,7 +33,7 @@ class gameGround extends JTable {
   }
 
   /**
-   * Help class to set column width
+   * Helper class to set column width
    */
   private void setColumnWidth(TableColumn column, int width) {
     column.setPreferredWidth(width);

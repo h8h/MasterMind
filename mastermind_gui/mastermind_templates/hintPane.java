@@ -7,12 +7,12 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.*;
 /**
- * Render array to buttons
+ * Renderer hint array to buttons on jpanel
  */
 public class hintPane implements TableCellRenderer {
 
   /**
-   * Render given array to buttons on JPanel<br>
+   * Renderer given array to buttons on JPanel<br>
    *
    * <code>black button</code> right color on right place<br>
    * <code>red button</code> right color on wrong place<br>

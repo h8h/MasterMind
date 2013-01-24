@@ -36,7 +36,6 @@ class gameArea extends JFrame implements WindowListener{
     setKeyListener(new gameKeyboard(game));
 
     options = new gameOptions(game);
-
     add(options,BorderLayout.LINE_START);
 
     nextTry = new JButton ("OK");
@@ -92,7 +91,7 @@ class gameArea extends JFrame implements WindowListener{
   }
 
   /**
-   * Add new try
+   * Add a new try
    *
    * @see gui#addTry()
    */
@@ -121,7 +120,7 @@ class gameArea extends JFrame implements WindowListener{
   /**
    * Add enabled color panel from given panel
    *
-   * @param eC JPanel on which the enabled colors are place
+   * @param eC JPanel on which the enabled colors are placed
    * @see gameInitialization#initEnabledColors()
    */
   protected void setEnabledColors(JPanel eC) {
@@ -135,7 +134,7 @@ class gameArea extends JFrame implements WindowListener{
   /**
    * Return enabled color panel
    *
-   * @return JPanel on which the enabled colors are place
+   * @return JPanel on which the enabled colors are placed
    * @see #setEnabledColors(JPanel)
    */
   protected JPanel getEnabledColors() {
