@@ -92,12 +92,12 @@ class gameKeyboard implements KeyEventDispatcher{
     //Add / Delete button is pressed
     switch(e.getKeyCode()) {
       case KeyEvent.VK_D:
-                 g.setHapticFeedback(tmpHelpText + " - D: Lösche - Farbe 1-10-Q-R");
+                 g.setHapticFeedback(tmpHelpText + " - D: Lösche - Farbe in Spalte 1-10-Q-R");
                  a = false;
                  d = true;
                  break;
       case KeyEvent.VK_A:
-                 g.setHapticFeedback(tmpHelpText + " - A: Hinzufügen - Farbe 1-10-Q-R/Spalte 1-10");
+                 g.setHapticFeedback(tmpHelpText + " - A: Hinzufügen - Farbe 1-10-Q-R / Spalte 1-10");
                  a = true;
                  d = false;
                  break;

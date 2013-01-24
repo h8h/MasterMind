@@ -35,7 +35,7 @@ class gameOptions extends JPanel {
         jsTries = new JSpinner();
         jsTries.setMaximumSize(new Dimension(80,50));
         ((JSpinner.DefaultEditor)jsTries.getEditor()).getTextField().setColumns(2);
-        setNumberOfTries((Integer)((3*codeLength)/2));
+        setNumberOfTries((Integer)(2+(slideColors.getValue()+1)/2)+((slideCode.getValue()+1)/2));
         jsTries.addChangeListener(new ChangeListener() {
           public void stateChanged(ChangeEvent e) {
             JSpinner source = (JSpinner) e.getSource();
@@ -54,6 +54,7 @@ class gameOptions extends JPanel {
           public void stateChanged(ChangeEvent e) {
                     JSlider source = (JSlider) e.getSource();
                     setColorRange(source.getValue());
+                    setNumberOfTries((Integer)(2+(source.getValue()+1)/2)+((slideCode.getValue()+1)/2));
           }
         });
 
@@ -64,7 +65,7 @@ class gameOptions extends JPanel {
           public void stateChanged(ChangeEvent e) {
             JSlider source = (JSlider) e.getSource();
             setCodeSize(source.getValue());
-            setNumberOfTries((Integer)((3*source.getValue())/2));
+            setNumberOfTries((Integer)(2+(source.getValue()+1)/2)+((slideColors.getValue()+1)/2));
           }
         });
         manuCode = new JCheckBox("Code manuell setzen");
