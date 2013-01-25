@@ -409,11 +409,10 @@ public class gui {
         return false;
       }
       if(ret == 2) { // Save
-        File tmp = filename;
-        filename = null;
         saveFile();
-        filename = tmp;
         gameRunningDialog = false;
+        if(gA.getTitle().endsWith("*"))
+          return true;
         return false;
       }
       gameRunningDialog = false;
